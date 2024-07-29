@@ -1,5 +1,5 @@
-
-namespace gastus_api
+﻿
+namespace Gastus.Api
 {
   public class Program
   {
