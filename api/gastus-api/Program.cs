@@ -14,6 +14,14 @@ namespace Gastus.Api
       builder.Services.AddEndpointsApiExplorer();
       builder.Services.AddSwaggerGen();
 
+      const string ALLOW_ALL = "AllowAll";
+      builder.Services.AddCors(options =>
+      {
+        options.AddPolicy(ALLOW_ALL, builder => builder
+          .AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader());
+      });
       var app = builder.Build();
 
       // Configure the HTTP request pipeline.
@@ -25,7 +33,7 @@ namespace Gastus.Api
 
       app.UseAuthorization();
 
-
+      app.UseCors(ALLOW_ALL);
       app.MapControllers();
 
       app.Run();

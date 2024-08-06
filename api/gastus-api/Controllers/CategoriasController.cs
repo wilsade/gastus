@@ -7,13 +7,13 @@ namespace Gastus.Api.Controllers
   /// </summary>
   [ApiController]
   [Route("[controller]")]
-  public class CategoriaController : GastusBaseController
+  public class CategoriasController : GastusBaseController
   {
     /// <summary>
     /// Recuperar todas as categorias cadastradas
     /// </summary>
     /// <returns>All categorias</returns>
-    [HttpGet]
+    [HttpGet()]
     public IActionResult GetAllCategorias()
     {
       try
