@@ -7,10 +7,8 @@ CREATE TABLE IF NOT EXISTS Categoria (
 -- Criação da tabela de gastos
 CREATE TABLE IF NOT EXISTS SubCategoria (
     id INTEGER,
+    id_categoria INTEGER,
     descricao TEXT NOT NULL,
-    valor REAL NOT NULL,
-    data TEXT NOT NULL,
-    categoria_id INTEGER,
-    PRIMARY KEY (id, categoria_id),
-    FOREIGN KEY (categoria_id) REFERENCES Categoria(id)
+    PRIMARY KEY (id, id_categoria),
+    FOREIGN KEY (id_categoria) REFERENCES Categoria(id)
 );

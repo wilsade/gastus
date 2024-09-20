@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 
 using System.Data.SQLite;
@@ -12,7 +12,13 @@ namespace Gastus.Api.Controllers
   [Route("[controller]")]
   public class CategoriasController : GastusBaseController
   {
-    const string DATABASE_FILE_NAME = @"Data Source=gastus.db;Version=3;";
+    const string DATABASE_FILE_NAME = @"Data Source=C:\_Wilsade\Projetos\git\gastus\gastus.db;Version=3;";
+
+    [HttpGet("bla")]
+    public IActionResult GetBla()
+    {
+      return Ok("bla");
+    }
 
     /// <summary>
     /// Recuperar todas as categorias cadastradas
@@ -89,7 +95,7 @@ namespace Gastus.Api.Controllers
       }
       catch (Exception ex)
       {
-        return BadRequest(ex);
+        return ReturnBadRequestException(ex);
       }
     }
 
@@ -120,8 +126,36 @@ namespace Gastus.Api.Controllers
       }
       catch (Exception ex)
       {
-        return BadRequest(ex);
+        return ReturnBadRequestException(ex);
       }
+    }
+
+    [HttpDelete("id")]
+    public async Task<IActionResult> DeleteCategoria(int id)
+    {
+      using (var connection = new SQLiteConnection(DATABASE_FILE_NAME))
+      {
+        await connection.OpenAsync();
+
+        // Comando SQL para excluir a categoria pelo ID
+        var commandText = "DELETE FROM Categoria WHERE Id = @Id";
+        using (var command = new SQLiteCommand(commandText, connection))
+        {
+          command.Parameters.AddWithValue("@Id", id);
+
+          // Executa o comando de exclusão
+          int affectedRows = await command.ExecuteNonQueryAsync();
+
+          // Se nenhuma linha foi afetada, retorna 404
+          if (affectedRows == 0)
+          {
+            return NotFound();
+          }
+        }
+      }
+
+      // Retorna 204 No Content em caso de sucesso
+      return NoContent();
     }
   }
 }
