@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Gastus.Domain;
+
+using Microsoft.AspNetCore.Mvc;
 
 
 using System.Data.SQLite;
@@ -8,18 +10,14 @@ namespace Gastus.Api.Controllers
   /// <summary>
   /// Controller para Categorias
   /// </summary>
+  /// <remarks>
+  /// Inicialização da classe: <see cref="CategoriasController"/>.
+  /// </remarks>
+  /// <param name="repository">Repositório</param>
   [ApiController]
   [Route("[controller]")]
-  public class CategoriasController : GastusBaseController
+  public class CategoriasController(ICategoriasRepository repository) : GastusBaseController(repository)
   {
-    const string DATABASE_FILE_NAME = @"Data Source=C:\_Wilsade\Projetos\git\gastus\gastus.db;Version=3;";
-
-    [HttpGet("bla")]
-    public IActionResult GetBla()
-    {
-      return Ok("bla");
-    }
-
     /// <summary>
     /// Recuperar todas as categorias cadastradas
     /// </summary>
@@ -29,34 +27,8 @@ namespace Gastus.Api.Controllers
     {
       try
       {
-        // Estabelecer a conexão com o banco de dados
-        using (var connection = new SQLiteConnection(DATABASE_FILE_NAME))
-        {
-          connection.Open();
-
-          // Executar a consulta para obter as categorias
-          var query = "SELECT id, nome FROM Categoria";
-          using (var command = new SQLiteCommand(query, connection))
-          {
-            var categorias = new List<object>();
-
-            using (var reader = command.ExecuteReader())
-            {
-              while (reader.Read())
-              {
-                var categoria = new
-                {
-                  id = reader.GetInt32(0),
-                  nome = reader.GetString(1)
-                };
-
-                categorias.Add(categoria);
-              }
-            }
-
-            return Ok(categorias);
-          }
-        }
+        List<CategoriaModel> lista = _repository.GetAllCategorias();
+        return Ok(lista);
 
         var obj = new[]
         {
@@ -100,29 +72,12 @@ namespace Gastus.Api.Controllers
     }
 
     [HttpPost()]
-    public IActionResult AddCategoria([FromBody] CategoriaModel categoria)
+    public IActionResult AddCategoria([FromBody] CategoriaInsertModel categoria)
     {
       try
       {
-        // Estabelecer a conexão com o banco de dados
-        using (var connection = new SQLiteConnection(DATABASE_FILE_NAME))
-        {
-          connection.Open();
-
-          int idCategoria = 1; // categoria["id"].ToObject<int>();
-          string nomeCategoria = "Alimentção"; // categoria["nome"].ToString();
-
-          // Executar a consulta para obter as categorias
-          var query = "INSERT INTO Categoria (id, nome) VALUES (@id, @nome)";
-          using (var command = new SQLiteCommand(query, connection))
-          {
-            command.Parameters.AddWithValue("@id", categoria.Id);
-            command.Parameters.AddWithValue("@nome", categoria.Nome);
-            command.ExecuteNonQuery();
-          }
-
-          return Ok();
-        }
+        CategoriaModel model = _repository.AddCategoria(categoria);
+        return Ok(model);
       }
       catch (Exception ex)
       {
@@ -133,25 +88,14 @@ namespace Gastus.Api.Controllers
     [HttpDelete("id")]
     public async Task<IActionResult> DeleteCategoria(int id)
     {
-      using (var connection = new SQLiteConnection(DATABASE_FILE_NAME))
+      try
       {
-        await connection.OpenAsync();
-
-        // Comando SQL para excluir a categoria pelo ID
-        var commandText = "DELETE FROM Categoria WHERE Id = @Id";
-        using (var command = new SQLiteCommand(commandText, connection))
-        {
-          command.Parameters.AddWithValue("@Id", id);
-
-          // Executa o comando de exclusão
-          int affectedRows = await command.ExecuteNonQueryAsync();
-
-          // Se nenhuma linha foi afetada, retorna 404
-          if (affectedRows == 0)
-          {
-            return NotFound();
-          }
-        }
+        int rowsAffected = _repository.DeleteCategoria(id);
+        return Ok(rowsAffected);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
       }
 
       // Retorna 204 No Content em caso de sucesso

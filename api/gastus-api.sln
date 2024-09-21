@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gastus.Api", "gastus-api\Gastus.Api.csproj", "{D1FE5E73-8B24-40F1-96B0-6DB79BFAFD43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gastus.Core", "Gastus.Core\Gastus.Core.csproj", "{B551F328-838A-4B99-A58A-7436F1444F79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gastus.Domain", "Gastus.Domain\Gastus.Domain.csproj", "{109762D6-6BF4-46BE-8DB5-742FA875E1D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D1FE5E73-8B24-40F1-96B0-6DB79BFAFD43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1FE5E73-8B24-40F1-96B0-6DB79BFAFD43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1FE5E73-8B24-40F1-96B0-6DB79BFAFD43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B551F328-838A-4B99-A58A-7436F1444F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B551F328-838A-4B99-A58A-7436F1444F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B551F328-838A-4B99-A58A-7436F1444F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B551F328-838A-4B99-A58A-7436F1444F79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{109762D6-6BF4-46BE-8DB5-742FA875E1D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{109762D6-6BF4-46BE-8DB5-742FA875E1D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{109762D6-6BF4-46BE-8DB5-742FA875E1D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{109762D6-6BF4-46BE-8DB5-742FA875E1D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

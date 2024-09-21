@@ -1,11 +1,19 @@
 ﻿using System.Data.SQLite;
 
+using Gastus.Domain;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gastus.Api.Controllers
 {
-  public abstract class GastusBaseController : ControllerBase
+  /// <summary>
+  /// Inicialização da classe: <see cref="GastusBaseController"/>.
+  /// </summary>
+  /// <param name="repository">Repositório</param>
+  public abstract class GastusBaseController(ICategoriasRepository repository) : ControllerBase
   {
+    protected readonly ICategoriasRepository _repository = repository;
+
     protected IActionResult ReturnBadRequestException(Exception ex)
     {
       if (ex is SQLiteException sqlEx)
