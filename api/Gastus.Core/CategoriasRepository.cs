@@ -19,7 +19,7 @@ namespace Gastus.Core
     /// <returns>Próximo Id</returns>
     static int GetNextId(SQLiteConnection connection)
     {
-      const string sql = "SELECT IFNULL(MAX(id), 0) + 1 NextId FROM CATEGORIA;";
+      const string sql = "SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM CATEGORIA;";
       int nextId = connection.QuerySingle<int>(sql);
       return nextId;
     }
@@ -31,7 +31,7 @@ namespace Gastus.Core
     public List<CategoriaModel> GetAllCategorias()
     {
       using SQLiteConnection connection = GetConnection();
-      var query = "SELECT id, nome FROM Categoria";
+      var query = "SELECT Id, Nome FROM Categoria";
 
       var categorias = connection.Query<CategoriaModel>(query).ToList();
       return categorias;
@@ -46,7 +46,7 @@ namespace Gastus.Core
     {
       using var connection = GetConnection();
 
-      var query = "INSERT INTO Categoria (id, nome) VALUES (@Id, @Nome)";
+      var query = "INSERT INTO Categoria (Id, Nome) VALUES (@Id, @Nome)";
       var novaCategoria = new CategoriaModel(GetNextId(connection), categoria.Nome);
       int rows = connection.Execute(query, novaCategoria);
       return novaCategoria;
@@ -72,7 +72,15 @@ namespace Gastus.Core
     /// <returns>Categoria</returns>
     public CategoriaModel GetCategoria(int id)
     {
-      throw new NotImplementedException();
+      const string sqlCategoria = "SELECT * FROM CATEGORIA WHERE Id = @id";
+      using var connection = GetConnection();
+      CategoriaModel categoria = connection.QueryFirstOrDefault<CategoriaModel>(sqlCategoria, new { id });
+      if (categoria == null)
+        return null;
+
+      const string sqlSubCategoria = "SELECT * FROM SUBCATEGORIA WHERE IdCategoria = @id";
+      categoria.SubCategorias = connection.Query<SubCategoriaModel>(sqlSubCategoria, new { id }).ToList();
+      return categoria;
     }
   }
 }

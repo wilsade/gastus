@@ -2,9 +2,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-
-using System.Data.SQLite;
-
 namespace Gastus.Api.Controllers
 {
   /// <summary>
@@ -90,6 +87,11 @@ namespace Gastus.Api.Controllers
       }
     }
 
+    /// <summary>
+    /// Inserir uma categoria
+    /// </summary>
+    /// <param name="categoria">Categoria</param>
+    /// <returns>Categoria inserida</returns>
     [HttpPost()]
     public IActionResult AddCategoria([FromBody] CategoriaInsertModel categoria)
     {
@@ -104,21 +106,25 @@ namespace Gastus.Api.Controllers
       }
     }
 
+    /// <summary>
+    /// Excluir uma categoria
+    /// </summary>
+    /// <param name="id">Identificador da categoria</param>
+    /// <returns>NoContent se não houve exclusão; OK em caso de sucesso</returns>
     [HttpDelete("id")]
-    public async Task<IActionResult> DeleteCategoria(int id)
+    public IActionResult DeleteCategoria(int id)
     {
       try
       {
         int rowsAffected = _repository.DeleteCategoria(id);
+        if (rowsAffected > 0)
+          return NoContent();
         return Ok(rowsAffected);
       }
       catch (Exception ex)
       {
         return ReturnBadRequestException(ex);
       }
-
-      // Retorna 204 No Content em caso de sucesso
-      return NoContent();
     }
   }
 }
