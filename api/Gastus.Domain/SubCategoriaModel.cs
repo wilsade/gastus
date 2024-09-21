@@ -7,19 +7,24 @@ using System.Threading.Tasks;
 namespace Gastus.Domain
 {
   /// <summary>
-  /// Representa um modelo básico de entidade do SGBD
+  /// Representa um item de SubCategoria
   /// </summary>
-  public abstract class BaseModel
+  public class SubCategoriaModel : BaseModel
   {
     /// <summary>
-    /// Identificador do modelo
+    /// Identificador da categoria
     /// </summary>
-    public int Id { get; set; }
+    public int IdCategoria { get; set; }
+
+    /// <summary>
+    /// Nome da subcategoria
+    /// </summary>
+    public string Nome { get; set; }
 
     /// <summary>
     /// Retorna uma string representando esta instância
     /// </summary>
     /// <returns>string representando esta instância</returns>
-    public override string ToString() => $"Id={Id}";
+    public override string ToString() => Nome;
   }
 }

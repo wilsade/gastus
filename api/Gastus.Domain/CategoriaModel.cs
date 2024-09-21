@@ -28,6 +28,17 @@
     /// Nome
     /// </summary>
     public string Nome { get; set; }
+
+    /// <summary>
+    /// Lista de Sub categorias
+    /// </summary>
+    public List<SubCategoriaModel> SubCategorias { get; set; } = [];
+
+    /// <summary>
+    /// Retorna uma string representando esta instância
+    /// </summary>
+    /// <returns>string representando esta instância</returns>
+    public override string ToString() => $"[{Id}] {Nome} (Filhas={SubCategorias.Count})";
   }
 
   /// <summary>

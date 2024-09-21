@@ -30,5 +30,12 @@ namespace Gastus.Domain
     /// <param name="id">Identificador da categoria a ser excluída</param>
     /// <returns>Número de linhas afetadas na exclusão</returns>
     int DeleteCategoria(int id);
+
+    /// <summary>
+    /// Recuperar uma categoria
+    /// </summary>
+    /// <param name="id">Identificador da categoria a ser recuperada</param>
+    /// <returns>Categoria</returns>
+    CategoriaModel GetCategoria(int id);
   }
 }

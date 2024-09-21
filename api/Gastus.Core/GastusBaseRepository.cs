@@ -23,11 +23,5 @@ namespace Gastus.Core
       connection.Open();
       return connection;
     }
-
-    /// <summary>
-    /// Recuperar o próximo Id da entidade
-    /// </summary>
-    /// <returns>Próximo Id</returns>
-    protected abstract int GetNextId();
   }
 }

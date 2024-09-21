@@ -71,6 +71,25 @@ namespace Gastus.Api.Controllers
       }
     }
 
+    /// <summary>
+    /// Recuperar uma categoria
+    /// </summary>
+    /// <param name="id">Identificador da categoria</param>
+    /// <returns>Categoria</returns>
+    [HttpGet("id")]
+    public IActionResult GetById(int id)
+    {
+      try
+      {
+        CategoriaModel model = _repository.GetCategoria(id);
+        return Ok(model);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
+
     [HttpPost()]
     public IActionResult AddCategoria([FromBody] CategoriaInsertModel categoria)
     {

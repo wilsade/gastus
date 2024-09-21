@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SQLite;
 
 using Dapper;
 
@@ -22,11 +17,10 @@ namespace Gastus.Core
     /// Recuperar o próximo Id da entidade
     /// </summary>
     /// <returns>Próximo Id</returns>
-    protected override int GetNextId()
+    static int GetNextId(SQLiteConnection connection)
     {
-      using var connection = GetConnection();
       const string sql = "SELECT IFNULL(MAX(id), 0) + 1 NextId FROM CATEGORIA;";
-      int nextId = connection.QuerySingle(sql);
+      int nextId = connection.QuerySingle<int>(sql);
       return nextId;
     }
 
@@ -39,20 +33,7 @@ namespace Gastus.Core
       using SQLiteConnection connection = GetConnection();
       var query = "SELECT id, nome FROM Categoria";
 
-      var bla = connection.Query<CategoriaModel>(query).ToList();
-
-      using var command = new SQLiteCommand(query, connection);
-      var categorias = new List<CategoriaModel>();
-
-      using (var reader = command.ExecuteReader())
-      {
-        while (reader.Read())
-        {
-          var categoria = new CategoriaModel(reader.GetInt32(0), reader.GetString(1));
-          categorias.Add(categoria);
-        }
-      }
-
+      var categorias = connection.Query<CategoriaModel>(query).ToList();
       return categorias;
     }
 
@@ -65,8 +46,8 @@ namespace Gastus.Core
     {
       using var connection = GetConnection();
 
-      var query = "INSERT INTO Categoria (id, nome) VALUES (@id, @nome)";
-      var novaCategoria = new CategoriaModel(GetNextId(), categoria.Nome);
+      var query = "INSERT INTO Categoria (id, nome) VALUES (@Id, @Nome)";
+      var novaCategoria = new CategoriaModel(GetNextId(connection), categoria.Nome);
       int rows = connection.Execute(query, novaCategoria);
       return novaCategoria;
     }
@@ -79,9 +60,19 @@ namespace Gastus.Core
     public int DeleteCategoria(int id)
     {
       using SQLiteConnection connection = GetConnection();
-      var commandText = "DELETE FROM Categoria WHERE Id = @Id";
+      var commandText = "DELETE FROM Categoria WHERE Id = @id";
       int rows = connection.Execute(commandText, new { id });
       return rows;
+    }
+
+    /// <summary>
+    /// Recuperar uma categoria
+    /// </summary>
+    /// <param name="id">Identificador da categoria a ser excluída</param>
+    /// <returns>Categoria</returns>
+    public CategoriaModel GetCategoria(int id)
+    {
+      throw new NotImplementedException();
     }
   }
 }
