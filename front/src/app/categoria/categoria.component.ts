@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PoModule } from '@po-ui/ng-components';
 import { AppService } from '../app.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-categoria',
@@ -15,6 +16,7 @@ export class CategoriaComponent implements OnInit {
   constructor(private _service: AppService) { }
 
   ngOnInit() {
+    console.log('meu ambiente: ', environment.nome);
     this._service.getCategorias().subscribe({
       next: data => {
         this.categorias = data;
