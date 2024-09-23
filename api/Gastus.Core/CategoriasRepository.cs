@@ -14,13 +14,30 @@ namespace Gastus.Core
     GastusBaseRepository(databaseFileName), ICategoriasRepository
   {
     /// <summary>
-    /// Recuperar o próximo Id da entidade
+    /// Recuperar o próximo Id da Categoria
     /// </summary>
+    /// <param name="connection">Conexão com o banco de dados</param>
     /// <returns>Próximo Id</returns>
-    static int GetNextId(SQLiteConnection connection)
+    static int GetNextCategoriaId(SQLiteConnection connection)
     {
       const string sql = "SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM CATEGORIA;";
       int nextId = connection.QuerySingle<int>(sql);
+      return nextId;
+    }
+
+    /// <summary>
+    /// Recuperar o próximo Id da SubCategoria
+    /// </summary>
+    /// <param name="connection">Conexão com o banco de dados</param>
+    /// <param name="idCategoria">Identificador da Categoria</param>
+    /// <returns>Próximo Id</returns>
+    static int GetNextSubCategoriaId(SQLiteConnection connection, int idCategoria)
+    {
+      const string sql = @"
+        SELECT IFNULL(MAX(Id), 0) + 1 NextId 
+        FROM SUBCATEGORIA
+        WHERE IDCATEGORIA = @idCategoria";
+      int nextId = connection.QuerySingle<int>(sql, new { idCategoria });
       return nextId;
     }
 
@@ -47,8 +64,9 @@ namespace Gastus.Core
       using var connection = GetConnection();
 
       var query = "INSERT INTO Categoria (Id, Nome) VALUES (@Id, @Nome)";
-      var novaCategoria = new CategoriaModel(GetNextId(connection), categoria.Nome);
+      var novaCategoria = new CategoriaModel(GetNextCategoriaId(connection), categoria.Nome);
       int rows = connection.Execute(query, novaCategoria);
+      System.Diagnostics.Trace.WriteLine(rows);
       return novaCategoria;
     }
 
@@ -81,6 +99,79 @@ namespace Gastus.Core
       const string sqlSubCategoria = "SELECT * FROM SUBCATEGORIA WHERE IdCategoria = @id";
       categoria.SubCategorias = connection.Query<SubCategoriaModel>(sqlSubCategoria, new { id }).ToList();
       return categoria;
+    }
+
+    /// <summary>
+    /// Recuperar todas as subCategorias
+    /// </summary>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <returns>SubCategorias</returns>
+    public List<SubCategoriaModel> GetAllSubCategorias(int? idCategoria)
+    {
+      string sql = @"SELECT * FROM SUBCATEGORIA";
+      object param = null;
+      if (idCategoria != null)
+      {
+        sql += " WHERE IDCATEGORIA = @idCategoria";
+        param = new { idCategoria };
+      }
+      using var connection = GetConnection();
+      List<SubCategoriaModel> subCategorias = connection.Query<SubCategoriaModel>(sql, param)
+        .ToList();
+      return subCategorias;
+    }
+
+    /// <summary>
+    /// Recuperar uma subcategoria
+    /// </summary>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="id">Identificador da subcategoria</param>
+    /// <returns>Sub categoria</returns>
+    public SubCategoriaModel GetSubCategoria(int idCategoria, int id)
+    {
+      const string sql = @"
+        SELECT * FROM SUBCATEGORIA
+        WHERE IDCATEGORIA = @idCategoria
+          AND ID = @id";
+      var connection = GetConnection();
+      SubCategoriaModel subCategoria = connection.QueryFirstOrDefault<SubCategoriaModel>(sql,
+        new { idCategoria, id });
+      return subCategoria;
+    }
+
+    /// <summary>
+    /// Adicionar uma subcategoria
+    /// </summary>
+    /// <param name="model">Dados da inserção</param>
+    /// <returns>SubCategoria inserida</returns>
+    public SubCategoriaModel AddSubCategoria(SubCategoriaInsertModel model)
+    {
+      const string sql = @"
+        INSERT INTO SUBCATEGORIA (IDCATEGORIA, ID, NOME)
+        VALUES (@IdCategoria, @Id, @Nome)";
+      var connection = GetConnection();
+      var nova = new SubCategoriaModel(model.IdCategoria,
+        GetNextSubCategoriaId(connection, model.IdCategoria), model.Nome);
+      int rows = connection.Execute(sql, nova);
+      System.Diagnostics.Trace.WriteLine(rows);
+      return nova;
+    }
+
+    /// <summary>
+    /// Excluir uma subcategoria
+    /// </summary>
+    /// <param name="idCategoria">Identificador da Categoria</param>
+    /// <param name="id">Identificador da categoria a ser excluída</param>
+    /// <returns>Linhas afetadas</returns>
+    public int DeleteSubCategoria(int idCategoria, int id)
+    {
+      const string sql = @"
+        DELETE FROM SUBCATEGORIA
+        WHERE IdCategoria = @idCategoria
+          AND Id = @id";
+      var connection = GetConnection();
+      int rows = connection.Execute(sql, new { idCategoria, id });
+      return rows;
     }
   }
 }

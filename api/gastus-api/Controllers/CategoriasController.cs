@@ -73,7 +73,7 @@ namespace Gastus.Api.Controllers
     /// </summary>
     /// <param name="id">Identificador da categoria</param>
     /// <returns>Categoria</returns>
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
       try
@@ -111,15 +111,15 @@ namespace Gastus.Api.Controllers
     /// </summary>
     /// <param name="id">Identificador da categoria</param>
     /// <returns>NoContent se não houve exclusão; OK em caso de sucesso</returns>
-    [HttpDelete("id")]
+    [HttpDelete("{id}")]
     public IActionResult DeleteCategoria(int id)
     {
       try
       {
         int rowsAffected = _repository.DeleteCategoria(id);
         if (rowsAffected > 0)
-          return NoContent();
-        return Ok(rowsAffected);
+          return Ok(rowsAffected);
+        return NoContent();
       }
       catch (Exception ex)
       {

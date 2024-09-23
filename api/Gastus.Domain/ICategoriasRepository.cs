@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gastus.Domain
+﻿namespace Gastus.Domain
 {
   /// <summary>
   /// Serviços para o repositório
@@ -37,5 +31,35 @@ namespace Gastus.Domain
     /// <param name="id">Identificador da categoria a ser recuperada</param>
     /// <returns>Categoria</returns>
     CategoriaModel GetCategoria(int id);
+
+    /// <summary>
+    /// Recuperar todas as subCategorias
+    /// </summary>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <returns>SubCategorias</returns>
+    List<SubCategoriaModel> GetAllSubCategorias(int? idCategoria);
+
+    /// <summary>
+    /// Recuperar uma subcategoria
+    /// </summary>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="id">Identificador da subcategoria</param>
+    /// <returns>Sub categoria</returns>
+    SubCategoriaModel GetSubCategoria(int idCategoria, int id);
+
+    /// <summary>
+    /// Adicionar uma subcategoria
+    /// </summary>
+    /// <param name="model">Dados da inserção</param>
+    /// <returns>SubCategoria inserida</returns>
+    SubCategoriaModel AddSubCategoria(SubCategoriaInsertModel model);
+
+    /// <summary>
+    /// Excluir uma subcategoria
+    /// </summary>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="id">Identificador da subcategoria a ser excluída</param>
+    /// <returns>Linhas afetadas</returns>
+    int DeleteSubCategoria(int idCategoria, int id);
   }
 }
