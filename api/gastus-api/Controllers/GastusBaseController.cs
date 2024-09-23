@@ -12,8 +12,16 @@ namespace Gastus.Api.Controllers
   /// <param name="repository">Repositório</param>
   public abstract class GastusBaseController(ICategoriasRepository repository) : ControllerBase
   {
+    /// <summary>
+    /// Repository
+    /// </summary>
     protected readonly ICategoriasRepository _repository = repository;
 
+    /// <summary>
+    /// Return Bad Request Exception
+    /// </summary>
+    /// <param name="ex">Ex</param>
+    /// <returns></returns>
     protected IActionResult ReturnBadRequestException(Exception ex)
     {
       if (ex is SQLiteException sqlEx)

@@ -36,7 +36,8 @@ namespace Gastus.Api.Controllers
     /// <summary>
     /// Recuperar uma Subcategoria
     /// </summary>
-    /// <param name="id">Identificador da categoria</param>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="id">Identificador da subcategoria</param>
     /// <returns>SubCategoria</returns>
     [HttpGet("{idCategoria}/{id}")]
     public IActionResult GetById(int idCategoria, int id)
@@ -55,7 +56,7 @@ namespace Gastus.Api.Controllers
     /// <summary>
     /// Inserir uma subcategoria
     /// </summary>
-    /// <param name="categoria">Dados da inserção</param>
+    /// <param name="model">Dados da inserção</param>
     /// <returns>SubCategoria inserida</returns>
     [HttpPost()]
     public IActionResult AddSubCategoria([FromBody] SubCategoriaInsertModel model)
