@@ -68,7 +68,7 @@ namespace Gastus.Core
     /// <summary>
     /// Recuperar uma categoria
     /// </summary>
-    /// <param name="id">Identificador da categoria a ser excluída</param>
+    /// <param name="id">Identificador da categoria a ser recuperada</param>
     /// <returns>Categoria</returns>
     public CategoriaModel GetCategoria(int id)
     {
