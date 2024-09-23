@@ -12,7 +12,7 @@ namespace Gastus.Api.Controllers
   /// </remarks>
   /// <param name="repository">Repositório</param>
   [ApiController]
-  [Route("[controller]")]
+  [Route("api/[controller]")]
   public class CategoriasController(ICategoriasRepository repository) : GastusBaseController(repository)
   {
     /// <summary>
