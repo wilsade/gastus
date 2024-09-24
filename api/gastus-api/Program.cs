@@ -24,8 +24,11 @@ namespace Gastus.Api
       const string DATABASE_FILE_NAME = @"Data Source=C:\_Wilsade\Projetos\git\gastus\gastus.db;Version=3;";
       builder.Services.AddSingleton<ICategoriasRepository>(x => new CategoriasRepository(DATABASE_FILE_NAME));
 
-      builder.Services.AddControllers();
-      // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+      builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+          options.JsonSerializerOptions.PropertyNamingPolicy = null; // Remove a conversão camelCase
+        });
       builder.Services.AddEndpointsApiExplorer();
       builder.Services.AddSwaggerGen(options =>
       {
