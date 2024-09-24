@@ -12,6 +12,12 @@ export class CategoriaService {
 
   constructor(private _http: HttpClient) { }
 
+  getEmptyCategoria(): ICategoria {
+    return {
+      Id: 0, Nome: 'xxx'
+    }
+  }
+
   getCategorias(): Observable<ICategoria[]> {
     return this._http.get<any>(this.categoriasUrl).pipe(
       map((response: any) => {

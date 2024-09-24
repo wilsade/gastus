@@ -3,5 +3,10 @@
             [p-striped]="true"
             [p-sort]="true"
             [p-columns]="colunas"
-            [p-items]="categorias"></po-table>
+            [p-items]="categorias"
+            [p-actions]="acoesTabela"></po-table>
+
+
+  <app-categoria-edit [(categoria)]="categoriaEscolhida"
+                      #modalCategoria></app-categoria-edit>
 </po-page-default>

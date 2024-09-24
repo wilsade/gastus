@@ -1,0 +1,6 @@
+<po-modal #modal
+          [p-title]="meuTitulo">
+  <po-input p-label="Categoria"
+            [(ngModel)]="categoria.Nome"
+            (p-change-model)="alterouNome()"></po-input>
+</po-modal>

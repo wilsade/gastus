@@ -1,29 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { PoModule, PoTableColumn } from '@po-ui/ng-components';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { PoModule, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CategoriaService } from './categoria.service';
 import { ICategoria } from '../_models/ICategoria';
+import { CategoriaEditComponent } from "./categoria-edit.component";
 
 @Component({
   selector: 'app-categoria',
   standalone: true,
-  imports: [PoModule],
+  imports: [PoModule, CategoriaEditComponent],
   templateUrl: './categoria.component.html'
 })
 export class CategoriaComponent implements OnInit {
 
-  categorias: Array<ICategoria>;
-
   constructor(private _service: CategoriaService) { }
+
+  categorias: Array<ICategoria>;
+  categoriaEscolhida: ICategoria = this._service.getEmptyCategoria();
 
   protected readonly colunas: PoTableColumn[] = [
     { label: 'Id.', property: 'Id', width: '10%' },
     { label: 'Nome', property: 'Nome' }
   ]
 
+  protected readonly acoesTabela: PoTableAction[] = [
+    { label: 'Editar', action: this.editarCategoria.bind(this) }
+  ]
+
+  @ViewChild('modalCategoria', { static: false })
+  modalCategoria: CategoriaEditComponent
+
   ngOnInit() {
     this._service.getCategorias().subscribe({
       next: data => {
-        console.log(data);
         this.categorias = data;
       },
       error: err => {
@@ -33,6 +41,11 @@ export class CategoriaComponent implements OnInit {
         console.log('categorias ok');
       }
     });
+  }
+
+  private editarCategoria(item: ICategoria): void {
+    this.categoriaEscolhida = item;
+    this.modalCategoria.exibirModal();
   }
 
 }
