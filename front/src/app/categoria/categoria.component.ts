@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PoModule } from '@po-ui/ng-components';
-import { AppService } from '../app.service';
-import { environment } from '../../environments/environment';
+import { PoModule, PoTableColumn } from '@po-ui/ng-components';
+import { CategoriaService } from './categoria.service';
+import { ICategoria } from '../_models/ICategoria';
 
 @Component({
   selector: 'app-categoria',
@@ -11,14 +11,19 @@ import { environment } from '../../environments/environment';
 })
 export class CategoriaComponent implements OnInit {
 
-  categorias: Array<any>;
+  categorias: Array<ICategoria>;
 
-  constructor(private _service: AppService) { }
+  constructor(private _service: CategoriaService) { }
+
+  protected readonly colunas: PoTableColumn[] = [
+    { label: 'Id.', property: 'Id', width: '10%' },
+    { label: 'Nome', property: 'Nome' }
+  ]
 
   ngOnInit() {
-    console.log('meu ambiente: ', environment.nome);
     this._service.getCategorias().subscribe({
       next: data => {
+        console.log(data);
         this.categorias = data;
       },
       error: err => {
@@ -26,7 +31,6 @@ export class CategoriaComponent implements OnInit {
       },
       complete: () => {
         console.log('categorias ok');
-
       }
     });
   }

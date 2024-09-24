@@ -1,3 +1,7 @@
 <po-page-default p-title="Categorias">
-  <po-table [p-items]="categorias"></po-table>
+  <po-table [p-hide-columns-manager]="true"
+            [p-striped]="true"
+            [p-sort]="true"
+            [p-columns]="colunas"
+            [p-items]="categorias"></po-table>
 </po-page-default>
