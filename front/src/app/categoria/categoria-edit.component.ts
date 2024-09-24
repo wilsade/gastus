@@ -1,13 +1,14 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule, PoTableColumn } from '@po-ui/ng-components';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Output, ViewChild } from '@angular/core';
+import { PoModalAction, PoModalComponent, PoModule } from '@po-ui/ng-components';
 import { ICategoria } from '../_models/ICategoria';
 import { CategoriaService } from './categoria.service';
 import { FormsModule } from '@angular/forms';
+import { SubcategoriaComponent } from "./subcategoria.component";
 
 @Component({
   selector: 'app-categoria-edit',
   standalone: true,
-  imports: [PoModule, FormsModule],
+  imports: [PoModule, FormsModule, SubcategoriaComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './categoria-edit.component.html',
   styleUrl: './categoria-edit.component.css'
@@ -31,11 +32,6 @@ export class CategoriaEditComponent {
       this.modal.close();
     }
   }
-
-  protected colunas: Array<PoTableColumn> = [
-    { label: 'Id', property: 'Id', width: '10%' },
-    { label: 'Nome', property: 'Nome' },
-  ]
 
   @ViewChild('modal')
   modal: PoModalComponent;
@@ -69,10 +65,5 @@ export class CategoriaEditComponent {
 
       }
     });
-  }
-
-  protected inserirSubCategoria_Click(): void {
-    console.log('inserirSubCategoria_Click');
-
   }
 }

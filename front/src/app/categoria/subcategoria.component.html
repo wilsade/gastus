@@ -1,0 +1,18 @@
+<div class="po-row">
+  <po-info class="po-pt-1"
+           [p-label-size]="20"
+           p-label="Subcategorias"></po-info>
+  <po-button style="margin-left: 9px;"
+             p-label="Inserir"
+             p-icon="ph-fill ph-plus-square"
+             (p-click)="inserirSubCategoria_Click()"></po-button>
+
+  <po-table class="po-md-12"
+            [p-hide-columns-manager]="true"
+            [p-striped]="true"
+            [p-sort]="true"
+            [p-columns]="colunas"
+            [p-items]="subcategorias"></po-table>
+</div>
+
+<app-input-box #inputBox></app-input-box>

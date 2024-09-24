@@ -1,0 +1,7 @@
+<po-modal #modal
+          [p-primary-action]="confirmou"
+          [p-secondary-action]="cancelou">
+  <po-input [p-label]="rotulo"
+            [(ngModel)]="valor"
+            (p-change-model)="alterouNome()"></po-input>
+</po-modal>
