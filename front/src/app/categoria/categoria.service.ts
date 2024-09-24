@@ -14,12 +14,19 @@ export class CategoriaService {
 
   getEmptyCategoria(): ICategoria {
     return {
-      Id: 0, Nome: ''
+      Id: 0, Nome: '', SubCategorias: []
     }
   }
 
   getCategorias(): Observable<ICategoria[]> {
     return this._http.get<any>(this.categoriasUrl).pipe(
+      map((response: any) => {
+        return response;
+      }));
+  }
+
+  getCategoriaById(id: number): Observable<ICategoria> {
+    return this._http.get<any>(`${this.categoriasUrl}/${id}`).pipe(
       map((response: any) => {
         return response;
       }));

@@ -38,7 +38,7 @@ export class CategoriaComponent implements OnInit {
         console.error(err);
       },
       complete: () => {
-        console.log('categorias ok');
+
       }
     });
   }

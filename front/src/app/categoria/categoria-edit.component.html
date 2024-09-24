@@ -4,4 +4,11 @@
           [p-title]="meuTitulo">
   <po-input p-label="Categoria"
             [(ngModel)]="categoria.Nome"></po-input>
+  <po-divider></po-divider>
+  <h3>Subcategorias</h3>
+
+  <po-grid class="po-md-12"
+           [p-row-actions]="rowActions"
+           [p-columns]="colunas"
+           [p-data]="categoria.SubCategorias"></po-grid>
 </po-modal>
