@@ -15,7 +15,7 @@ export class CategoriaComponent implements OnInit {
   constructor(private _service: CategoriaService) { }
 
   categorias: Array<ICategoria>;
-  categoriaEscolhida: ICategoria = this._service.getEmptyCategoria();
+  //categoriaEscolhida: ICategoria = this._service.getEmptyCategoria();
 
   protected readonly colunas: PoTableColumn[] = [
     { label: 'Id.', property: 'Id', width: '10%' },
@@ -44,8 +44,12 @@ export class CategoriaComponent implements OnInit {
   }
 
   private editarCategoria(item: ICategoria): void {
-    this.categoriaEscolhida = item;
-    this.modalCategoria.exibirModal(item.Nome);
+    //this.categoriaEscolhida = item;
+    this.modalCategoria.exibirModal(item);
   }
 
+  protected categoriaAlterada(item: ICategoria): void {
+    console.log('callback', item);
+
+  }
 }

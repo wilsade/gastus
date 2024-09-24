@@ -19,7 +19,8 @@ export class CategoriaEditComponent {
   protected confirmouModal: PoModalAction = {
     label: 'Confirmar',
     action: () => {
-      console.log('salvar tudo');
+      console.log('salvar tudo', this.categoria);
+      this.onConfirmouModal.emit(this.categoria);
       this.modal.close();
     }
   }
@@ -34,20 +35,20 @@ export class CategoriaEditComponent {
   @ViewChild('modal')
   modal: PoModalComponent;
 
-  @Input()
-  categoria: ICategoria;
+  //@Input()
+  protected categoria: ICategoria = this._service.getEmptyCategoria();
+
+  //@Output()
+  //categoriaChange = new EventEmitter<ICategoria>();
 
   @Output()
-  categoriaChange = new EventEmitter<ICategoria>();
+  onConfirmouModal = new EventEmitter<ICategoria>();
 
   protected meuTitulo: string;
 
-  exibirModal(nome: string): void {
-    this.meuTitulo = `Editar categoria: ${nome}`;
+  exibirModal(item: ICategoria): void {
+    this.categoria = { Id: item.Id, Nome: item.Nome };
+    this.meuTitulo = `Editar categoria: ${item.Nome}`;
     this.modal.open();
-  }
-
-  protected alterouNome(): void {
-    this.categoriaChange.emit(this.categoria);
   }
 }

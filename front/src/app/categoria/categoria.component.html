@@ -7,6 +7,6 @@
             [p-actions]="acoesTabela"></po-table>
 
 
-  <app-categoria-edit [(categoria)]="categoriaEscolhida"
-                      #modalCategoria></app-categoria-edit>
+  <app-categoria-edit #modalCategoria
+                      (onConfirmouModal)="categoriaAlterada($event)"></app-categoria-edit>
 </po-page-default>
