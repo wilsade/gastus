@@ -5,5 +5,5 @@
   <po-input p-label="Categoria"
             [(ngModel)]="categoria.Nome"></po-input>
   <hr>
-  <app-subcategoria [subcategorias]="categoria.SubCategorias"></app-subcategoria>
+  <app-subcategoria [categoria]="categoria"></app-subcategoria>
 </po-modal>

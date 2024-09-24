@@ -62,7 +62,6 @@ export class CategoriaEditComponent {
         console.error(err);
       },
       complete: () => {
-
       }
     });
   }

@@ -12,7 +12,8 @@
             [p-striped]="true"
             [p-sort]="true"
             [p-columns]="colunas"
-            [p-items]="subcategorias"></po-table>
+            [p-items]="categoria.SubCategorias"></po-table>
 </div>
 
-<app-input-box #inputBox></app-input-box>
+<app-input-box #inputBox
+               (onConfirmou)="confirmouNomeSubCategoria($event)"></app-input-box>

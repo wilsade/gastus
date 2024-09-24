@@ -2,7 +2,8 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, ViewChild } from '@angular/co
 import { FormsModule } from '@angular/forms';
 import { PoModule, PoTableColumn } from '@po-ui/ng-components';
 import { InputBoxComponent } from '../shared/input-box.component';
-import { ISubCategoria } from '../_models/ICategoria';
+import { ICategoria } from '../_models/ICategoria';
+import { CategoriaService } from './categoria.service';
 
 @Component({
   selector: 'app-subcategoria',
@@ -13,8 +14,10 @@ import { ISubCategoria } from '../_models/ICategoria';
 })
 export class SubcategoriaComponent {
 
+  constructor(private _service: CategoriaService) { }
+
   @Input()
-  subcategorias: ISubCategoria[] = [];
+  categoria: ICategoria;
 
   @ViewChild('inputBox')
   inputBox: InputBoxComponent
@@ -26,6 +29,19 @@ export class SubcategoriaComponent {
 
   protected inserirSubCategoria_Click(): void {
     this.inputBox.showInputBox();
+  }
+
+  protected confirmouNomeSubCategoria(nome: string): void {
+    this._service.inserirSubCategoria(this.categoria.Id, nome).subscribe({
+      next: data => {
+        this.categoria.SubCategorias = [...this.categoria.SubCategorias, data];
+      },
+      error: err => {
+        console.error(err);
+      },
+      complete: () => {
+      }
+    });
   }
 
 }

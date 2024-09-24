@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input, Input, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PoModalAction, PoModalComponent, PoModule } from '@po-ui/ng-components';
 
@@ -17,6 +17,9 @@ export class InputBoxComponent {
   @Input()
   valor: string;
 
+  @Output()
+  onConfirmou = new EventEmitter<string>();
+
   @ViewChild('modal')
   modal: PoModalComponent
 
@@ -24,7 +27,7 @@ export class InputBoxComponent {
     label: 'OK',
     disabled: true,
     action: () => {
-      console.log('input box ok');
+      this.onConfirmou.emit(this.valor);
       this.modal.close();
     }
   }
@@ -32,7 +35,6 @@ export class InputBoxComponent {
   protected cancelou: PoModalAction = {
     label: 'Cancelar',
     action: () => {
-      console.log('input box cancelado');
       this.modal.close();
     }
   }
