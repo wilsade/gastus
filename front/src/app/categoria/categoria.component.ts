@@ -45,7 +45,7 @@ export class CategoriaComponent implements OnInit {
 
   private editarCategoria(item: ICategoria): void {
     this.categoriaEscolhida = item;
-    this.modalCategoria.exibirModal();
+    this.modalCategoria.exibirModal(item.Nome);
   }
 
 }

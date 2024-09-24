@@ -1,4 +1,6 @@
 <po-modal #modal
+          [p-primary-action]="confirmouModal"
+          [p-secondary-action]="cancelouModal"
           [p-title]="meuTitulo">
   <po-input p-label="Categoria"
             [(ngModel)]="categoria.Nome"

@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { PoModalComponent, PoModule } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule } from '@po-ui/ng-components';
 import { ICategoria } from '../_models/ICategoria';
 import { CategoriaService } from './categoria.service';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +16,21 @@ export class CategoriaEditComponent {
 
   constructor(private _service: CategoriaService) { }
 
+  protected confirmouModal: PoModalAction = {
+    label: 'Confirmar',
+    action: () => {
+      console.log('salvar tudo');
+      this.modal.close();
+    }
+  }
+
+  protected cancelouModal: PoModalAction = {
+    label: 'Cancelar',
+    action: () => {
+      this.modal.close();
+    }
+  }
+
   @ViewChild('modal')
   modal: PoModalComponent;
 
@@ -25,9 +40,10 @@ export class CategoriaEditComponent {
   @Output()
   categoriaChange = new EventEmitter<ICategoria>();
 
-  meuTitulo: string;
+  protected meuTitulo: string;
 
-  exibirModal(): void {
+  exibirModal(nome: string): void {
+    this.meuTitulo = `Editar categoria: ${nome}`;
     this.modal.open();
   }
 

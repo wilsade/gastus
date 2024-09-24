@@ -14,7 +14,7 @@ export class CategoriaService {
 
   getEmptyCategoria(): ICategoria {
     return {
-      Id: 0, Nome: 'xxx'
+      Id: 0, Nome: ''
     }
   }
 
