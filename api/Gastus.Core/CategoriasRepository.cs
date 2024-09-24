@@ -173,5 +173,22 @@ namespace Gastus.Core
       int rows = connection.Execute(sql, new { idCategoria, id });
       return rows;
     }
+
+    /// <summary>
+    /// Editar uma subcategoria
+    /// </summary>
+    /// <param name="model">Dados da alteração</param>
+    /// <returns>Linhas afetadas</returns>
+    public int EditSubCategoria(SubCategoriaModel model)
+    {
+      const string sql = @"
+        UPDATE SUBCATEGORIA
+        SET NOME = @Nome
+        WHERE IDCATEGORIA = @IdCategoria
+          AND ID = @id";
+      var connection = GetConnection();
+      int rows = connection.Execute(sql, model);
+      return rows;
+    }
   }
 }

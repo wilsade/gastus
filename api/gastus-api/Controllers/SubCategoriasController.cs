@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gastus.Api.Controllers
 {
   /// <summary>
-  /// Controller para Categorias
+  /// Controller para Subcategorias
   /// </summary>
   /// <remarks>
   /// Inicialização da classe: <see cref="SubCategoriasController"/>.
@@ -16,9 +16,9 @@ namespace Gastus.Api.Controllers
   public class SubCategoriasController(ICategoriasRepository repository) : GastusBaseController(repository)
   {
     /// <summary>
-    /// Recuperar todas as categorias cadastradas
+    /// Recuperar todas as subcategorias cadastradas
     /// </summary>
-    /// <returns>All categorias</returns>
+    /// <returns>Subcategorias</returns>
     [HttpGet()]
     public IActionResult GetAllSubCategorias(int? idCategoria)
     {
@@ -84,6 +84,27 @@ namespace Gastus.Api.Controllers
       try
       {
         int rowsAffected = _repository.DeleteSubCategoria(idCategoria, id);
+        if (rowsAffected > 0)
+          return Ok(rowsAffected);
+        return NoContent();
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
+
+    /// <summary>
+    /// Editar uma subcategoria
+    /// </summary>
+    /// <param name="model">Dados da inserção</param>
+    /// <returns>SubCategoria inserida</returns>
+    [HttpPut()]
+    public IActionResult EditSubCategoria([FromBody] SubCategoriaModel model)
+    {
+      try
+      {
+        int rowsAffected = _repository.EditSubCategoria(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NoContent();

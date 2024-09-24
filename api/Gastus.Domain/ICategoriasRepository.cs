@@ -61,5 +61,12 @@
     /// <param name="id">Identificador da subcategoria a ser excluída</param>
     /// <returns>Linhas afetadas</returns>
     int DeleteSubCategoria(int idCategoria, int id);
+
+    /// <summary>
+    /// Editar uma subcategoria
+    /// </summary>
+    /// <param name="model">Dados da alteração</param>
+    /// <returns>Linhas afetadas</returns>
+    int EditSubCategoria(SubCategoriaModel model);
   }
 }
