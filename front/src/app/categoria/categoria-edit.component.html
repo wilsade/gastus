@@ -4,11 +4,21 @@
           [p-title]="meuTitulo">
   <po-input p-label="Categoria"
             [(ngModel)]="categoria.Nome"></po-input>
-  <po-divider></po-divider>
-  <h3>Subcategorias</h3>
+  <hr>
+  <div class="po-row">
+    <po-info class="po-pt-1"
+             [p-label-size]="20"
+             p-label="Subcategorias"></po-info>
+    <po-button style="margin-left: 9px;"
+               p-label="Inserir"
+               p-icon="ph-fill ph-plus-square"
+               (p-click)="inserirSubCategoria_Click()"></po-button>
+  </div>
 
-  <po-grid class="po-md-12"
-           [p-row-actions]="rowActions"
-           [p-columns]="colunas"
-           [p-data]="categoria.SubCategorias"></po-grid>
+  <po-table class="po-md-12"
+            [p-hide-columns-manager]="true"
+            [p-striped]="true"
+            [p-sort]="true"
+            [p-columns]="colunas"
+            [p-items]="categoria.SubCategorias"></po-table>
 </po-modal>
