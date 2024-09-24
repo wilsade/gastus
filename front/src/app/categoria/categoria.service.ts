@@ -42,6 +42,14 @@ export class CategoriaService {
       idCategoria,
       nome: nomeSubCategoria
     };
-    return this._http.post<any>(this.subCategoriasUrl, body, { headers });
+    return this._http.post<ISubCategoria>(this.subCategoriasUrl, body, { headers });
+  }
+
+  editarSubCategoria(subcategoria: ISubCategoria): Observable<ISubCategoria> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.put<any>(this.subCategoriasUrl, subcategoria, { headers });
   }
 }

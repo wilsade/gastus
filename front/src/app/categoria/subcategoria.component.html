@@ -11,9 +11,12 @@
             [p-hide-columns-manager]="true"
             [p-striped]="true"
             [p-sort]="true"
+            [p-actions]="acoesTabela"
             [p-columns]="colunas"
             [p-items]="categoria.SubCategorias"></po-table>
 </div>
 
-<app-input-box #inputBox
-               (onConfirmou)="confirmouNomeSubCategoria($event)"></app-input-box>
+<app-input-box #inputBoxInserir
+               (onConfirmou)="confirmouInsercaoNomeSubCategoria($event)"></app-input-box>
+<app-input-box #inputBoxEditar
+               (onConfirmou)="confirmouEdicaoNomeSubCategoria($event)"></app-input-box>
