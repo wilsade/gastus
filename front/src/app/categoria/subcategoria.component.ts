@@ -1,6 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PoModule, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoDialogService, PoModule, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { InputBoxComponent } from '../shared/input-box.component';
 import { ICategoria, ISubCategoria } from '../_models/ICategoria';
 import { CategoriaService } from './categoria.service';
@@ -14,7 +14,7 @@ import { CategoriaService } from './categoria.service';
 })
 export class SubcategoriaComponent {
 
-  constructor(private _service: CategoriaService) { }
+  constructor(private readonly _service: CategoriaService, private readonly _dialog: PoDialogService) { }
 
   private _subCategoriaAtual: ISubCategoria;
 
@@ -34,7 +34,7 @@ export class SubcategoriaComponent {
 
   protected acoesTabela: Array<PoTableAction> = [
     { label: 'Editar', icon: 'ph-fill ph-pencil-simple', action: this.editar_Click.bind(this) },
-    { label: 'Excluir', icon: 'ph-fill ph-minus-circle' }
+    { label: 'Excluir', icon: 'ph-fill ph-minus-circle', action: this.excluir_Click.bind(this) }
   ]
 
   protected inserirSubCategoria_Click(): void {
@@ -59,6 +59,32 @@ export class SubcategoriaComponent {
     this._subCategoriaAtual = subCategoria;
     this.inputBoxEditar.valor = subCategoria.Nome;
     this.inputBoxEditar.showInputBox();
+  }
+
+  private excluir_Click(subCategoria: ISubCategoria): void {
+    let excluir = false;
+    this._dialog.confirm({
+      title: 'Exclusão de SubCategoria',
+      message: `Atenção!<br>Deseja realmente EXCLUIR a subcategoria <b>${subCategoria.Nome}</b>?`,
+      confirm: () => {
+        excluir = true;
+      }
+    });
+
+    if (!excluir)
+      return;
+
+    this._service.excluirSubCategoria(this.categoria.Id, subCategoria.Id).subscribe({
+      next: data => {
+        this.categoria.SubCategorias = this.categoria.SubCategorias.filter(sub => sub.Id !== subCategoria.Id);
+      },
+      error: err => {
+        console.error(err);
+      },
+      complete: () => {
+
+      }
+    });
   }
 
   protected confirmouEdicaoNomeSubCategoria(nome: string): void {
