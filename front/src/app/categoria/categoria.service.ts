@@ -11,7 +11,7 @@ export class CategoriaService {
   categoriasUrl = `${environment.apiUrl}/categorias`;
   subCategoriasUrl = `${environment.apiUrl}/SubCategorias`;
 
-  constructor(private _http: HttpClient) { }
+  constructor(private readonly _http: HttpClient) { }
 
   getEmptyCategoria(): ICategoria {
     return {
@@ -51,5 +51,9 @@ export class CategoriaService {
     });
 
     return this._http.put<any>(this.subCategoriasUrl, subcategoria, { headers });
+  }
+
+  excluirSubCategoria(idCategoria: number, id: number): Observable<any> {
+    return this._http.delete<any>(`${this.subCategoriasUrl}/${idCategoria}/${id}`);
   }
 }
