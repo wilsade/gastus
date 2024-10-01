@@ -1,4 +1,4 @@
-﻿namespace Gastus.Domain
+namespace Gastus.Domain
 {
   /// <summary>
   /// Representa um item de Categoria
@@ -45,6 +45,17 @@
   /// Representa um item de Categoria para inserção
   /// </summary>
   public class CategoriaInsertModel
+  {
+    /// <summary>
+    /// Nome
+    /// </summary>
+    public string Nome { get; set; }
+  }
+
+  /// <summary>
+  /// Representa um item de Categoria para modificação
+  /// </summary>
+  public class CategoriaEditModel : BaseModel
   {
     /// <summary>
     /// Nome
