@@ -12,7 +12,7 @@ import { CategoriaEditComponent } from "./categoria-edit.component";
 })
 export class CategoriaComponent implements OnInit {
 
-  constructor(private _service: CategoriaService) { }
+  constructor(private readonly _service: CategoriaService) { }
 
   categorias: Array<ICategoria>;
   //categoriaEscolhida: ICategoria = this._service.getEmptyCategoria();
@@ -49,7 +49,16 @@ export class CategoriaComponent implements OnInit {
   }
 
   protected categoriaAlterada(item: ICategoria): void {
-    console.log('callback', item);
-
+    this._service.editarCategoria(item).subscribe({
+      next: data => {
+        console.log(data);
+        this.ngOnInit();
+      },
+      error: err => {
+        console.error(err);
+      },
+      complete: () => {
+      }
+    });
   }
 }
