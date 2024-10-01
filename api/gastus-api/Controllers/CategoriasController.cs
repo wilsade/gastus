@@ -1,4 +1,4 @@
-﻿using Gastus.Domain;
+using Gastus.Domain;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -82,6 +82,27 @@ namespace Gastus.Api.Controllers
       try
       {
         int rowsAffected = _repository.DeleteCategoria(id);
+        if (rowsAffected > 0)
+          return Ok(rowsAffected);
+        return NoContent();
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
+
+    /// <summary>
+    /// Editar uma categoria
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Categoria alterada</returns>
+    [HttpPut()]
+    public IActionResult EditCategoria([FromBody] CategoriaEditModel model)
+    {
+      try
+      {
+        int rowsAffected = _repository.EditCategoria(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NoContent();
