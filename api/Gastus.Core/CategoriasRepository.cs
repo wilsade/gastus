@@ -1,4 +1,4 @@
-﻿using System.Data.SQLite;
+using System.Data.SQLite;
 
 using Dapper;
 
@@ -99,6 +99,19 @@ namespace Gastus.Core
       const string sqlSubCategoria = "SELECT * FROM SUBCATEGORIA WHERE IdCategoria = @id";
       categoria.SubCategorias = connection.Query<SubCategoriaModel>(sqlSubCategoria, new { id }).ToList();
       return categoria;
+    }
+
+    /// <summary>
+    /// Editar uma Categoria
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros afetados</returns>
+    public int EditCategoria(CategoriaEditModel model)
+    {
+      const string sql = "UPDATE CATEGORIA SET NOME = @Nome WHERE ID = @Id";
+      using var connection = GetConnection();
+      int rows = connection.Execute(sql, model);
+      return rows;
     }
 
     /// <summary>
