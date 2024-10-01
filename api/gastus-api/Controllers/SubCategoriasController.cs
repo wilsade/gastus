@@ -1,4 +1,4 @@
-﻿using Gastus.Domain;
+using Gastus.Domain;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -97,8 +97,8 @@ namespace Gastus.Api.Controllers
     /// <summary>
     /// Editar uma subcategoria
     /// </summary>
-    /// <param name="model">Dados da inserção</param>
-    /// <returns>SubCategoria inserida</returns>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>SubCategoria modificada</returns>
     [HttpPut()]
     public IActionResult EditSubCategoria([FromBody] SubCategoriaModel model)
     {
