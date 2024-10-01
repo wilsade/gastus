@@ -1,4 +1,4 @@
-﻿namespace Gastus.Domain
+namespace Gastus.Domain
 {
   /// <summary>
   /// Serviços para o repositório
@@ -31,6 +31,13 @@
     /// <param name="id">Identificador da categoria a ser recuperada</param>
     /// <returns>Categoria</returns>
     CategoriaModel GetCategoria(int id);
+
+    /// <summary>
+    /// Editar uma Categoria
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros afetados</returns>
+    int EditCategoria(CategoriaEditModel model);
 
     /// <summary>
     /// Recuperar todas as subCategorias
