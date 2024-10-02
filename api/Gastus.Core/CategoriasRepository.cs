@@ -1,4 +1,4 @@
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 
 using Dapper;
 
@@ -198,7 +198,7 @@ namespace Gastus.Core
         UPDATE SUBCATEGORIA
         SET NOME = @Nome
         WHERE IDCATEGORIA = @IdCategoria
-          AND ID = @id";
+          AND ID = @Id";
       var connection = GetConnection();
       int rows = connection.Execute(sql, model);
       return rows;
