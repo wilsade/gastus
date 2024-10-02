@@ -51,6 +51,8 @@ export class InputDialogComponent {
       this.modal.title = options.title;
     if (options.label)
       this.label = options.label;
+    if (options.valor)
+      this.valor = options.valor;
 
     this.modal.open();
   }

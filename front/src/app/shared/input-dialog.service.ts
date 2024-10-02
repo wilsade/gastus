@@ -22,5 +22,6 @@ export interface IInputDialogOptions {
   onConfirm: (input: string) => void;
   title?: string;
   label?: string;
+  valor?: string;
   onCancel?: () => void;
 }
