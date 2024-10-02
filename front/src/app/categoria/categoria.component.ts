@@ -51,7 +51,6 @@ export class CategoriaComponent implements OnInit {
   protected categoriaAlterada(item: ICategoria): void {
     this._service.editarCategoria(item).subscribe({
       next: data => {
-        console.log(data);
         this.ngOnInit();
       },
       error: err => {

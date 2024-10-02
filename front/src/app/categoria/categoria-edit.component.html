@@ -3,7 +3,8 @@
           [p-secondary-action]="cancelouModal"
           [p-title]="meuTitulo">
   <po-input p-label="Categoria"
-            [(ngModel)]="categoria.Nome"></po-input>
+            [(ngModel)]="categoria.Nome"
+            (p-change-model)="alterouNomeCategoria()"></po-input>
   <hr>
   <app-subcategoria [categoria]="categoria"></app-subcategoria>
 </po-modal>

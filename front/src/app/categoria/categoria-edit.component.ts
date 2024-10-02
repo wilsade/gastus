@@ -10,17 +10,16 @@ import { SubcategoriaComponent } from "./subcategoria.component";
   standalone: true,
   imports: [PoModule, FormsModule, SubcategoriaComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  templateUrl: './categoria-edit.component.html',
-  styleUrl: './categoria-edit.component.css'
+  templateUrl: './categoria-edit.component.html'
 })
 export class CategoriaEditComponent {
 
   constructor(private _service: CategoriaService) { }
+  private _nomeOriginal: string;
 
   protected confirmouModal: PoModalAction = {
     label: 'Confirmar',
     action: () => {
-      console.log('salvar tudo', this.categoria);
       this.onConfirmouModal.emit(this.categoria);
       this.modal.close();
     }
@@ -36,11 +35,7 @@ export class CategoriaEditComponent {
   @ViewChild('modal')
   modal: PoModalComponent;
 
-  //@Input()
   protected categoria: ICategoria = this._service.getEmptyCategoria();
-
-  //@Output()
-  //categoriaChange = new EventEmitter<ICategoria>();
 
   @Output()
   onConfirmouModal = new EventEmitter<ICategoria>();
@@ -48,9 +43,14 @@ export class CategoriaEditComponent {
   protected meuTitulo: string;
 
   exibirModal(item: ICategoria): void {
+    this._nomeOriginal = item.Nome;
     this.meuTitulo = `Editar categoria: ${item.Nome}`;
     this.modal.open();
     this.loadCategoria(item);
+  }
+
+  protected alterouNomeCategoria(): void {
+    this.confirmouModal.disabled = this._nomeOriginal === this.categoria.Nome;
   }
 
   private loadCategoria(item: ICategoria): void {
