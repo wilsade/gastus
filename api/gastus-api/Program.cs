@@ -21,7 +21,8 @@ namespace Gastus.Api
 
       // Add services to the container.
 
-      const string DATABASE_FILE_NAME = @"Data Source=C:\_Wilsade\Projetos\git\gastus\gastus.db;Version=3;";
+      string gastusPath = Environment.GetEnvironmentVariable("GASTUS_DB_PATH", EnvironmentVariableTarget.Machine);
+      string DATABASE_FILE_NAME = $@"Data Source={gastusPath};Version=3;";
       builder.Services.AddSingleton<ICategoriasRepository>(x => new CategoriasRepository(DATABASE_FILE_NAME));
 
       builder.Services.AddControllers()
