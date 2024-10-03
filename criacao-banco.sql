@@ -12,3 +12,9 @@ CREATE TABLE IF NOT EXISTS SubCategoria (
     PRIMARY KEY (IdCategoria, Id),
     FOREIGN KEY (IdCategoria) REFERENCES Categoria(Id)
 );
+
+-- Criação da tabela de TipoTransacao
+CREATE TABLE IF NOT EXISTS TipoTransacao (
+    Id INTEGER PRIMARY KEY,
+    Nome TEXT NOT NULL
+);
