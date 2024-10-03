@@ -47,7 +47,7 @@ namespace Gastus.Core
     /// <returns>Todas as categorias</returns>
     public List<CategoriaModel> GetAllCategorias()
     {
-      using SQLiteConnection connection = GetConnection();
+      using SQLiteConnection connection = GetConnection(false);
       var query = "SELECT Id, Nome FROM Categoria";
 
       var categorias = connection.Query<CategoriaModel>(query).ToList();
@@ -61,7 +61,7 @@ namespace Gastus.Core
     /// <returns>Nova categoria</returns>
     public CategoriaModel AddCategoria(CategoriaInsertModel categoria)
     {
-      using var connection = GetConnection();
+      using var connection = GetConnection(false);
 
       var query = "INSERT INTO Categoria (Id, Nome) VALUES (@Id, @Nome)";
       var novaCategoria = new CategoriaModel(GetNextCategoriaId(connection), categoria.Nome);
@@ -77,7 +77,7 @@ namespace Gastus.Core
     /// <returns>Número de linhas afetadas na exclusão</returns>
     public int DeleteCategoria(int id)
     {
-      using SQLiteConnection connection = GetConnection();
+      using SQLiteConnection connection = GetConnection(true);
       var commandText = "DELETE FROM Categoria WHERE Id = @id";
       int rows = connection.Execute(commandText, new { id });
       return rows;
@@ -91,7 +91,7 @@ namespace Gastus.Core
     public CategoriaModel GetCategoria(int id)
     {
       const string sqlCategoria = "SELECT * FROM CATEGORIA WHERE Id = @id";
-      using var connection = GetConnection();
+      using var connection = GetConnection(false);
       CategoriaModel categoria = connection.QueryFirstOrDefault<CategoriaModel>(sqlCategoria, new { id });
       if (categoria == null)
         return null;
@@ -109,7 +109,7 @@ namespace Gastus.Core
     public int EditCategoria(CategoriaEditModel model)
     {
       const string sql = "UPDATE CATEGORIA SET NOME = @Nome WHERE ID = @Id";
-      using var connection = GetConnection();
+      using var connection = GetConnection(false);
       int rows = connection.Execute(sql, model);
       return rows;
     }
@@ -128,7 +128,7 @@ namespace Gastus.Core
         sql += " WHERE IDCATEGORIA = @idCategoria";
         param = new { idCategoria };
       }
-      using var connection = GetConnection();
+      using var connection = GetConnection(false);
       List<SubCategoriaModel> subCategorias = connection.Query<SubCategoriaModel>(sql, param)
         .ToList();
       return subCategorias;
@@ -146,7 +146,7 @@ namespace Gastus.Core
         SELECT * FROM SUBCATEGORIA
         WHERE IDCATEGORIA = @idCategoria
           AND ID = @id";
-      var connection = GetConnection();
+      var connection = GetConnection(false);
       SubCategoriaModel subCategoria = connection.QueryFirstOrDefault<SubCategoriaModel>(sql,
         new { idCategoria, id });
       return subCategoria;
@@ -162,7 +162,7 @@ namespace Gastus.Core
       const string sql = @"
         INSERT INTO SUBCATEGORIA (IDCATEGORIA, ID, NOME)
         VALUES (@IdCategoria, @Id, @Nome)";
-      var connection = GetConnection();
+      var connection = GetConnection(false);
       var nova = new SubCategoriaModel(model.IdCategoria,
         GetNextSubCategoriaId(connection, model.IdCategoria), model.Nome);
       int rows = connection.Execute(sql, nova);
@@ -182,7 +182,7 @@ namespace Gastus.Core
         DELETE FROM SUBCATEGORIA
         WHERE IdCategoria = @idCategoria
           AND Id = @id";
-      var connection = GetConnection();
+      var connection = GetConnection(false);
       int rows = connection.Execute(sql, new { idCategoria, id });
       return rows;
     }
@@ -199,7 +199,7 @@ namespace Gastus.Core
         SET NOME = @Nome
         WHERE IDCATEGORIA = @IdCategoria
           AND ID = @Id";
-      var connection = GetConnection();
+      var connection = GetConnection(false);
       int rows = connection.Execute(sql, model);
       return rows;
     }

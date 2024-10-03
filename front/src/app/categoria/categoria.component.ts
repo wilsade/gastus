@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PoModule, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CategoriaService } from './categoria.service';
 import { ICategoria } from '../_models/ICategoria';
 import { CategoriaEditComponent } from "./categoria-edit.component";
 import { InputDialogService } from '../shared/input-dialog.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-categoria',
@@ -14,7 +15,8 @@ import { InputDialogService } from '../shared/input-dialog.service';
 })
 export class CategoriaComponent implements OnInit {
 
-  constructor(private readonly _service: CategoriaService, private readonly _modalDlg: InputDialogService) { }
+  constructor(private readonly _service: CategoriaService, private readonly _modalDlg: InputDialogService,
+    private readonly _notification: PoNotificationService) { }
 
   categorias: Array<ICategoria>;
 
@@ -84,12 +86,23 @@ export class CategoriaComponent implements OnInit {
       confirm: () => {
         this._service.excluirCategoria(item.Id).subscribe({
           next: data => {
+            console.log('o que eu exclui?', data);
             if (data > 0)
               this.categorias = this.categorias.filter(cat => cat.Id !== item.Id);
+          },
+          error: err => {
+            this.tratarErro(err);
           }
         })
       }
     });
+  }
+
+  private tratarErro(err: HttpErrorResponse): void {
+    let msg = err.message;
+    if (err.error?.error)
+      msg = err.error.error;
+    this._notification.error(msg);
   }
 
   protected categoriaAlterada(item: ICategoria): void {
