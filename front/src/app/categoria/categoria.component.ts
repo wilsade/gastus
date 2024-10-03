@@ -1,29 +1,42 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PoModule, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoModule, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CategoriaService } from './categoria.service';
 import { ICategoria } from '../_models/ICategoria';
 import { CategoriaEditComponent } from "./categoria-edit.component";
+import { InputDialogService } from '../shared/input-dialog.service';
 
 @Component({
   selector: 'app-categoria',
   standalone: true,
   imports: [PoModule, CategoriaEditComponent],
+  providers: [InputDialogService],
   templateUrl: './categoria.component.html'
 })
 export class CategoriaComponent implements OnInit {
 
-  constructor(private readonly _service: CategoriaService) { }
+  constructor(private readonly _service: CategoriaService, private readonly _modalDlg: InputDialogService) { }
 
   categorias: Array<ICategoria>;
-  //categoriaEscolhida: ICategoria = this._service.getEmptyCategoria();
 
   protected readonly colunas: PoTableColumn[] = [
     { label: 'Id.', property: 'Id', width: '10%' },
     { label: 'Nome', property: 'Nome' }
   ]
 
+  protected readonly acoesPagina: PoPageAction[] = [
+    {
+      label: 'Atualizar', icon: 'ph-fill ph-arrows-clockwise',
+      action: () => this.ngOnInit()
+    },
+    {
+      label: 'Inserir Categoria', icon: 'ph-fill ph-plus-square',
+      action: () => this.inserirCategoria_Click()
+    }
+  ]
+
   protected readonly acoesTabela: PoTableAction[] = [
-    { label: 'Editar', action: this.editarCategoria.bind(this) }
+    { label: 'Editar', icon: 'ph-fill ph-pencil-simple', action: this.editarCategoria.bind(this) },
+    { label: 'Excluir', icon: 'ph-fill ph-minus-circle', action: this.excluirCategoria.bind(this) }
   ]
 
   @ViewChild('modalCategoria', { static: false })
@@ -43,9 +56,40 @@ export class CategoriaComponent implements OnInit {
     });
   }
 
+  private inserirCategoria_Click(): void {
+    this._modalDlg.showInput({
+      title: 'Inserção de Categoria',
+      label: 'Informe o nome da nova Categoria',
+      onConfirm: (valor: string) => {
+        this._service.inserirCategoria(valor).subscribe({
+          next: data => {
+            this.categorias = [...this.categorias, data];
+          },
+          error: err => {
+            console.error(err);
+          }
+        })
+      }
+    })
+  }
+
   private editarCategoria(item: ICategoria): void {
-    //this.categoriaEscolhida = item;
     this.modalCategoria.exibirModal(item);
+  }
+
+  private excluirCategoria(item: ICategoria): void {
+    this._modalDlg.confirm({
+      title: 'Exclusão de Categoria',
+      message: `Atenção!<br>Deseja realmente EXCLUIR a Categoria <b>${item.Nome}</b>?`,
+      confirm: () => {
+        this._service.excluirCategoria(item.Id).subscribe({
+          next: data => {
+            if (data > 0)
+              this.categorias = this.categorias.filter(cat => cat.Id !== item.Id);
+          }
+        })
+      }
+    });
   }
 
   protected categoriaAlterada(item: ICategoria): void {

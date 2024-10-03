@@ -33,6 +33,18 @@ export class CategoriaService {
       }));
   }
 
+  inserirCategoria(nome: string): Observable<ICategoria> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const body = {
+      Nome: nome
+    };
+
+    return this._http.post<ICategoria>(this.categoriasUrl, body, { headers });
+  }
+
   editarCategoria(categoria: ICategoria): Observable<ISubCategoria> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -44,6 +56,10 @@ export class CategoriaService {
     };
 
     return this._http.put<any>(this.categoriasUrl, body, { headers });
+  }
+
+  excluirCategoria(id: number): Observable<number> {
+    return this._http.delete<number>(`${this.categoriasUrl}/${id}`);
   }
 
   inserirSubCategoria(idCategoria: number, nomeSubCategoria: string): Observable<ISubCategoria> {
