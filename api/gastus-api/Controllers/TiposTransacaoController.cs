@@ -51,14 +51,14 @@ namespace Gastus.Api.Controllers
     /// <summary>
     /// Inserir um Tipo de transação
     /// </summary>
-    /// <param name="categoria">Tipo de transação</param>
+    /// <param name="insertModel">Tipo de transação</param>
     /// <returns>Tipo de transação inserido</returns>
     [HttpPost()]
-    public IActionResult AddTipoTransacao([FromBody] TipoTransacaoInsertModel categoria)
+    public IActionResult AddTipoTransacao([FromBody] TipoTransacaoInsertModel insertModel)
     {
       try
       {
-        TipoTransacaoModel model = _repository.AddTipoTransacao(categoria);
+        TipoTransacaoModel model = _repository.AddTipoTransacao(insertModel);
         return Ok(model);
       }
       catch (Exception ex)

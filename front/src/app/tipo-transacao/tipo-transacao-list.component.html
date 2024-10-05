@@ -1,7 +1,9 @@
-<po-page-default p-title="Tipos de transação">
+<po-page-default p-title="Tipos de transação"
+                 [p-actions]="acoesPagina">
   <po-table [p-striped]="true"
             [p-sort]="true"
             [p-hide-columns-manager]="true"
+            [p-actions]="acoesTabela"
             [p-columns]="colunas"
             [p-loading]="loading"
             [p-items]="tiposTransacao"></po-table>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { map, Observable } from 'rxjs';
@@ -21,5 +21,21 @@ export class TipoTransacaoService {
       map((response: any) => {
         return response;
       }));
+  }
+
+  inserirTipoTransacao(nome: string): Observable<ITipoTransacao> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const body = {
+      Nome: nome
+    };
+
+    return this._http.post<ITipoTransacao>(this.tiposTransacaoUrl, body, { headers });
+  }
+
+  excluirTipoTransacao(id: number): Observable<number> {
+    return this._http.delete<number>(`${this.tiposTransacaoUrl}/${id}`);
   }
 }
