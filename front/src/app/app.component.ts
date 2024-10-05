@@ -18,5 +18,6 @@ import {
 export class AppComponent {
   readonly menus: Array<PoMenuItem> = [
     { label: 'Categorias', link: './categorias' },
+    { label: 'Tipos de transação', link: './tipostransacao' },
   ];
 }
