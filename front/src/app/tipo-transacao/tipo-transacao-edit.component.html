@@ -1,0 +1,8 @@
+<po-modal #modal
+          [p-primary-action]="confirmouModal"
+          [p-secondary-action]="cancelouModal"
+          [p-title]="meuTitulo">
+  <po-input p-label="Tipo de transação"
+            [(ngModel)]="tipoTransacao.Nome"
+            (p-change-model)="alterouNome()"></po-input>
+</po-modal>

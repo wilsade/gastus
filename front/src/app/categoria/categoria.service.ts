@@ -45,7 +45,7 @@ export class CategoriaService {
     return this._http.post<ICategoria>(this.categoriasUrl, body, { headers });
   }
 
-  editarCategoria(categoria: ICategoria): Observable<ISubCategoria> {
+  editarCategoria(categoria: ICategoria): Observable<number> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
@@ -55,7 +55,7 @@ export class CategoriaService {
       Nome: categoria.Nome
     };
 
-    return this._http.put<any>(this.categoriasUrl, body, { headers });
+    return this._http.put<number>(this.categoriasUrl, body, { headers });
   }
 
   excluirCategoria(id: number): Observable<number> {

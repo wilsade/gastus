@@ -7,4 +7,7 @@
             [p-columns]="colunas"
             [p-loading]="loading"
             [p-items]="tiposTransacao"></po-table>
+
+  <app-tipo-transacao-edit #modalTipoTransacao
+                           (onConfirmouModal)="tipoTransacaoAlterado($event)"></app-tipo-transacao-edit>
 </po-page-default>

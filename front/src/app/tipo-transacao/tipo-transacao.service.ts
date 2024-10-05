@@ -12,6 +12,10 @@ export class TipoTransacaoService {
 
   constructor(private readonly _http: HttpClient) { }
 
+  getEmptyTipoTransacao(): ITipoTransacao {
+    return { Id: 0, Nome: '' }
+  }
+
   /**
    * Listar os Tipos de transação
    * @returns Tipos de transação cadastrados
@@ -38,4 +42,21 @@ export class TipoTransacaoService {
   excluirTipoTransacao(id: number): Observable<number> {
     return this._http.delete<number>(`${this.tiposTransacaoUrl}/${id}`);
   }
+
+  getTipoTransacaoById(id: number): Observable<ITipoTransacao> {
+    return this._http.get<any>(`${this.tiposTransacaoUrl}/${id}`).pipe(
+      map((response: any) => {
+        return response;
+      }));
+  }
+
+  editarTipoTransacao(tipoTransacao: ITipoTransacao): Observable<number> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.put<any>(this.tiposTransacaoUrl, tipoTransacao, { headers });
+  }
+
+
 }
