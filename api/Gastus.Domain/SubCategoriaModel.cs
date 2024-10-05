@@ -40,7 +40,7 @@
     /// Retorna uma string representando esta instância
     /// </summary>
     /// <returns>string representando esta instância</returns>
-    public override string ToString() => Nome;
+    public override string ToString() => $"[Id={Id}] {Nome}";
   }
 
   /// <summary>

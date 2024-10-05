@@ -7,11 +7,11 @@ using Gastus.Domain;
 namespace Gastus.Core
 {
   /// <summary>
-  /// Inicialização da classe: <see cref="CategoriasRepository"/>.
+  /// Inicialização da classe: <see cref="CadastrosRepository"/>.
   /// </summary>
   /// <param name="databaseFileName">Database file name</param>
-  public class CategoriasRepository(string databaseFileName) :
-    GastusBaseRepository(databaseFileName), ICategoriasRepository
+  public class CadastrosRepository(string databaseFileName) :
+    GastusBaseRepository(databaseFileName), ICadastrosRepository
   {
     /// <summary>
     /// Recuperar o próximo Id da Categoria
@@ -38,6 +38,18 @@ namespace Gastus.Core
         FROM SUBCATEGORIA
         WHERE IDCATEGORIA = @idCategoria";
       int nextId = connection.QuerySingle<int>(sql, new { idCategoria });
+      return nextId;
+    }
+
+    /// <summary>
+    /// Recuperar o próximo Id do Tipo de transação
+    /// </summary>
+    /// <param name="connection">Conexão com o banco de dados</param>
+    /// <returns>Próximo Id</returns>
+    static int GetNextTipoTransacaoId(SQLiteConnection connection)
+    {
+      const string sql = "SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM TipoTransacao;";
+      int nextId = connection.QuerySingle<int>(sql);
       return nextId;
     }
 
@@ -200,6 +212,74 @@ namespace Gastus.Core
         WHERE IDCATEGORIA = @IdCategoria
           AND ID = @Id";
       var connection = GetConnection(false);
+      int rows = connection.Execute(sql, model);
+      return rows;
+    }
+
+    /// <summary>
+    /// Recuperar todos os Tipos de transação
+    /// </summary>
+    /// <returns>Todas os Tipos de transação</returns>
+    public List<TipoTransacaoModel> GetAllTiposTransacao()
+    {
+      using SQLiteConnection connection = GetConnection(false);
+      var query = "SELECT Id, Nome FROM TipoTransacao";
+
+      var tiposTransacao = connection.Query<TipoTransacaoModel>(query).ToList();
+      return tiposTransacao;
+    }
+
+    /// <summary>
+    /// Recuperar um Tipo de Transação
+    /// </summary>
+    /// <param name="id">Identificador do Tipo de transação</param>
+    /// <returns>Tipo de transação</returns>
+    public TipoTransacaoModel GetTipoTransacao(int id)
+    {
+      const string sql = "SELECT * FROM TipoTransacao WHERE Id = @id";
+      using var connection = GetConnection(false);
+      TipoTransacaoModel tipoTransacao = connection.QueryFirstOrDefault<TipoTransacaoModel>(sql, new { id });
+      return tipoTransacao;
+    }
+
+    /// <summary>
+    /// Adicionar um Tipo de transação
+    /// </summary>
+    /// <param name="model">Dados da inserção</param>
+    /// <returns>Novo Tipo de transação</returns>
+    public TipoTransacaoModel AddTipoTransacao(TipoTransacaoInsertModel model)
+    {
+      using var connection = GetConnection(false);
+
+      var query = "INSERT INTO TipoTransacao (Id, Nome) VALUES (@Id, @Nome)";
+      var novoTipoTransacao = new TipoTransacaoModel(GetNextTipoTransacaoId(connection), model.Nome);
+      int rows = connection.Execute(query, novoTipoTransacao);
+      System.Diagnostics.Trace.WriteLine(rows);
+      return novoTipoTransacao;
+    }
+
+    /// <summary>
+    /// Excluir um Tipo de transação
+    /// </summary>
+    /// <param name="id">Identificador do Tipo de transação ser excluído</param>
+    /// <returns>Número de linhas afetadas na exclusão</returns>
+    public int DeleteTipoTransacao(int id)
+    {
+      using SQLiteConnection connection = GetConnection(true);
+      var commandText = "DELETE FROM TipoTransacao WHERE Id = @id";
+      int rows = connection.Execute(commandText, new { id });
+      return rows;
+    }
+
+    /// <summary>
+    /// Editar um Tipo de transação
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros afetados</returns>
+    public int EditTipoTransacao(TipoTransacaoModel model)
+    {
+      const string sql = "UPDATE TipoTransacao SET NOME = @Nome WHERE ID = @Id";
+      using var connection = GetConnection(false);
       int rows = connection.Execute(sql, model);
       return rows;
     }

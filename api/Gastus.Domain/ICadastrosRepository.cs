@@ -1,9 +1,9 @@
-namespace Gastus.Domain
+﻿namespace Gastus.Domain
 {
   /// <summary>
   /// Serviços para o repositório
   /// </summary>
-  public interface ICategoriasRepository
+  public interface ICadastrosRepository
   {
     /// <summary>
     /// Recuperar todas as categorias
@@ -75,5 +75,39 @@ namespace Gastus.Domain
     /// <param name="model">Dados da alteração</param>
     /// <returns>Linhas afetadas</returns>
     int EditSubCategoria(SubCategoriaModel model);
+
+    /// <summary>
+    /// Recuperar todos os Tipos de transação
+    /// </summary>
+    /// <returns>Todas os Tipos de transação</returns>
+    List<TipoTransacaoModel> GetAllTiposTransacao();
+
+    /// <summary>
+    /// Recuperar um Tipo de Transação
+    /// </summary>
+    /// <param name="id">Identificador do Tipo de transação</param>
+    /// <returns>Tipo de transação</returns>
+    TipoTransacaoModel GetTipoTransacao(int id);
+
+    /// <summary>
+    /// Adicionar um Tipo de transação
+    /// </summary>
+    /// <param name="model">Tipo de transação a ser adicionada</param>
+    /// <returns>Novo Tipo de transação </returns>
+    TipoTransacaoModel AddTipoTransacao(TipoTransacaoInsertModel model);
+
+    /// <summary>
+    /// Excluir um Tipo de transação
+    /// </summary>
+    /// <param name="id">Identificador do Tipo de transação a ser excluído</param>
+    /// <returns>Número de linhas afetadas na exclusão</returns>
+    int DeleteTipoTransacao(int id);
+
+    /// <summary>
+    /// Editar um Tipo de transação
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros afetados</returns>
+    int EditTipoTransacao(TipoTransacaoModel model);
   }
 }

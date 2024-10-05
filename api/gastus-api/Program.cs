@@ -23,7 +23,7 @@ namespace Gastus.Api
 
       string gastusPath = Environment.GetEnvironmentVariable("GASTUS_DB_PATH", EnvironmentVariableTarget.Machine);
       string DATABASE_FILE_NAME = $@"Data Source={gastusPath};Version=3;";
-      builder.Services.AddSingleton<ICategoriasRepository>(x => new CategoriasRepository(DATABASE_FILE_NAME));
+      builder.Services.AddSingleton<ICadastrosRepository>(x => new CadastrosRepository(DATABASE_FILE_NAME));
 
       builder.Services.AddControllers()
         .AddJsonOptions(options =>

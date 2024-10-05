@@ -10,12 +10,12 @@ namespace Gastus.Api.Controllers
   /// Inicialização da classe: <see cref="GastusBaseController"/>.
   /// </summary>
   /// <param name="repository">Repositório</param>
-  public abstract class GastusBaseController(ICategoriasRepository repository) : ControllerBase
+  public abstract class GastusBaseController(ICadastrosRepository repository) : ControllerBase
   {
     /// <summary>
     /// Repository
     /// </summary>
-    protected readonly ICategoriasRepository _repository = repository;
+    protected readonly ICadastrosRepository _repository = repository;
 
     /// <summary>
     /// Return Bad Request Exception

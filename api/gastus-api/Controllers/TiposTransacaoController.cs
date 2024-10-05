@@ -5,26 +5,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gastus.Api.Controllers
 {
   /// <summary>
-  /// Controller para Categorias
+  /// Controller para Tipos de transação
   /// </summary>
-  /// <remarks>
-  /// Inicialização da classe: <see cref="CategoriasController"/>.
-  /// </remarks>
-  /// <param name="repository">Repositório</param>
   [ApiController]
   [Route("api/[controller]")]
-  public class CategoriasController(ICadastrosRepository repository) : GastusBaseController(repository)
+  public class TiposTransacaoController(ICadastrosRepository repository) : GastusBaseController(repository)
   {
     /// <summary>
-    /// Recuperar todas as categorias cadastradas
+    /// Recuperar todas os Tipos de transações
     /// </summary>
-    /// <returns>All categorias</returns>
+    /// <returns>Todos os tipos de transações</returns>
     [HttpGet()]
-    public IActionResult GetAllCategorias()
+    public IActionResult GetAll()
     {
       try
       {
-        List<CategoriaModel> lista = _repository.GetAllCategorias();
+        List<TipoTransacaoModel> lista = _repository.GetAllTiposTransacao();
         return Ok(lista);
       }
       catch (Exception ex)
@@ -34,16 +30,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Recuperar uma categoria
+    /// Recuperar um Tipo de transação
     /// </summary>
-    /// <param name="id">Identificador da categoria</param>
-    /// <returns>Categoria</returns>
+    /// <param name="id">Identificador do Tipo de transação</param>
+    /// <returns>Tipo de transação</returns>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
       try
       {
-        CategoriaModel model = _repository.GetCategoria(id);
+        TipoTransacaoModel model = _repository.GetTipoTransacao(id);
         return Ok(model);
       }
       catch (Exception ex)
@@ -53,16 +49,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Inserir uma categoria
+    /// Inserir um Tipo de transação
     /// </summary>
-    /// <param name="categoria">Categoria</param>
-    /// <returns>Categoria inserida</returns>
+    /// <param name="categoria">Tipo de transação</param>
+    /// <returns>Tipo de transação inserido</returns>
     [HttpPost()]
-    public IActionResult AddCategoria([FromBody] CategoriaInsertModel categoria)
+    public IActionResult AddTipoTransacao([FromBody] TipoTransacaoInsertModel categoria)
     {
       try
       {
-        CategoriaModel model = _repository.AddCategoria(categoria);
+        TipoTransacaoModel model = _repository.AddTipoTransacao(categoria);
         return Ok(model);
       }
       catch (Exception ex)
@@ -72,16 +68,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Excluir uma categoria
+    /// Excluir um Tipo de transação
     /// </summary>
-    /// <param name="id">Identificador da categoria</param>
+    /// <param name="id">Identificador do Tipo de transação</param>
     /// <returns>NoContent se não houve exclusão; OK em caso de sucesso</returns>
     [HttpDelete("{id}")]
-    public IActionResult DeleteCategoria(int id)
+    public IActionResult DeleteTipoTransacao(int id)
     {
       try
       {
-        int rowsAffected = _repository.DeleteCategoria(id);
+        int rowsAffected = _repository.DeleteTipoTransacao(id);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NoContent();
@@ -93,16 +89,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Editar uma categoria
+    /// Editar um Tipo de transação
     /// </summary>
     /// <param name="model">Dados da modificação</param>
     /// <returns>NoContent se não houve alteração; OK em caso de sucesso</returns>
     [HttpPut()]
-    public IActionResult EditCategoria([FromBody] CategoriaEditModel model)
+    public IActionResult EditTipoTransacao([FromBody] TipoTransacaoModel model)
     {
       try
       {
-        int rowsAffected = _repository.EditCategoria(model);
+        int rowsAffected = _repository.EditTipoTransacao(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NoContent();

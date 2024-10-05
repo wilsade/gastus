@@ -1,4 +1,4 @@
-using Gastus.Domain;
+﻿using Gastus.Domain;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +13,7 @@ namespace Gastus.Api.Controllers
   /// <param name="repository">Repositório</param>
   [ApiController]
   [Route("api/[controller]")]
-  public class SubCategoriasController(ICategoriasRepository repository) : GastusBaseController(repository)
+  public class SubCategoriasController(ICadastrosRepository repository) : GastusBaseController(repository)
   {
     /// <summary>
     /// Recuperar todas as subcategorias cadastradas
