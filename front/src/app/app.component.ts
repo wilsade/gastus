@@ -8,6 +8,7 @@ import {
   PoPageModule,
   PoToolbarModule,
 } from '@po-ui/ng-components';
+import { NomesRotas } from './app.routes';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ import {
 })
 export class AppComponent {
   readonly menus: Array<PoMenuItem> = [
-    { label: 'Categorias', link: './categorias' },
-    { label: 'Tipos de transação', link: './tipostransacao' },
+    { label: 'Categorias', link: `./${NomesRotas.CATEGORIAS}` },
+    { label: 'Tipos de transação', link: `./${NomesRotas.TIPOS_TRANSACAO}` },
   ];
 }
