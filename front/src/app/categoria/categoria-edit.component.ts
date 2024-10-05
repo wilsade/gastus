@@ -1,9 +1,10 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Output, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule, PoNotificationService } from '@po-ui/ng-components';
 import { ICategoria } from '../_models/ICategoria';
 import { CategoriaService } from './categoria.service';
 import { FormsModule } from '@angular/forms';
 import { SubcategoriaComponent } from "./subcategoria.component";
+import { GastusBaseComponent } from '../shared/gastus-base-component';
 
 @Component({
   selector: 'app-categoria-edit',
@@ -12,9 +13,13 @@ import { SubcategoriaComponent } from "./subcategoria.component";
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './categoria-edit.component.html'
 })
-export class CategoriaEditComponent {
+export class CategoriaEditComponent extends GastusBaseComponent {
 
-  constructor(private _service: CategoriaService) { }
+  constructor(protected override _notification: PoNotificationService,
+    private _service: CategoriaService) {
+    super(_notification);
+  }
+
   private _nomeOriginal: string;
 
   protected confirmouModal: PoModalAction = {
@@ -59,7 +64,7 @@ export class CategoriaEditComponent {
         this.categoria = data;
       },
       error: err => {
-        console.error(err);
+        this.tratarErro(err);
       },
       complete: () => {
       }

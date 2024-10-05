@@ -1,9 +1,10 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PoModule, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { ICategoria, ISubCategoria } from '../_models/ICategoria';
 import { CategoriaService } from './categoria.service';
 import { InputDialogService } from '../shared/input-dialog.service';
+import { GastusBaseComponent } from '../shared/gastus-base-component';
 
 @Component({
   selector: 'app-subcategoria',
@@ -13,10 +14,13 @@ import { InputDialogService } from '../shared/input-dialog.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './subcategoria.component.html'
 })
-export class SubcategoriaComponent {
+export class SubcategoriaComponent extends GastusBaseComponent {
 
-  constructor(private readonly _service: CategoriaService,
-    private readonly _dialog: InputDialogService) { }
+  constructor(protected override _notification: PoNotificationService,
+    private readonly _service: CategoriaService,
+    private readonly _dialog: InputDialogService) {
+    super(_notification);
+  }
 
   @Input()
   categoria: ICategoria;
@@ -47,7 +51,7 @@ export class SubcategoriaComponent {
         this.categoria.SubCategorias = [...this.categoria.SubCategorias, data];
       },
       error: err => {
-        console.error(err);
+        this.tratarErro(err);
       },
       complete: () => {
       }
@@ -67,7 +71,7 @@ export class SubcategoriaComponent {
               subCategoria.Nome = valor;
           },
           error: err => {
-            console.error(err);
+            this.tratarErro(err);
           },
           complete: () => {
           }
@@ -93,7 +97,7 @@ export class SubcategoriaComponent {
           this.categoria.SubCategorias = this.categoria.SubCategorias.filter(sub => sub.Id !== subCategoria.Id);
       },
       error: err => {
-        console.error(err);
+        this.tratarErro(err);
       },
       complete: () => {
       }
