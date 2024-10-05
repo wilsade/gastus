@@ -25,11 +25,10 @@ namespace Gastus.Api.Controllers
     protected IActionResult ReturnBadRequestException(Exception ex)
     {
       if (ex is SQLiteException sqlEx)
-        return BadRequest(new { error = sqlEx.Message });
+        return BadRequest(new { message = sqlEx.Message });
       else
         return StatusCode(500, new
         {
-          error = "An error occurred while processing your request.",
           message = ex.InnerException?.Message ?? ex.Message
         });
 
