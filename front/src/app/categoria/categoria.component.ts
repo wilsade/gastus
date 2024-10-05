@@ -4,20 +4,25 @@ import { CategoriaService } from './categoria.service';
 import { ICategoria } from '../_models/ICategoria';
 import { CategoriaEditComponent } from "./categoria-edit.component";
 import { InputDialogService } from '../shared/input-dialog.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { GastusBaseComponent } from '../shared/gastus-base-component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-categoria',
   standalone: true,
-  imports: [PoModule, CategoriaEditComponent],
+  imports: [PoModule, CommonModule, CategoriaEditComponent],
   providers: [InputDialogService],
   templateUrl: './categoria.component.html'
 })
-export class CategoriaComponent implements OnInit {
+export class CategoriaComponent extends GastusBaseComponent implements OnInit {
 
-  constructor(private readonly _service: CategoriaService, private readonly _modalDlg: InputDialogService,
-    private readonly _notification: PoNotificationService) { }
+  constructor(protected override _notification: PoNotificationService,
+    private readonly _service: CategoriaService,
+    private readonly _modalDlg: InputDialogService) {
+    super(_notification);
+  }
 
+  loading = false;
   categorias: Array<ICategoria>;
 
   protected readonly colunas: PoTableColumn[] = [
@@ -45,15 +50,17 @@ export class CategoriaComponent implements OnInit {
   modalCategoria: CategoriaEditComponent
 
   ngOnInit() {
+    this.loading = true;
     this._service.getCategorias().subscribe({
       next: data => {
         this.categorias = data;
       },
       error: err => {
-        console.error(err);
+        this.tratarErro(err);
+        this.loading = false;
       },
       complete: () => {
-
+        this.loading = false;
       }
     });
   }
@@ -68,7 +75,7 @@ export class CategoriaComponent implements OnInit {
             this.categorias = [...this.categorias, data];
           },
           error: err => {
-            console.error(err);
+            this.tratarErro(err);
           }
         })
       }
@@ -86,7 +93,6 @@ export class CategoriaComponent implements OnInit {
       confirm: () => {
         this._service.excluirCategoria(item.Id).subscribe({
           next: data => {
-            console.log('o que eu exclui?', data);
             if (data > 0)
               this.categorias = this.categorias.filter(cat => cat.Id !== item.Id);
           },
@@ -98,20 +104,13 @@ export class CategoriaComponent implements OnInit {
     });
   }
 
-  private tratarErro(err: HttpErrorResponse): void {
-    let msg = err.message;
-    if (err.error?.error)
-      msg = err.error.error;
-    this._notification.error(msg);
-  }
-
   protected categoriaAlterada(item: ICategoria): void {
     this._service.editarCategoria(item).subscribe({
       next: data => {
         this.ngOnInit();
       },
       error: err => {
-        console.error(err);
+        this.tratarErro(err);
       },
       complete: () => {
       }

@@ -10,4 +10,9 @@
 
   <app-categoria-edit #modalCategoria
                       (onConfirmouModal)="categoriaAlterada($event)"></app-categoria-edit>
+
 </po-page-default>
+<div *ngIf="loading"
+     class="sample-container">
+  <po-loading-overlay></po-loading-overlay>
+</div>
