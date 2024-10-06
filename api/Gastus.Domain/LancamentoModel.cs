@@ -71,7 +71,7 @@
     /// <param name="idSubCategoria">Identificador subcategoria</param>
     /// <param name="idTipoTransacao">Identificador do tipo de transação</param>
     /// <param name="valor">Valor</param>
-    public LancamentoModel(int id, DateOnly data, string titulo, string comentario, int idCategoria, int idSubCategoria, int? idTipoTransacao, decimal valor)
+    public LancamentoModel(int id, DateTime data, string titulo, string comentario, int idCategoria, int idSubCategoria, int? idTipoTransacao, decimal valor)
     {
       Id = id;
       Data = data;
@@ -91,6 +91,27 @@
     /// <summary>
     /// Data do lançamento
     /// </summary>
-    public DateOnly Data { get; set; }
+    public DateTime Data { get; set; }
+  }
+
+  /// <summary>
+  /// Representa um item de visão de Lançamento
+  /// </summary>
+  public class LancamentoViewModel : LancamentoModel
+  {
+    /// <summary>
+    /// Nome da categoria
+    /// </summary>
+    public string NomeCategoria { get; set; }
+
+    /// <summary>
+    /// Nome da subcategoria
+    /// </summary>
+    public string NomeSubCategoria { get; set; }
+
+    /// <summary>
+    /// Nome do tipo de transação
+    /// </summary>
+    public string NomeTipoTransacao { get; set; }
   }
 }

@@ -35,13 +35,13 @@ namespace Gastus.Core
         VALUES (@Id, @Data, @Titulo, @Comentario, @IdCategoria, @IdSubCategoria, @IdTipoTransacao, @Valor);";
       using var connection = GetConnection(false);
       var novoLancamento = new LancamentoModel(GetNextId(connection),
-        DateOnly.Parse(insertModel.Data), insertModel.Titulo, insertModel.Comentario,
+        DateTime.Parse(insertModel.Data), insertModel.Titulo, insertModel.Comentario,
         insertModel.IdCategoria, insertModel.IdSubCategoria, insertModel.IdTipoTransacao,
         insertModel.Valor);
       _ = connection.Execute(sql, new
       {
         novoLancamento.Id,
-        Data = novoLancamento.Data.ToString("yyyy-MM-dd"),
+        novoLancamento.Data,
         novoLancamento.Titulo,
         novoLancamento.Comentario,
         novoLancamento.IdCategoria,
@@ -50,6 +50,25 @@ namespace Gastus.Core
         novoLancamento.Valor
       });
       return novoLancamento;
+    }
+
+    /// <summary>
+    /// Recuperar os lançamentos
+    /// </summary>
+    /// <returns>Lançamentos</returns>
+    public List<LancamentoViewModel> GetLancamentos()
+    {
+      const string sql = @"
+        SELECT L.*,
+          C.Nome NomeCategoria, S.Nome NomeSubCategoria, T.Nome NomeTipoTransacao
+        FROM LANCAMENTO L
+          JOIN CATEGORIA C ON L.IdCategoria = C.Id
+          JOIN SUBCATEGORIA S ON L.IdCategoria = S.IdCategoria AND L.IdSubCategoria = S.Id
+          LEFT JOIN TIPOTRANSACAO T ON L.IdTipoTransacao = T.Id";
+      var connection = GetConnection(false);
+      List<LancamentoViewModel> lancamentos = connection.Query<LancamentoViewModel>
+        (sql).ToList();
+      return lancamentos;
     }
   }
 }

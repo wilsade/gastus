@@ -32,5 +32,23 @@ namespace Gastus.Api.Controllers
         return ReturnBadRequestException(ex);
       }
     }
+
+    /// <summary>
+    /// Recuperar os lancamentos
+    /// </summary>
+    /// <returns>Lancamentos</returns>
+    [HttpGet]
+    public IActionResult GetLancamentos()
+    {
+      try
+      {
+        var lancamentos = _lancamentosRepository.GetLancamentos();
+        return Ok(lancamentos);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
   }
 }
