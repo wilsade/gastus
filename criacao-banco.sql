@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS TipoTransacao (
 -- Criação da tabela de Lançamento
 CREATE TABLE IF NOT EXISTS Lancamento (
     Id INTEGER PRIMARY KEY,
-    Data TEXT NOT NULL,
+    Data Date NOT NULL,
     Titulo TEXT NOT NULL,
     Comentario TEXT,
     IdCategoria INTEGER NOT NULL,
