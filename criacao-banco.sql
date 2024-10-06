@@ -21,3 +21,18 @@ CREATE TABLE IF NOT EXISTS TipoTransacao (
     Nome TEXT NOT NULL,
     CONSTRAINT UQ_Nome_TipoTransacao UNIQUE (Nome COLLATE NOCASE)
 );
+
+-- Criação da tabela de Lançamento
+CREATE TABLE IF NOT EXISTS Lancamento (
+    Id INTEGER PRIMARY KEY,
+    Data TEXT NOT NULL,
+    Titulo TEXT NOT NULL,
+    Comentario TEXT,
+    IdCategoria INTEGER NOT NULL,
+    IdSubCategoria INTEGER NOT NULL,
+    IdTipoTransacao INTEGER,
+    Valor REAL NOT NULL,
+    FOREIGN KEY (IdCategoria) REFERENCES Categoria(Id),
+    FOREIGN KEY (IdCategoria, IdSubCategoria) REFERENCES SubCategoria(IdCategoria, Id),
+    FOREIGN KEY (IdTipoTransacao) REFERENCES TipoTransacao(Id)
+);

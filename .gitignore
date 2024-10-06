@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 gastus.db
+sqlite3.exe
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
