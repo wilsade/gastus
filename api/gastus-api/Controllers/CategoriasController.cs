@@ -44,6 +44,9 @@ namespace Gastus.Api.Controllers
       try
       {
         CategoriaModel model = _repository.GetCategoria(id);
+        if (model == null)
+          return NotFound($"Categoria com ID={id} não encontrado.");
+
         return Ok(model);
       }
       catch (Exception ex)
@@ -84,7 +87,7 @@ namespace Gastus.Api.Controllers
         int rowsAffected = _repository.DeleteCategoria(id);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
-        return NoContent();
+        return NotFound();
       }
       catch (Exception ex)
       {
@@ -105,7 +108,7 @@ namespace Gastus.Api.Controllers
         int rowsAffected = _repository.EditCategoria(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
-        return NoContent();
+        return NotFound();
       }
       catch (Exception ex)
       {

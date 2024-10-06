@@ -45,6 +45,8 @@ namespace Gastus.Api.Controllers
       try
       {
         SubCategoriaModel model = _repository.GetSubCategoria(idCategoria, id);
+        if (model == null)
+          return NotFound($"Subcategoria [{idCategoria},{id}] não encontrado.");
         return Ok(model);
       }
       catch (Exception ex)
@@ -86,7 +88,7 @@ namespace Gastus.Api.Controllers
         int rowsAffected = _repository.DeleteSubCategoria(idCategoria, id);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
-        return NoContent();
+        return NotFound();
       }
       catch (Exception ex)
       {
@@ -107,7 +109,7 @@ namespace Gastus.Api.Controllers
         int rowsAffected = _repository.EditSubCategoria(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
-        return NoContent();
+        return NotFound();
       }
       catch (Exception ex)
       {

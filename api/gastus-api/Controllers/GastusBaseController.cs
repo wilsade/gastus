@@ -31,7 +31,6 @@ namespace Gastus.Api.Controllers
         {
           message = ex.InnerException?.Message ?? ex.Message
         });
-
     }
   }
 }

@@ -40,6 +40,8 @@ namespace Gastus.Api.Controllers
       try
       {
         TipoTransacaoModel model = _repository.GetTipoTransacao(id);
+        if (model == null)
+          return NotFound($"Tipo de transação com ID={id} não encontrado.");
         return Ok(model);
       }
       catch (Exception ex)
@@ -80,7 +82,7 @@ namespace Gastus.Api.Controllers
         int rowsAffected = _repository.DeleteTipoTransacao(id);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
-        return NoContent();
+        return NotFound();
       }
       catch (Exception ex)
       {
@@ -101,7 +103,7 @@ namespace Gastus.Api.Controllers
         int rowsAffected = _repository.EditTipoTransacao(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
-        return NoContent();
+        return NotFound();
       }
       catch (Exception ex)
       {
