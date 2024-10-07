@@ -1,5 +1,19 @@
 <po-page-default p-title="Lançamentos">
-  <po-table [p-items]="lancamentos"></po-table>
+  <po-table [p-striped]="true"
+            [p-columns]="colunas"
+            [p-items]="lancamentos">
+
+    <ng-template p-table-cell-template
+                 let-column="column"
+                 let-row="row">
+      <div *ngIf="column.property === 'Valor'">
+        <span style="color: red;"
+              *ngIf="row.Valor < 0">{{formatValue(row.Valor)}}</span>
+        <span *ngIf="row.Valor > 0">{{formatValue(row.Valor)}}</span>
+      </div>
+    </ng-template>
+
+  </po-table>
 </po-page-default>
 
 <div *ngIf="loading"
