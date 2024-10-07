@@ -50,5 +50,26 @@ namespace Gastus.Api.Controllers
         return ReturnBadRequestException(ex);
       }
     }
+
+    /// <summary>
+    /// Excluir um Lançamento
+    /// </summary>
+    /// <param name="id">Identificador do Lançamento</param>
+    /// <returns>NotFound se não houve exclusão; OK em caso de sucesso</returns>
+    [HttpDelete("{id}")]
+    public IActionResult DeleteLancamento(int id)
+    {
+      try
+      {
+        int rowsAffected = _lancamentosRepository.DeleteLancamento(id);
+        if (rowsAffected > 0)
+          return Ok(rowsAffected);
+        return NotFound();
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
   }
 }

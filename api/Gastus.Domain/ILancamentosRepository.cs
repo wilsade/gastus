@@ -17,5 +17,12 @@
     /// </summary>
     /// <returns>Lançamentos</returns>
     List<LancamentoViewModel> GetLancamentos();
+
+    /// <summary>
+    /// Excluir um Lançamento
+    /// </summary>
+    /// <param name="id">Identificador do lançamento ser excluído</param>
+    /// <returns>Número de linhas afetadas na exclusão</returns>
+    int DeleteLancamento(int id);
   }
 }

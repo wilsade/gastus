@@ -70,5 +70,18 @@ namespace Gastus.Core
         (sql).ToList();
       return lancamentos;
     }
+
+    /// <summary>
+    /// Excluir um Lançamento
+    /// </summary>
+    /// <param name="id">Identificador do lançamento ser excluído</param>
+    /// <returns>Número de linhas afetadas na exclusão</returns>
+    public int DeleteLancamento(int id)
+    {
+      using SQLiteConnection connection = GetConnection(true);
+      var commandText = "DELETE FROM Lancamento WHERE Id = @id";
+      int rows = connection.Execute(commandText, new { id });
+      return rows;
+    }
   }
 }

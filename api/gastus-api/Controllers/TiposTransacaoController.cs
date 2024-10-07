@@ -73,7 +73,7 @@ namespace Gastus.Api.Controllers
     /// Excluir um Tipo de transação
     /// </summary>
     /// <param name="id">Identificador do Tipo de transação</param>
-    /// <returns>NoContent se não houve exclusão; OK em caso de sucesso</returns>
+    /// <returns>NotFound se não houve exclusão; OK em caso de sucesso</returns>
     [HttpDelete("{id}")]
     public IActionResult DeleteTipoTransacao(int id)
     {

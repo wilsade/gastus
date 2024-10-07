@@ -78,7 +78,7 @@ namespace Gastus.Api.Controllers
     /// Excluir uma categoria
     /// </summary>
     /// <param name="id">Identificador da categoria</param>
-    /// <returns>NoContent se não houve exclusão; OK em caso de sucesso</returns>
+    /// <returns>NotFound se não houve exclusão; OK em caso de sucesso</returns>
     [HttpDelete("{id}")]
     public IActionResult DeleteCategoria(int id)
     {

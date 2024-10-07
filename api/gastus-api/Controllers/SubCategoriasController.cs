@@ -79,7 +79,7 @@ namespace Gastus.Api.Controllers
     /// </summary>
     /// <param name="id">Identificador da categoria</param>
     /// <param name="idCategoria">Identificador da subCategoria</param>
-    /// <returns>NoContent se não houve exclusão; OK em caso de sucesso</returns>
+    /// <returns>NotFound se não houve exclusão; OK em caso de sucesso</returns>
     [HttpDelete("{idCategoria}/{id}")]
     public IActionResult DeleteSubCategoria(int idCategoria, int id)
     {
