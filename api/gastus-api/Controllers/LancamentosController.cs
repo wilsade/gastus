@@ -52,6 +52,27 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
+    /// Recuperar um Lançamento
+    /// </summary>
+    /// <param name="id">Identificador do Lançamento</param>
+    /// <returns>Lançamento</returns>
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+      try
+      {
+        LancamentoModel model = _lancamentosRepository.GetLancamento(id);
+        if (model == null)
+          return NotFound($"Lançamento com ID={id} não encontrado.");
+        return Ok(model);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
+
+    /// <summary>
     /// Excluir um Lançamento
     /// </summary>
     /// <param name="id">Identificador do Lançamento</param>

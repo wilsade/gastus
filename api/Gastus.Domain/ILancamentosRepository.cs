@@ -24,5 +24,12 @@
     /// <param name="id">Identificador do lançamento ser excluído</param>
     /// <returns>Número de linhas afetadas na exclusão</returns>
     int DeleteLancamento(int id);
+
+    /// <summary>
+    /// Recuperar um Lançamento
+    /// </summary>
+    /// <param name="id">Identificador do Lançamento</param>
+    /// <returns>Lançamento</returns>
+    LancamentoModel GetLancamento(int id);
   }
 }

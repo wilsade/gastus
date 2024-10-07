@@ -83,5 +83,18 @@ namespace Gastus.Core
       int rows = connection.Execute(commandText, new { id });
       return rows;
     }
+
+    /// <summary>
+    /// Recuperar um Lançamento
+    /// </summary>
+    /// <param name="id">Identificador do Lançamento</param>
+    /// <returns>Lançamento</returns>
+    public LancamentoModel GetLancamento(int id)
+    {
+      const string sql = "SELECT * FROM Lancamento WHERE Id = @id";
+      using var connection = GetConnection(false);
+      LancamentoModel lancamento = connection.QueryFirstOrDefault<LancamentoModel>(sql, new { id });
+      return lancamento;
+    }
   }
 }
