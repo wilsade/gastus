@@ -31,5 +31,12 @@
     /// <param name="id">Identificador do Lançamento</param>
     /// <returns>Lançamento</returns>
     LancamentoModel GetLancamento(int id);
+
+    /// <summary>
+    /// Editar um Lançamento
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros afetados</returns>
+    int EditLancamento(LancamentoModel model);
   }
 }

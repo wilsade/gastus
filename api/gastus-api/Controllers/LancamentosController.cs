@@ -92,5 +92,26 @@ namespace Gastus.Api.Controllers
         return ReturnBadRequestException(ex);
       }
     }
+
+    /// <summary>
+    /// Editar um Lançamento
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>NoContent se não houve alteração; OK em caso de sucesso</returns>
+    [HttpPut()]
+    public IActionResult EditTipoTransacao([FromBody] LancamentoModel model)
+    {
+      try
+      {
+        int rowsAffected = _lancamentosRepository.EditLancamento(model);
+        if (rowsAffected > 0)
+          return Ok(rowsAffected);
+        return NotFound();
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
   }
 }

@@ -96,5 +96,28 @@ namespace Gastus.Core
       LancamentoModel lancamento = connection.QueryFirstOrDefault<LancamentoModel>(sql, new { id });
       return lancamento;
     }
+
+    /// <summary>
+    /// Editar um Lançamento
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros afetados</returns>
+    public int EditLancamento(LancamentoModel model)
+    {
+      const string sql = @"
+        UPDATE Lancamento
+        SET 
+            Data = @Data,
+            Titulo = @Titulo,
+            Comentario = @Comentario,
+            IdCategoria = @IdCategoria,
+            IdSubCategoria = @IdSubCategoria,
+            IdTipoTransacao = @IdTipoTransacao,
+            Valor = @Valor
+        WHERE Id = @Id";
+
+      using var connection = GetConnection(true);
+      return connection.Execute(sql, model);
+    }
   }
 }
