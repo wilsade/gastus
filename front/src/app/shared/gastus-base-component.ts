@@ -10,8 +10,8 @@ export abstract class GastusBaseComponent {
    * Criar a coluna para o Identificador da entidade
    * @returns Coluna para o Id
    */
-  protected createColumnId(): PoTableColumn {
-    return { label: 'Id.', property: 'Id', width: '10%' }
+  protected createColumnId(visivel: boolean = true): PoTableColumn {
+    return { label: 'Id.', property: 'Id', width: '10%', visible: visivel }
   }
 
   /**
