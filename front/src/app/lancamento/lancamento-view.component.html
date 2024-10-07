@@ -1,0 +1,8 @@
+<po-page-default p-title="Lançamentos">
+  <po-table [p-items]="lancamentos"></po-table>
+</po-page-default>
+
+<div *ngIf="loading"
+     class="sample-container">
+  <po-loading-overlay></po-loading-overlay>
+</div>
