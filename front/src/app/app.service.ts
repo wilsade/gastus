@@ -6,8 +6,5 @@ import { Injectable } from '@angular/core';
 })
 export class AppService {
 
-
-  constructor(private _http: HttpClient) { }
-
-
+  constructor(private readonly _http: HttpClient) { }
 }
