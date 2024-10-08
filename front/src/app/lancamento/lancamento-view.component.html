@@ -9,7 +9,8 @@
       <div *ngIf="column.property === 'Valor'">
         <span style="color: red;"
               *ngIf="row.Valor < 0">{{formatValue(row.Valor)}}</span>
-        <span *ngIf="row.Valor > 0">{{formatValue(row.Valor)}}</span>
+        <span style="color: blue;"
+              *ngIf="row.Valor > 0">{{formatValue(row.Valor)}}</span>
       </div>
     </ng-template>
 
