@@ -7,4 +7,5 @@ export interface ILancamento {
   IdSubCategoria: number;
   IdTipoTransacao?: number | null;
   Valor: number;
+  SALDO: number;
 }
