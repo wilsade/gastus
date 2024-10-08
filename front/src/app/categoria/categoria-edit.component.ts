@@ -16,7 +16,7 @@ import { GastusBaseComponent } from '../shared/gastus-base-component';
 export class CategoriaEditComponent extends GastusBaseComponent {
 
   constructor(protected override _notification: PoNotificationService,
-    private _service: CategoriaService) {
+    private readonly _service: CategoriaService) {
     super(_notification);
   }
 
