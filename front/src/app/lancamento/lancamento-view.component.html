@@ -12,6 +12,13 @@
         <span style="color: blue;"
               *ngIf="row.Valor > 0">{{formatValue(row.Valor)}}</span>
       </div>
+
+      <div *ngIf="column.property === 'SALDO'">
+        <span style="color: red;"
+              *ngIf="row.SALDO < 0">{{formatValue(row.SALDO)}}</span>
+        <span style="color: blue;"
+              *ngIf="row.SALDO > 0">{{formatValue(row.SALDO)}}</span>
+      </div>
     </ng-template>
 
   </po-table>
