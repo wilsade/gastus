@@ -1,14 +1,15 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
-import { PoModule, PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
+import { PoModule, PoNotificationService, PoPageAction, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { ILancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { CommonModule } from '@angular/common';
+import { LancamentoEditComponent } from './lancamento-edit.component';
 
 @Component({
   selector: 'app-lancamento-view',
   standalone: true,
-  imports: [CommonModule, PoModule],
+  imports: [CommonModule, PoModule, LancamentoEditComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './lancamento-view.component.html'
 })
@@ -30,9 +31,15 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
     { label: 'Categoria', property: 'NomeCategoria' },
     { label: 'SubCategoria', property: 'NomeSubCategoria' },
     { label: 'Tipo', property: 'NomeTipoTransacao' },
-    //{ label: 'ValorN', property: 'Valor', type: 'number', format: '1.2-5' },
     { label: 'Valor', property: 'Valor', type: 'cellTemplate' },
     { label: 'Saldo', property: 'SALDO', type: 'cellTemplate' }
+  ]
+
+  @ViewChild('modalLancamento')
+  modalLancamento: LancamentoEditComponent;
+
+  acoesPagina: PoPageAction[] = [
+    { label: 'Inserir', icon: 'ph-fill ph-plus-square', action: () => this.modalLancamento.showModal(this._service.getEmptyLancamento()) }
   ]
 
   ngOnInit(): void {
