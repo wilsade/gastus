@@ -1,4 +1,5 @@
-<po-page-default p-title="Lançamentos">
+<po-page-default p-title="Lançamentos"
+                 [p-actions]="acoesPagina">
   <po-table [p-striped]="true"
             [p-columns]="colunas"
             [p-items]="lancamentos">
@@ -22,6 +23,8 @@
     </ng-template>
 
   </po-table>
+
+  <app-lancamento-edit #modalLancamento></app-lancamento-edit>
 </po-page-default>
 
 <div *ngIf="loading"
