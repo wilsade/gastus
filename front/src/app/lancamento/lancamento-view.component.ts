@@ -32,6 +32,7 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
     { label: 'Tipo', property: 'NomeTipoTransacao' },
     //{ label: 'ValorN', property: 'Valor', type: 'number', format: '1.2-5' },
     { label: 'Valor', property: 'Valor', type: 'cellTemplate' },
+    { label: 'Saldo', property: 'SALDO', type: 'cellTemplate' }
   ]
 
   ngOnInit(): void {
