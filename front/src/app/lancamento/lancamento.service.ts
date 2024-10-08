@@ -23,7 +23,6 @@ export class LancamentoService {
     return this._http.get<ILancamento[]>(this.lancamentosUrl).pipe(
       map((response: ILancamento[]) => {
         this.calculaSaldo(response);
-        console.log(response);
         return response;
       }));
   }
