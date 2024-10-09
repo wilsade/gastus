@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
-import { PoModule, PoNotificationService, PoPageAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { ILancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
@@ -42,8 +42,16 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
     { label: 'Inserir', icon: 'ph-fill ph-plus-square', action: () => this.modalLancamento.showModal(this._service.getEmptyLancamento()) }
   ]
 
+  acoesTabela: PoTableAction[] = [
+    { label: 'Editar', icon: this.iconeEditar, action: this.editarLancamento.bind(this) }
+  ]
+
   ngOnInit(): void {
     this.carregarLancamentos();
+  }
+
+  private editarLancamento(item: ILancamento): void {
+    this.modalLancamento.showModal(item);
   }
 
   private carregarLancamentos() {

@@ -22,14 +22,17 @@ export class LancamentoService {
   getLancamentos(): Observable<ILancamento[]> {
     return this._http.get<ILancamento[]>(this.lancamentosUrl).pipe(
       map((response: ILancamento[]) => {
-        this.calculaSaldo(response);
+        this.formatarValores(response);
         return response;
       }));
   }
 
-  private calculaSaldo(lancamentos: ILancamento[]): void {
+  private formatarValores(lancamentos: ILancamento[]): void {
     let saldo = 0;
     lancamentos.forEach(lancamento => {
+
+      lancamento.Data = new Date(lancamento.Data);
+
       saldo += lancamento.Valor;
       lancamento.SALDO = saldo;
     });

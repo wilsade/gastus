@@ -1,4 +1,17 @@
 <po-modal #modal
           [p-title]="titulo">
-  editar lancamento
+  <div class="po-row">
+    <po-input class="po-md-2"
+              p-label="Id."
+              disabled="true"
+              [(ngModel)]="lancamento.Id"></po-input>
+    <po-datepicker class="po-md-4"
+                   name="data"
+                   p-format="dd/MM/yyyy"
+                   [(ngModel)]="lancamento.Data"
+                   p-label="Data"></po-datepicker>
+    <po-input class="po-md-6"
+              p-label="Título"
+              [(ngModel)]="lancamento.Titulo"></po-input>
+  </div>
 </po-modal>
