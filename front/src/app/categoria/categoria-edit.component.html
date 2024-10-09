@@ -2,9 +2,17 @@
           [p-primary-action]="confirmouModal"
           [p-secondary-action]="cancelouModal"
           [p-title]="meuTitulo">
-  <po-input p-label="Categoria"
-            [(ngModel)]="categoria.Nome"
-            (p-change-model)="alterouNomeCategoria()"></po-input>
+  <div class="po-row">
+    <po-input class="po-md-2"
+              p-label="Id."
+              [(ngModel)]="categoria.Id"
+              p-readonly="true"
+              disabled="true"></po-input>
+    <po-input class="po-md-10"
+              p-label="Categoria"
+              [(ngModel)]="categoria.Nome"
+              (p-change-model)="alterouNomeCategoria()"></po-input>
+  </div>
   <hr>
   <app-subcategoria [categoria]="categoria"></app-subcategoria>
 </po-modal>

@@ -23,7 +23,7 @@ export class CategoriaEditComponent extends GastusBaseComponent {
   private _nomeOriginal: string;
 
   protected confirmouModal: PoModalAction = {
-    label: 'Confirmar',
+    label: 'Salvar e fechar',
     action: () => {
       this.onConfirmouModal.emit(this.categoria);
       this.modal.close();
