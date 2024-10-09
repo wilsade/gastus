@@ -42,7 +42,7 @@ export class CategoriaComponent extends GastusBaseComponent implements OnInit {
   ]
 
   protected readonly acoesTabela: PoTableAction[] = [
-    { label: 'Editar', icon: 'ph-fill ph-pencil-simple', action: this.editarCategoria.bind(this) },
+    { label: 'Editar', icon: this.iconeEditar, action: this.editarCategoria.bind(this) },
     { label: 'Excluir', icon: 'ph-fill ph-minus-circle', action: this.excluirCategoria.bind(this) }
   ]
 
