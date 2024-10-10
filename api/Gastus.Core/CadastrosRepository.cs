@@ -54,15 +54,38 @@ namespace Gastus.Core
     }
 
     /// <summary>
+    /// Recuperar todas as subCategorias
+    /// </summary>
+    /// <param name="connection">Conexão com o banco de dados</param>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <returns>SubCategorias</returns>
+    static List<SubCategoriaModel> GetAllSubCategorias(SQLiteConnection connection, int? idCategoria)
+    {
+      string sql = @"SELECT * FROM SUBCATEGORIA";
+      object param = null;
+      if (idCategoria != null)
+      {
+        sql += " WHERE IDCATEGORIA = @idCategoria";
+        param = new { idCategoria };
+      }
+      List<SubCategoriaModel> subCategorias = connection.Query<SubCategoriaModel>(sql, param)
+        .ToList();
+      return subCategorias;
+    }
+
+    /// <summary>
     /// Recuperar todas as categorias
     /// </summary>
+    /// <param name="loadSubs">true para carregar as subcategorias</param>
     /// <returns>Todas as categorias</returns>
-    public List<CategoriaModel> GetAllCategorias()
+    public List<CategoriaModel> GetAllCategorias(bool loadSubs)
     {
       using SQLiteConnection connection = GetConnection(false);
       var query = "SELECT Id, Nome FROM Categoria";
 
       var categorias = connection.Query<CategoriaModel>(query).ToList();
+      if (loadSubs)
+        categorias.ForEach(c => c.SubCategorias = GetAllSubCategorias(connection, c.Id));
       return categorias;
     }
 
@@ -141,8 +164,7 @@ namespace Gastus.Core
         param = new { idCategoria };
       }
       using var connection = GetConnection(false);
-      List<SubCategoriaModel> subCategorias = connection.Query<SubCategoriaModel>(sql, param)
-        .ToList();
+      List<SubCategoriaModel> subCategorias = GetAllSubCategorias(connection, idCategoria);
       return subCategorias;
     }
 

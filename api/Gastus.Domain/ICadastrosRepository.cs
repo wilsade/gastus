@@ -8,8 +8,9 @@
     /// <summary>
     /// Recuperar todas as categorias
     /// </summary>
+    /// <param name="loadSubs">true para carregar as subcategorias</param>
     /// <returns>Todas as categorias</returns>
-    List<CategoriaModel> GetAllCategorias();
+    List<CategoriaModel> GetAllCategorias(bool loadSubs);
 
     /// <summary>
     /// Adicionar uma categoria

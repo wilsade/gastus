@@ -19,8 +19,8 @@ export class CategoriaService {
     }
   }
 
-  getCategorias(): Observable<ICategoria[]> {
-    return this._http.get<any>(this.categoriasUrl).pipe(
+  getCategorias(loadSubs: boolean = false): Observable<ICategoria[]> {
+    return this._http.get<any>(`${this.categoriasUrl}?loadsubs=${loadSubs}`).pipe(
       map((response: any) => {
         return response;
       }));

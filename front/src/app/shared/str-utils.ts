@@ -1,5 +1,5 @@
 export class StrUtils {
-  static hasValue(str: string): boolean {
+  static hasValue(str: any): boolean {
     return str != undefined && str != null && str != '';
   }
 }

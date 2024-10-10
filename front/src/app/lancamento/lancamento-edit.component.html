@@ -1,17 +1,46 @@
 <po-modal #modal
-          [p-title]="titulo">
+          [p-title]="titulo"
+          [p-primary-action]="confirmou"
+          [p-secondary-action]="cancelou">
   <div class="po-row">
     <po-input class="po-md-2"
+              p-required="true"
               p-label="Id."
               disabled="true"
               [(ngModel)]="lancamento.Id"></po-input>
-    <po-datepicker class="po-md-4"
+    <po-datepicker class="po-md-6"
+                   p-required="true"
                    name="data"
                    p-format="dd/MM/yyyy"
                    [(ngModel)]="lancamento.Data"
+                   (ngModelChange)="alterouCampo()"
                    p-label="Data"></po-datepicker>
-    <po-input class="po-md-6"
+  </div>
+  <div class="po-row">
+    <po-input class="po-md-8"
+              p-required="true"
               p-label="Título"
-              [(ngModel)]="lancamento.Titulo"></po-input>
+              [(ngModel)]="lancamento.Titulo"
+              (ngModelChange)="alterouCampo()"></po-input>
+    <po-input class="po-md-4"
+              p-required="true"
+              p-label="Comentário"
+              [(ngModel)]="lancamento.Comentario"></po-input>
+
+  </div>
+
+  <div class="po-row">
+    <po-select class="po-md-6"
+               [p-options]="comboCategorias"
+               [ngModel]="lancamento.IdCategoria"
+               (ngModelChange)="lancamento.IdCategoria = $event"
+               (ngModelChange)="alterouComboCategoria($event)"
+               p-label="Categoria"></po-select>
+    <po-select class="po-md-6"
+               [p-options]="comboSubCategorias"
+               [ngModel]="lancamento.IdSubCategoria"
+               (ngModelChange)="lancamento.IdSubCategoria = $event"
+               (ngModelChange)="alterouComboSubCategoria()"
+               p-label="SubCategoria"></po-select>
   </div>
 </po-modal>

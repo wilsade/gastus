@@ -18,13 +18,14 @@ namespace Gastus.Api.Controllers
     /// <summary>
     /// Recuperar todas as categorias cadastradas
     /// </summary>
+    /// <param name="loadSubs">true para carregar as subcategorias</param>
     /// <returns>All categorias</returns>
     [HttpGet()]
-    public IActionResult GetAllCategorias()
+    public IActionResult GetAllCategorias(bool loadSubs)
     {
       try
       {
-        List<CategoriaModel> lista = _repository.GetAllCategorias();
+        List<CategoriaModel> lista = _repository.GetAllCategorias(loadSubs);
         return Ok(lista);
       }
       catch (Exception ex)
