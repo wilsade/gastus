@@ -1,11 +1,12 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule, PoNotificationService } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { ILancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { FormsModule } from '@angular/forms';
 import { ComboCategoria } from '../_models/ICategoria';
 import { StrUtils } from '../shared/str-utils';
+import { TipoTransacaoService } from '../tipo-transacao/tipo-transacao.service';
 
 @Component({
   selector: 'app-lancamento-edit',
@@ -16,13 +17,15 @@ import { StrUtils } from '../shared/str-utils';
 })
 export class LancamentoEditComponent extends GastusBaseComponent implements OnInit {
   constructor(protected override _notification: PoNotificationService,
-    private readonly _service: LancamentoService) {
+    private readonly _service: LancamentoService,
+    private readonly _tipoTransacaoService: TipoTransacaoService) {
     super(_notification);
   }
 
   protected titulo = '';
   protected comboCategorias: ComboCategoria[] = [];
-  protected comboSubCategorias: ComboCategoria[] = [];
+  protected comboSubCategorias: PoSelectOption[] = [];
+  protected tiposTransacao: PoSelectOption[] = [];
 
   @ViewChild('modal')
   protected modal: PoModalComponent;
@@ -49,6 +52,17 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     this._service.getComboCategorias().subscribe({
       next: data => {
         this.comboCategorias = data;
+      },
+      error: err => {
+        this.tratarErro(err);
+      }
+    });
+    this._tipoTransacaoService.getTiposTransacao().subscribe({
+      next: data => {
+        this.tiposTransacao = [];
+        data.forEach(t => {
+          this.tiposTransacao.push({ label: t.Nome, value: t.Id });
+        })
       },
       error: err => {
         this.tratarErro(err);
@@ -92,6 +106,7 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     const tituloOK = StrUtils.hasValue(this.lancamento.Titulo);
     const categoriaOK = StrUtils.hasValue(this.lancamento.IdCategoria);
     const subCategoriaOK = StrUtils.hasValue(this.lancamento.IdSubCategoria);
-    this.cancelou.disabled = !dataOk || !tituloOK || !categoriaOK || !subCategoriaOK;
+    const valorOK = StrUtils.hasValue(this.lancamento.Valor);
+    this.cancelou.disabled = !dataOk || !tituloOK || !categoriaOK || !subCategoriaOK || !valorOK;
   }
 }

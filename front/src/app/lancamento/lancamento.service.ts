@@ -33,7 +33,7 @@ export class LancamentoService {
   getComboCategorias(): Observable<ComboCategoria[]> {
     return this._serviceCategoria.getCategorias(true).pipe(
       map((categorias: ICategoria[]) => {
-        return categorias.map(categoria => new ComboCategoria(categoria, 0));
+        return categorias.map(categoria => new ComboCategoria(categoria));
       })
     );
   }

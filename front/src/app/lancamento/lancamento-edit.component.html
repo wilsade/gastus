@@ -15,18 +15,21 @@
                    [(ngModel)]="lancamento.Data"
                    (ngModelChange)="alterouCampo()"
                    p-label="Data"></po-datepicker>
+    <po-decimal class="po-md-4"
+                p-label="Valor"
+                p-required="true"
+                name="valor"
+                p-icon="ph ph-money-wavy"
+                [ngModel]="lancamento.Valor"
+                (ngModelChange)="lancamento.Valor = $event"
+                (ngModelChange)="alterouCampo()"></po-decimal>
   </div>
   <div class="po-row">
-    <po-input class="po-md-8"
+    <po-input class="po-md-12"
               p-required="true"
               p-label="Título"
               [(ngModel)]="lancamento.Titulo"
               (ngModelChange)="alterouCampo()"></po-input>
-    <po-input class="po-md-4"
-              p-required="true"
-              p-label="Comentário"
-              [(ngModel)]="lancamento.Comentario"></po-input>
-
   </div>
 
   <div class="po-row">
@@ -42,5 +45,18 @@
                (ngModelChange)="lancamento.IdSubCategoria = $event"
                (ngModelChange)="alterouComboSubCategoria()"
                p-label="SubCategoria"></po-select>
+  </div>
+
+  <div class="po-row">
+    <po-input class="po-md-6"
+              p-required="true"
+              p-label="Comentário"
+              [(ngModel)]="lancamento.Comentario"></po-input>
+    <po-select class="po-md-6"
+               [p-options]="tiposTransacao"
+               [ngModel]="lancamento.IdTipoTransacao"
+               (ngModelChange)="lancamento.IdTipoTransacao = $event"
+               p-label="Tipo de transação"></po-select>
+
   </div>
 </po-modal>

@@ -13,22 +13,18 @@ export class ISubCategoria {
 }
 
 export class ComboCategoria implements PoSelectOption {
-  parent: string | number;
   label: string;
   value: string | number;
-  Filhas: ComboCategoria[] = []; // Inicialize as Filhas como array vazio
+  Filhas: PoSelectOption[] = []; // Inicialize as Filhas como array vazio
 
-  constructor(private _categoria: ICategoria, pai: string | number) {
-    this.label = _categoria.Nome;
-    this.value = _categoria.Id;
-    this.parent = pai;
+  constructor(categoria: ICategoria) {
+    this.label = categoria.Nome;
+    this.value = categoria.Id;
 
-    if (_categoria.SubCategorias && _categoria.SubCategorias.length > 0) {
-      _categoria.SubCategorias.forEach(s => {
-
-        const fake: ICategoria = { Id: s.Id, Nome: s.Nome, SubCategorias: [] };
-
-        this.Filhas.push(new ComboCategoria(fake, _categoria.Id));
+    if (categoria.SubCategorias && categoria.SubCategorias.length > 0) {
+      categoria.SubCategorias.forEach(s => {
+        const filha: PoSelectOption = { value: s.Id, label: s.Nome };
+        this.Filhas.push(filha);
       });
     }
   }
