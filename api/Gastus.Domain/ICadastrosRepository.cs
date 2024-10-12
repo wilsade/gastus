@@ -174,5 +174,12 @@
     /// <param name="id">Identificador do lançamento</param>
     /// <returns>Lancamento de aplicação</returns>
     LancamentoAplicacaoModel GetLancamentoAplicacao(int idAplicacao, int id);
+
+    /// <summary>
+    /// Editar um Lançamento de uma aplicação
+    /// </summary>
+    /// <param name="editModel">Dados da modificação</param>
+    /// <returns>Lançamento alterado</returns>
+    int EditLancamentoAplicacao(LancamentoAplicacaoModel editModel);
   }
 }

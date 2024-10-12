@@ -417,5 +417,23 @@ namespace Gastus.Core
         new { idAplicacao, id });
       return lancamento;
     }
+
+    /// <summary>
+    /// Editar um Lançamento de uma aplicação
+    /// </summary>
+    /// <param name="editModel">Dados da modificação</param>
+    /// <returns>Lançamento alterado</returns>
+    public int EditLancamentoAplicacao(LancamentoAplicacaoModel editModel)
+    {
+      const string sql = @"
+        UPDATE LancamentoAplicacao
+        SET Data = @Data,
+          Valor = @Valor
+        WHERE IdAplicacao = @IdAplicacao
+          AND Id = @Id";
+      var connection = GetConnection(false);
+      int rows = connection.Execute(sql, editModel);
+      return rows;
+    }
   }
 }
