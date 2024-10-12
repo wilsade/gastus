@@ -21,5 +21,6 @@ export class AppComponent {
     { label: 'Categorias', shortLabel: 'Categorias', icon: 'ph ph-browsers', link: `./${NomesRotas.CATEGORIAS}` },
     { label: 'Tipos de transação', shortLabel: 'T. Transação', icon: 'ph ph-credit-card', link: `./${NomesRotas.TIPOS_TRANSACAO}` },
     { label: 'Lançamentos', shortLabel: 'Lançamentos', icon: 'ph ph-cash-register', link: `./${NomesRotas.LANCAMENTOS}` },
+    { label: 'Aplicações', shortLabel: 'Aplicações', link: `./${NomesRotas.APLICACOES}` },
   ];
 }

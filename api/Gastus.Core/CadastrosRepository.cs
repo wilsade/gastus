@@ -14,18 +14,6 @@ namespace Gastus.Core
     GastusBaseRepository(databaseFileName), ICadastrosRepository
   {
     /// <summary>
-    /// Recuperar o próximo Id da Categoria
-    /// </summary>
-    /// <param name="connection">Conexão com o banco de dados</param>
-    /// <returns>Próximo Id</returns>
-    static int GetNextCategoriaId(SQLiteConnection connection)
-    {
-      const string sql = "SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM CATEGORIA;";
-      int nextId = connection.QuerySingle<int>(sql);
-      return nextId;
-    }
-
-    /// <summary>
     /// Recuperar o próximo Id da SubCategoria
     /// </summary>
     /// <param name="connection">Conexão com o banco de dados</param>
@@ -42,13 +30,14 @@ namespace Gastus.Core
     }
 
     /// <summary>
-    /// Recuperar o próximo Id do Tipo de transação
+    /// Recuperar o próximo Id de uma tabela
     /// </summary>
     /// <param name="connection">Conexão com o banco de dados</param>
+    /// <param name="tableName">Nome da tabela</param>
     /// <returns>Próximo Id</returns>
-    static int GetNextTipoTransacaoId(SQLiteConnection connection)
+    static int GetNextIdFromTabela(SQLiteConnection connection, string tableName)
     {
-      const string sql = "SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM TipoTransacao;";
+      string sql = $"SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM {tableName};";
       int nextId = connection.QuerySingle<int>(sql);
       return nextId;
     }
@@ -99,7 +88,7 @@ namespace Gastus.Core
       using var connection = GetConnection(false);
 
       var query = "INSERT INTO Categoria (Id, Nome) VALUES (@Id, @Nome)";
-      var novaCategoria = new CategoriaModel(GetNextCategoriaId(connection), categoria.Nome);
+      var novaCategoria = new CategoriaModel(GetNextIdFromTabela(connection, "Categoria"), categoria.Nome);
       int rows = connection.Execute(query, novaCategoria);
       System.Diagnostics.Trace.WriteLine(rows);
       return novaCategoria;
@@ -267,7 +256,7 @@ namespace Gastus.Core
       using var connection = GetConnection(false);
 
       var query = "INSERT INTO TipoTransacao (Id, Nome) VALUES (@Id, @Nome)";
-      var novoTipoTransacao = new TipoTransacaoModel(GetNextTipoTransacaoId(connection), model.Nome);
+      var novoTipoTransacao = new TipoTransacaoModel(GetNextIdFromTabela(connection, "TipoTransacao"), model.Nome);
       int rows = connection.Execute(query, novoTipoTransacao);
       System.Diagnostics.Trace.WriteLine(rows);
       return novoTipoTransacao;
@@ -305,7 +294,11 @@ namespace Gastus.Core
     /// <returns>Aplicações com seus respectivos lançamentos</returns>
     public List<AplicacaoModel> GetAllAplicacoes()
     {
-      throw new NotImplementedException();
+      using SQLiteConnection connection = GetConnection(false);
+      var query = "SELECT Id, Nome FROM Aplicacao";
+
+      var aplicacoes = connection.Query<AplicacaoModel>(query).ToList();
+      return aplicacoes;
     }
 
     /// <summary>
@@ -325,7 +318,12 @@ namespace Gastus.Core
     /// <returns>Aplicação inserida</returns>
     public AplicacaoModel AddAplicacao(BaseInsertModel insertModel)
     {
-      throw new NotImplementedException();
+      using var connection = GetConnection(false);
+
+      var query = "INSERT INTO Aplicacao (Id, Nome) VALUES (@Id, @Nome)";
+      var novaAplicacao = new AplicacaoModel(GetNextIdFromTabela(connection, "Aplicacao"), insertModel.Nome);
+      _ = connection.Execute(query, novaAplicacao);
+      return novaAplicacao;
     }
 
     /// <summary>
@@ -335,7 +333,7 @@ namespace Gastus.Core
     /// <returns>Número de registros excluídos</returns>
     public int DeleteAplicacao(int id)
     {
-      throw new NotImplementedException();
+      return DeleteById("Aplicacao", id);
     }
 
     /// <summary>

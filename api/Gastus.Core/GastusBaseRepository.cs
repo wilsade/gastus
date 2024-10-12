@@ -31,5 +31,19 @@ namespace Gastus.Core
       }
       return connection;
     }
+
+    /// <summary>
+    /// Excluir uma categoria
+    /// </summary>
+    /// <param name="tableName">Nome da tabela</param>
+    /// <param name="id">Identificador da registro a ser excluído</param>
+    /// <returns>Número de linhas afetadas na exclusão</returns>
+    protected int DeleteById(string tableName, int id)
+    {
+      using SQLiteConnection connection = GetConnection(true);
+      var commandText = $"DELETE FROM {tableName} WHERE Id = @id";
+      int rows = connection.Execute(commandText, new { id });
+      return rows;
+    }
   }
 }

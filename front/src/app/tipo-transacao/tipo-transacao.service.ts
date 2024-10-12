@@ -21,7 +21,7 @@ export class TipoTransacaoService {
    * @returns Tipos de transação cadastrados
    */
   getTiposTransacao(): Observable<ITipoTransacao[]> {
-    return this._http.get<any>(this.tiposTransacaoUrl).pipe(
+    return this._http.get<ITipoTransacao>(this.tiposTransacaoUrl).pipe(
       map((response: any) => {
         return response;
       }));

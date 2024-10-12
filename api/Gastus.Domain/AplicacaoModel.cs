@@ -6,6 +6,25 @@
   public class AplicacaoModel : BaseModel
   {
     /// <summary>
+    /// Inicialização da classe: <see cref="AplicacaoModel"/>.
+    /// </summary>
+    public AplicacaoModel()
+    {
+
+    }
+
+    /// <summary>
+    /// Inicialização da classe: <see cref="AplicacaoModel"/>.
+    /// </summary>
+    /// <param name="id">Identificador</param>
+    /// <param name="nome">Nome</param>
+    public AplicacaoModel(int id, string nome)
+    {
+      Id = id;
+      Nome = nome;
+    }
+
+    /// <summary>
     /// Nome
     /// </summary>
     public string Nome { get; set; }
