@@ -66,6 +66,20 @@ namespace Gastus.Core
     }
 
     /// <summary>
+    /// Recuperar todos os lançamentos de uma aplicação
+    /// </summary>
+    /// <param name="connection">Conexão com o banco de dados</param>
+    /// <param name="idAplicacao">Identificador da aplicação</param>
+    /// <returns>Lançamentos da aplicação</returns>
+    static List<LancamentoAplicacaoModel> GetAllLancamentosAplicacao(SQLiteConnection connection, int idAplicacao)
+    {
+      const string sql = @"SELECT * FROM LancamentoAplicacao WHERE IdAplicacao = @IdAplicacao";
+      List<LancamentoAplicacaoModel> lancamentos = connection.Query<LancamentoAplicacaoModel>(
+        sql, new { IdAplicacao = idAplicacao }).ToList();
+      return lancamentos;
+    }
+
+    /// <summary>
     /// Recuperar todas as categorias
     /// </summary>
     /// <param name="loadSubs">true para carregar as subcategorias</param>
@@ -295,6 +309,12 @@ namespace Gastus.Core
       var query = "SELECT Id, Nome FROM Aplicacao";
 
       var aplicacoes = connection.Query<AplicacaoModel>(query).ToList();
+
+      aplicacoes.ForEach(aplicacao =>
+      {
+        aplicacao.Lancamentos = GetAllLancamentosAplicacao(connection, aplicacao.Id);
+      });
+
       return aplicacoes;
     }
 
@@ -356,11 +376,8 @@ namespace Gastus.Core
     /// <returns>Lançamentos da aplicação</returns>
     public List<LancamentoAplicacaoModel> GetAllLancamentosAplicacao(int idAplicacao)
     {
-      const string sql = @"SELECT * FROM LancamentoAplicacao WHERE IdAplicacao = @IdAplicacao";
       using var connection = GetConnection(false);
-      List<LancamentoAplicacaoModel> lancamentos = connection.Query<LancamentoAplicacaoModel>(
-        sql, new { IdAplicacao = idAplicacao }).ToList();
-      return lancamentos;
+      return GetAllLancamentosAplicacao(connection, idAplicacao);
     }
 
     /// <summary>

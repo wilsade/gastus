@@ -12,9 +12,9 @@ namespace Gastus.Api.Controllers
   public class AplicacoesController(ICadastrosRepository repository) : GastusBaseController(repository)
   {
     /// <summary>
-    /// Recuperar todas as aplicações
+    /// Recuperar todas as Aplicações com seus respectivos Lançamentos
     /// </summary>
-    /// <returns>Todos as aplicações</returns>
+    /// <returns>Todos as aplicações e lançamentos</returns>
     [HttpGet()]
     public IActionResult GetAll()
     {
