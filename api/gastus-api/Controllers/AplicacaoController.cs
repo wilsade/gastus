@@ -5,22 +5,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gastus.Api.Controllers
 {
   /// <summary>
-  /// Controller para Tipos de transação
+  /// Controller para Aplicação
   /// </summary>
   [ApiController]
   [Route("api/[controller]")]
-  public class TiposTransacaoController(ICadastrosRepository repository) : GastusBaseController(repository)
+  public class AplicacaoController(ICadastrosRepository repository) : GastusBaseController(repository)
   {
     /// <summary>
-    /// Recuperar todas os Tipos de transações
+    /// Recuperar todas as aplicações
     /// </summary>
-    /// <returns>Todos os tipos de transações</returns>
+    /// <returns>Todos as aplicações</returns>
     [HttpGet()]
     public IActionResult GetAll()
     {
       try
       {
-        List<TipoTransacaoModel> lista = _repository.GetAllTiposTransacao();
+        List<AplicacaoModel> lista = _repository.GetAllAplicacoes();
         return Ok(lista);
       }
       catch (Exception ex)
@@ -30,18 +30,18 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Recuperar um Tipo de transação
+    /// Recuperar uma Aplicação
     /// </summary>
-    /// <param name="id">Identificador do Tipo de transação</param>
-    /// <returns>Tipo de transação</returns>
+    /// <param name="id">Identificador da aplicação</param>
+    /// <returns>aplicação</returns>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
       try
       {
-        TipoTransacaoModel model = _repository.GetTipoTransacao(id);
+        AplicacaoModel model = _repository.GetAplicacao(id);
         if (model == null)
-          return NotFound($"Tipo de transação com ID={id} não encontrado.");
+          return NotFound($"aplicação com ID={id} não encontrado.");
         return Ok(model);
       }
       catch (Exception ex)
@@ -51,16 +51,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Inserir um Tipo de transação
+    /// Inserir uma aplicação
     /// </summary>
-    /// <param name="insertModel">Tipo de transação</param>
-    /// <returns>Tipo de transação inserido</returns>
+    /// <param name="insertModel">Aplicação</param>
+    /// <returns>Aplicação inserida</returns>
     [HttpPost()]
-    public IActionResult AddTipoTransacao([FromBody] BaseInsertModel insertModel)
+    public IActionResult AddAplicacao([FromBody] BaseInsertModel insertModel)
     {
       try
       {
-        TipoTransacaoModel model = _repository.AddTipoTransacao(insertModel);
+        AplicacaoModel model = _repository.AddAplicacao(insertModel);
         return Ok(model);
       }
       catch (Exception ex)
@@ -70,16 +70,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Excluir um Tipo de transação
+    /// Excluir uma aplicação
     /// </summary>
-    /// <param name="id">Identificador do Tipo de transação</param>
+    /// <param name="id">Identificador da aplicação</param>
     /// <returns>NotFound se não houve exclusão; OK em caso de sucesso</returns>
     [HttpDelete("{id}")]
-    public IActionResult DeleteTipoTransacao(int id)
+    public IActionResult DeleteAplicacao(int id)
     {
       try
       {
-        int rowsAffected = _repository.DeleteTipoTransacao(id);
+        int rowsAffected = _repository.DeleteAplicacao(id);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NotFound();
@@ -91,16 +91,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Editar um Tipo de transação
+    /// Editar uma aplicação
     /// </summary>
     /// <param name="model">Dados da modificação</param>
     /// <returns>NoContent se não houve alteração; OK em caso de sucesso</returns>
     [HttpPut()]
-    public IActionResult EditTipoTransacao([FromBody] TipoTransacaoModel model)
+    public IActionResult EditAplicacao([FromBody] BaseEditModel model)
     {
       try
       {
-        int rowsAffected = _repository.EditTipoTransacao(model);
+        int rowsAffected = _repository.EditAplicacao(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NotFound();

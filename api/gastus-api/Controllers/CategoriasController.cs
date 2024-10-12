@@ -62,7 +62,7 @@ namespace Gastus.Api.Controllers
     /// <param name="categoria">Categoria</param>
     /// <returns>Categoria inserida</returns>
     [HttpPost()]
-    public IActionResult AddCategoria([FromBody] CategoriaInsertModel categoria)
+    public IActionResult AddCategoria([FromBody] BaseInsertModel categoria)
     {
       try
       {
@@ -102,7 +102,7 @@ namespace Gastus.Api.Controllers
     /// <param name="model">Dados da modificação</param>
     /// <returns>NoContent se não houve alteração; OK em caso de sucesso</returns>
     [HttpPut()]
-    public IActionResult EditCategoria([FromBody] CategoriaEditModel model)
+    public IActionResult EditCategoria([FromBody] BaseEditModel model)
     {
       try
       {

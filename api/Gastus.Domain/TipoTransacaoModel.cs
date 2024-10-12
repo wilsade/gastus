@@ -35,16 +35,4 @@
     /// <returns>string representando esta instância</returns>
     public override string ToString() => $"[Id={Id}] {Nome}";
   }
-
-  /// <summary>
-  /// Representa um item de Tipo de transação para inserção
-  /// </summary>
-  public class TipoTransacaoInsertModel
-  {
-    /// <summary>
-    /// Nome
-    /// </summary>
-    public string Nome { get; set; }
-
-  }
 }

@@ -36,3 +36,19 @@ CREATE TABLE IF NOT EXISTS Lancamento (
     FOREIGN KEY (IdCategoria, IdSubCategoria) REFERENCES SubCategoria(IdCategoria, Id),
     FOREIGN KEY (IdTipoTransacao) REFERENCES TipoTransacao(Id)
 );
+
+-- Criação da tabela de Aplicacao
+CREATE TABLE IF NOT EXISTS Aplicacao (
+    Id INTEGER PRIMARY KEY,
+    Nome TEXT NOT NULL,
+    CONSTRAINT UQ_Nome_Aplicacao UNIQUE (Nome COLLATE NOCASE)
+);
+
+-- Criação da tabela de Lançamentos da aplicacao
+CREATE TABLE IF NOT EXISTS LancamentoAplicacao (
+    Id INTEGER PRIMARY KEY,
+    Data Date NOT NULL,
+    Valor REAL NOT NULL,
+    IdAplicacao INTEGER NOT NULL,
+    FOREIGN KEY (IdAplicacao) REFERENCES Aplicacao(Id)
+);

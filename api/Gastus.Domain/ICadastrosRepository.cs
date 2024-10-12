@@ -17,7 +17,7 @@
     /// </summary>
     /// <param name="categoria">Categoria a ser adicionada</param>
     /// <returns>Nova categoria</returns>
-    CategoriaModel AddCategoria(CategoriaInsertModel categoria);
+    CategoriaModel AddCategoria(BaseInsertModel categoria);
 
     /// <summary>
     /// Excluir uma categoria
@@ -38,7 +38,7 @@
     /// </summary>
     /// <param name="model">Dados da modificação</param>
     /// <returns>Número de registros afetados</returns>
-    int EditCategoria(CategoriaEditModel model);
+    int EditCategoria(BaseEditModel model);
 
     /// <summary>
     /// Recuperar todas as subCategorias
@@ -95,7 +95,7 @@
     /// </summary>
     /// <param name="model">Tipo de transação a ser adicionada</param>
     /// <returns>Novo Tipo de transação </returns>
-    TipoTransacaoModel AddTipoTransacao(TipoTransacaoInsertModel model);
+    TipoTransacaoModel AddTipoTransacao(BaseInsertModel model);
 
     /// <summary>
     /// Excluir um Tipo de transação
@@ -110,5 +110,39 @@
     /// <param name="model">Dados da modificação</param>
     /// <returns>Número de registros afetados</returns>
     int EditTipoTransacao(TipoTransacaoModel model);
+
+    /// <summary>
+    /// Recuperar todas as Aplicações cadastradas
+    /// </summary>
+    /// <returns>Aplicações com seus respectivos lançamentos</returns>
+    List<AplicacaoModel> GetAllAplicacoes();
+
+    /// <summary>
+    /// Recuperar uma aplicação
+    /// </summary>
+    /// <param name="id">Identificador da aplicação</param>
+    /// <returns>Aplicação</returns>
+    AplicacaoModel GetAplicacao(int id);
+
+    /// <summary>
+    /// Adicionar uma Aplicação
+    /// </summary>
+    /// <param name="insertModel">Modelo de inserção</param>
+    /// <returns>Aplicação inserida</returns>
+    AplicacaoModel AddAplicacao(BaseInsertModel insertModel);
+
+    /// <summary>
+    /// Excluir uma Aplicação
+    /// </summary>
+    /// <param name="id">Identificador da aplicação a ser excluída</param>
+    /// <returns>Número de registros excluídos</returns>
+    int DeleteAplicacao(int id);
+
+    /// <summary>
+    /// Editar uma Aplicação
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros alterados</returns>
+    int EditAplicacao(BaseEditModel model);
   }
 }

@@ -22,4 +22,26 @@ namespace Gastus.Domain
     /// <returns>string representando esta instância</returns>
     public override string ToString() => $"Id={Id}";
   }
+
+  /// <summary>
+  /// Representa um modelo básico de entidade para inserção
+  /// </summary>
+  public class BaseInsertModel
+  {
+    /// <summary>
+    /// Nome
+    /// </summary>
+    public string Nome { get; set; }
+  }
+
+  /// <summary>
+  /// Representa um modelo básico de entidade para ediçào
+  /// </summary>
+  public class BaseEditModel : BaseModel
+  {
+    /// <summary>
+    /// Nome
+    /// </summary>
+    public string Nome { get; set; }
+  }
 }

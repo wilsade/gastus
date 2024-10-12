@@ -94,7 +94,7 @@ namespace Gastus.Core
     /// </summary>
     /// <param name="categoria">Categoria a ser adicionada</param>
     /// <returns>Nova categoria</returns>
-    public CategoriaModel AddCategoria(CategoriaInsertModel categoria)
+    public CategoriaModel AddCategoria(BaseInsertModel categoria)
     {
       using var connection = GetConnection(false);
 
@@ -141,7 +141,7 @@ namespace Gastus.Core
     /// </summary>
     /// <param name="model">Dados da modificação</param>
     /// <returns>Número de registros afetados</returns>
-    public int EditCategoria(CategoriaEditModel model)
+    public int EditCategoria(BaseEditModel model)
     {
       const string sql = "UPDATE CATEGORIA SET NOME = @Nome WHERE ID = @Id";
       using var connection = GetConnection(false);
@@ -156,13 +156,6 @@ namespace Gastus.Core
     /// <returns>SubCategorias</returns>
     public List<SubCategoriaModel> GetAllSubCategorias(int? idCategoria)
     {
-      string sql = @"SELECT * FROM SUBCATEGORIA";
-      object param = null;
-      if (idCategoria != null)
-      {
-        sql += " WHERE IDCATEGORIA = @idCategoria";
-        param = new { idCategoria };
-      }
       using var connection = GetConnection(false);
       List<SubCategoriaModel> subCategorias = GetAllSubCategorias(connection, idCategoria);
       return subCategorias;
@@ -269,7 +262,7 @@ namespace Gastus.Core
     /// </summary>
     /// <param name="model">Dados da inserção</param>
     /// <returns>Novo Tipo de transação</returns>
-    public TipoTransacaoModel AddTipoTransacao(TipoTransacaoInsertModel model)
+    public TipoTransacaoModel AddTipoTransacao(BaseInsertModel model)
     {
       using var connection = GetConnection(false);
 
@@ -304,6 +297,55 @@ namespace Gastus.Core
       using var connection = GetConnection(false);
       int rows = connection.Execute(sql, model);
       return rows;
+    }
+
+    /// <summary>
+    /// Recuperar todas as Aplicações cadastradas
+    /// </summary>
+    /// <returns>Aplicações com seus respectivos lançamentos</returns>
+    public List<AplicacaoModel> GetAllAplicacoes()
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Recuperar uma aplicação
+    /// </summary>
+    /// <param name="id">Identificador da aplicação</param>
+    /// <returns>Aplicação</returns>
+    public AplicacaoModel GetAplicacao(int id)
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Adicionar uma Aplicação
+    /// </summary>
+    /// <param name="insertModel">Modelo de inserção</param>
+    /// <returns>Aplicação inserida</returns>
+    public AplicacaoModel AddAplicacao(BaseInsertModel insertModel)
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Excluir uma Aplicação
+    /// </summary>
+    /// <param name="id">Identificador da aplicação a ser excluída</param>
+    /// <returns>Número de registros excluídos</returns>
+    public int DeleteAplicacao(int id)
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Editar uma Aplicação
+    /// </summary>
+    /// <param name="model">Dados da modificação</param>
+    /// <returns>Número de registros alterados</returns>
+    public int EditAplicacao(BaseEditModel model)
+    {
+      throw new NotImplementedException();
     }
   }
 }
