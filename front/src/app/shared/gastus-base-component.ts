@@ -10,6 +10,7 @@ export abstract class GastusBaseComponent {
   iconeExcluir = 'ph-fill ph-minus-circle';
   iconeInserir = 'ph-fill ph-plus-square';
   iconeAtualizar = 'ph-fill ph-arrows-clockwise';
+  alturaVisao = 400;
 
   /**
    * Criar a coluna para o Identificador da entidade

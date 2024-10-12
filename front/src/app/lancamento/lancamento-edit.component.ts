@@ -34,25 +34,23 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   lancamento: ILancamento = this._service.getEmptyLancamento();
 
   @Output()
-  modalClosed: EventEmitter<void> = new EventEmitter<void>();
+  onModalClosed = new EventEmitter<void>();
 
   protected readonly confirmou: PoModalAction = {
-    label: 'Salvar',
+    label: 'Salvar e fechar',
     disabled: false,
     action: () => {
       if (this.lancamento.Id > 0)
         this.editarLancamento(this.lancamento);
       else
         this.inserirLancamento(this.lancamento);
-      console.log(this.lancamento);
     }
   }
 
   protected readonly cancelou: PoModalAction = {
     label: 'Cancelar e fechar',
     action: () => {
-      this.modal.close();
-      this.modalClosed.emit();
+      this.fecharModal();
     }
   }
 
@@ -78,23 +76,30 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     })
   }
 
+  private fecharModal(): void {
+    this.modal.close();
+    this.onModalClosed.emit();
+  }
+
   editarLancamento(lancamento: ILancamento): void {
     this._service.editarLancamento(lancamento).subscribe({
       next: data => {
         if (data > 0)
-          this._notification.information('Lançamento atualizado com sucesso');
+          this._notification.information({ message: 'Lançamento atualizado com sucesso', duration: 1000 });
       },
-      error: err => this.tratarErro(err)
+      error: err => this.tratarErro(err),
+      complete: () => this.fecharModal()
     })
   }
 
   inserirLancamento(lancamento: ILancamento): void {
     this._service.inserirLancamento(lancamento).subscribe({
       next: data => {
-        this._notification.information('Lançamento inserido com sucesso');
         this.lancamento = data;
+        this._notification.information({ message: 'Lançamento inserido com sucesso', duration: 1000 });
       },
-      error: err => this.tratarErro(err)
+      error: err => this.tratarErro(err),
+      complete: () => this.fecharModal()
     })
   }
 

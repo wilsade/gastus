@@ -1,35 +1,36 @@
 <po-page-default p-title="Lançamentos"
                  [p-actions]="acoesPagina">
-  <po-table [p-striped]="true"
-            [p-actions]="acoesTabela"
-            [p-columns]="colunas"
-            [p-items]="lancamentos">
+      <po-table [p-striped]="true"
+                [p-height]="alturaVisao"
+                [p-actions]="acoesTabela"
+                [p-columns]="colunas"
+                [p-items]="lancamentos">
 
-    <ng-template p-table-cell-template
-                 let-column="column"
-                 let-row="row">
-      <div *ngIf="column.property === 'Valor'">
-        <span style="color: red;"
-              *ngIf="row.Valor < 0">{{formatValue(row.Valor)}}</span>
-        <span style="color: blue;"
-              *ngIf="row.Valor > 0">{{formatValue(row.Valor)}}</span>
-      </div>
+            <ng-template p-table-cell-template
+                         let-column="column"
+                         let-row="row">
+                  <div *ngIf="column.property === 'Valor'">
+                        <span style="color: red;"
+                              *ngIf="row.Valor < 0">{{formatValue(row.Valor)}}</span>
+                        <span style="color: blue;"
+                              *ngIf="row.Valor > 0">{{formatValue(row.Valor)}}</span>
+                  </div>
 
-      <div *ngIf="column.property === 'SALDO'">
-        <span style="color: red;"
-              *ngIf="row.SALDO < 0">{{formatValue(row.SALDO)}}</span>
-        <span style="color: blue;"
-              *ngIf="row.SALDO > 0">{{formatValue(row.SALDO)}}</span>
-      </div>
-    </ng-template>
+                  <div *ngIf="column.property === 'SALDO'">
+                        <span style="color: red;"
+                              *ngIf="row.SALDO < 0">{{formatValue(row.SALDO)}}</span>
+                        <span style="color: blue;"
+                              *ngIf="row.SALDO > 0">{{formatValue(row.SALDO)}}</span>
+                  </div>
+            </ng-template>
 
-  </po-table>
+      </po-table>
 
-  <app-lancamento-edit #modalLancamento
-                       (modalClosed)="fechouModal()"></app-lancamento-edit>
+      <app-lancamento-edit #modalLancamento
+                           (onModalClosed)="fechouModal()"></app-lancamento-edit>
 </po-page-default>
 
 <div *ngIf="loading"
      class="sample-container">
-  <po-loading-overlay></po-loading-overlay>
+      <po-loading-overlay></po-loading-overlay>
 </div>

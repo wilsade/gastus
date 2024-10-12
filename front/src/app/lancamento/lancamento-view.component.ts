@@ -68,7 +68,7 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
           next: data => {
             if (data > 0) {
               this.lancamentos = this.lancamentos.filter(cat => cat.Id !== item.Id);
-              this._notification.information('Lançamento excluído');
+              this._notification.information({ message: 'Lançamento excluído', duration: 1000 });
             }
           },
           error: err => {
@@ -84,6 +84,7 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   }
 
   private carregarLancamentos() {
+    this.lancamentos = [];
     this.loading = true;
     this._service.getLancamentos().subscribe({
       next: data => {
@@ -100,6 +101,7 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   }
 
   protected fechouModal(): void {
+    console.log('call back');
     this.carregarLancamentos();
   }
 
