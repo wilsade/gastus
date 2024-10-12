@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gastus.Api.Controllers
 {
   /// <summary>
-  /// Controller para Aplicação
+  /// Controller para Aplicações
   /// </summary>
   [ApiController]
   [Route("api/[controller]")]
-  public class AplicacaoController(ICadastrosRepository repository) : GastusBaseController(repository)
+  public class AplicacoesController(ICadastrosRepository repository) : GastusBaseController(repository)
   {
     /// <summary>
     /// Recuperar todas as aplicações

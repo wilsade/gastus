@@ -44,7 +44,7 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
   ]
 
   protected readonly acoesTabela: PoTableAction[] = [
-    //{ label: 'Editar', icon: this.iconeEditar, action: this.editarTipoTransacao.bind(this) },
+    { label: 'Editar', icon: this.iconeEditar, action: this.editarAplicacao.bind(this) },
     { label: 'Excluir', icon: this.iconeExcluir, action: this.excluirAplicacao.bind(this) }
   ]
 
@@ -86,6 +86,10 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
         })
       }
     });
+  }
+
+  private editarAplicacao(item: IAplicacao): void {
+    this._notification.warning(`Editar: ${item.Nome}`);
   }
 
 }

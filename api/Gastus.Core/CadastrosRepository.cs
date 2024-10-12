@@ -30,19 +30,6 @@ namespace Gastus.Core
     }
 
     /// <summary>
-    /// Recuperar o próximo Id de uma tabela
-    /// </summary>
-    /// <param name="connection">Conexão com o banco de dados</param>
-    /// <param name="tableName">Nome da tabela</param>
-    /// <returns>Próximo Id</returns>
-    static int GetNextIdFromTabela(SQLiteConnection connection, string tableName)
-    {
-      string sql = $"SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM {tableName};";
-      int nextId = connection.QuerySingle<int>(sql);
-      return nextId;
-    }
-
-    /// <summary>
     /// Recuperar todas as subCategorias
     /// </summary>
     /// <param name="connection">Conexão com o banco de dados</param>
@@ -101,10 +88,7 @@ namespace Gastus.Core
     /// <returns>Número de linhas afetadas na exclusão</returns>
     public int DeleteCategoria(int id)
     {
-      using SQLiteConnection connection = GetConnection(true);
-      var commandText = "DELETE FROM Categoria WHERE Id = @id";
-      int rows = connection.Execute(commandText, new { id });
-      return rows;
+      return DeleteById("Categoria", id);
     }
 
     /// <summary>
@@ -269,10 +253,7 @@ namespace Gastus.Core
     /// <returns>Número de linhas afetadas na exclusão</returns>
     public int DeleteTipoTransacao(int id)
     {
-      using SQLiteConnection connection = GetConnection(true);
-      var commandText = "DELETE FROM TipoTransacao WHERE Id = @id";
-      int rows = connection.Execute(commandText, new { id });
-      return rows;
+      return DeleteById("TipoTransacao", id);
     }
 
     /// <summary>
@@ -308,7 +289,10 @@ namespace Gastus.Core
     /// <returns>Aplicação</returns>
     public AplicacaoModel GetAplicacao(int id)
     {
-      throw new NotImplementedException();
+      const string sql = "SELECT * FROM Aplicacao WHERE Id = @id";
+      using var connection = GetConnection(false);
+      AplicacaoModel aplicacao = connection.QueryFirstOrDefault<AplicacaoModel>(sql, new { id });
+      return aplicacao;
     }
 
     /// <summary>
@@ -343,7 +327,10 @@ namespace Gastus.Core
     /// <returns>Número de registros alterados</returns>
     public int EditAplicacao(BaseEditModel model)
     {
-      throw new NotImplementedException();
+      const string sql = "UPDATE Aplicacao SET NOME = @Nome WHERE ID = @Id";
+      using var connection = GetConnection(false);
+      int rows = connection.Execute(sql, model);
+      return rows;
     }
   }
 }

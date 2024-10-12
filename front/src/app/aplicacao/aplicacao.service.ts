@@ -9,7 +9,7 @@ import { IAplicacao } from '../_models/IAplicacao';
 })
 export class AplicacaoService {
 
-  aplicacaoUrl = `${environment.apiUrl}/aplicacao`;
+  aplicacaoUrl = `${environment.apiUrl}/aplicacoes`;
 
   constructor(private readonly _http: HttpClient) { }
 

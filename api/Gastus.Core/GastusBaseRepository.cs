@@ -33,6 +33,19 @@ namespace Gastus.Core
     }
 
     /// <summary>
+    /// Recuperar o próximo Id de uma tabela
+    /// </summary>
+    /// <param name="connection">Conexão com o banco de dados</param>
+    /// <param name="tableName">Nome da tabela</param>
+    /// <returns>Próximo Id</returns>
+    protected static int GetNextIdFromTabela(SQLiteConnection connection, string tableName)
+    {
+      string sql = $"SELECT IFNULL(MAX(Id), 0) + 1 NextId FROM {tableName};";
+      int nextId = connection.QuerySingle<int>(sql);
+      return nextId;
+    }
+
+    /// <summary>
     /// Excluir uma categoria
     /// </summary>
     /// <param name="tableName">Nome da tabela</param>
