@@ -399,5 +399,23 @@ namespace Gastus.Core
       int rows = connection.Execute(sql, new { idAplicacao, id });
       return rows;
     }
+
+    /// <summary>
+    /// Recuperar um Lançamento de uma aplicação
+    /// </summary>
+    /// <param name="idAplicacao">Identificador da Aplicação</param>
+    /// <param name="id">Identificador do lançamento</param>
+    /// <returns>Lancamento de aplicação</returns>
+    public LancamentoAplicacaoModel GetLancamentoAplicacao(int idAplicacao, int id)
+    {
+      const string sql = @"
+        SELECT * FROM LancamentoAplicacao
+        WHERE IdAplicacao = @idAplicacao
+          AND Id = @id";
+      var connection = GetConnection(false);
+      LancamentoAplicacaoModel lancamento = connection.QueryFirstOrDefault<LancamentoAplicacaoModel>(sql,
+        new { idAplicacao, id });
+      return lancamento;
+    }
   }
 }

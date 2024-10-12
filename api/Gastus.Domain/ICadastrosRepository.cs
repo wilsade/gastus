@@ -166,5 +166,13 @@
     /// <param name="id">Identificador do lançamento a ser excluído</param>
     /// <returns>Número de registros excluídos</returns>
     int DeleteLancamentoAplicacao(int idAplicacao, int id);
+
+    /// <summary>
+    /// Recuperar um Lançamento de uma aplicação
+    /// </summary>
+    /// <param name="idAplicacao">Identificador da aplicação</param>
+    /// <param name="id">Identificador do lançamento</param>
+    /// <returns>Lancamento de aplicação</returns>
+    LancamentoAplicacaoModel GetLancamentoAplicacao(int idAplicacao, int id);
   }
 }

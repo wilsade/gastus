@@ -31,6 +31,28 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
+    /// Recuperar um Lançamento de uma aplicação
+    /// </summary>
+    /// <param name="idAplicacao">Identificador da Aplicação</param>
+    /// <param name="id">Identificador do Lançamento</param>
+    /// <returns>Lançamentos</returns>
+    [HttpGet("{idAplicacao}/{id}")]
+    public IActionResult GetById(int idAplicacao, int id)
+    {
+      try
+      {
+        LancamentoAplicacaoModel model = _repository.GetLancamentoAplicacao(idAplicacao, id);
+        if (model == null)
+          return NotFound($"Lançamento [{idAplicacao},{id}] não encontrado.");
+        return Ok(model);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
+
+    /// <summary>
     /// Inserir um Lançamento de Aplicação
     /// </summary>
     /// <param name="model">Dados da inserção</param>
