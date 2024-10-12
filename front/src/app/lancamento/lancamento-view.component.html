@@ -1,7 +1,9 @@
 <po-page-default p-title="Lançamentos"
                  [p-actions]="acoesPagina">
-      <po-table [p-striped]="true"
+      <po-table #tableLancamentos
+                [p-striped]="true"
                 [p-height]="alturaVisao"
+                [p-hide-table-search]="false"
                 [p-actions]="acoesTabela"
                 [p-columns]="colunas"
                 [p-items]="lancamentos">
@@ -9,6 +11,11 @@
             <ng-template p-table-cell-template
                          let-column="column"
                          let-row="row">
+
+                  <div *ngIf="column.property === 'Titulo'">
+                        <span (click)="clicouTitulo(row)">{{row.Titulo}}</span>
+                  </div>
+
                   <div *ngIf="column.property === 'Valor'">
                         <span style="color: red;"
                               *ngIf="row.Valor < 0">{{formatValue(row.Valor)}}</span>

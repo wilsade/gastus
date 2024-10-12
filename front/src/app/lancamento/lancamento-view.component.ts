@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
-import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { ILancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
@@ -29,7 +29,7 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   colunas: PoTableColumn[] = [
     this.createColumnId(false),
     { label: 'Data', property: 'Data', type: 'date', format: 'dd/MM/yyyy' },
-    { label: 'Título', property: 'Titulo' },
+    { label: 'Título', property: 'Titulo', type: 'cellTemplate' },
     { label: 'Comentário', property: 'Comentario' },
     { label: 'Categoria', property: 'NomeCategoria' },
     { label: 'SubCategoria', property: 'NomeSubCategoria' },
@@ -40,6 +40,9 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
 
   @ViewChild('modalLancamento')
   modalLancamento: LancamentoEditComponent;
+
+  @ViewChild('tableLancamentos')
+  tableLancamentos: PoTableComponent;
 
   acoesPagina: PoPageAction[] = [
     {
@@ -79,6 +82,11 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
     });
   }
 
+  protected clicouTitulo(item: ILancamento): void {
+    this.tableLancamentos.unselectRows();
+    this.tableLancamentos.selectRow(item);
+  }
+
   private editarLancamento(item: ILancamento): void {
     this.modalLancamento.showEditModal(item);
   }
@@ -101,7 +109,6 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   }
 
   protected fechouModal(): void {
-    console.log('call back');
     this.carregarLancamentos();
   }
 
