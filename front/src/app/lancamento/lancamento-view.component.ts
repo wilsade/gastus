@@ -42,7 +42,11 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   modalLancamento: LancamentoEditComponent;
 
   acoesPagina: PoPageAction[] = [
-    { label: 'Inserir', icon: 'ph-fill ph-plus-square', action: () => this.modalLancamento.showEditModal(this._service.getEmptyLancamento()) }
+    {
+      label: 'Atualizar', icon: this.iconeAtualizar,
+      action: () => this.carregarLancamentos()
+    },
+    { label: 'Inserir', icon: this.iconeInserir, action: () => this.modalLancamento.showInsertModal() }
   ]
 
   acoesTabela: PoTableAction[] = [
@@ -93,6 +97,10 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
         this.loading = false;
       }
     })
+  }
+
+  protected fechouModal(): void {
+    this.carregarLancamentos();
   }
 
   protected formatValue(item: number): string {

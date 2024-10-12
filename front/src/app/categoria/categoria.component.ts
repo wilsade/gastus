@@ -32,18 +32,18 @@ export class CategoriaComponent extends GastusBaseComponent implements OnInit {
 
   protected readonly acoesPagina: PoPageAction[] = [
     {
-      label: 'Atualizar', icon: 'ph-fill ph-arrows-clockwise',
+      label: 'Atualizar', icon: this.iconeAtualizar,
       action: () => this.ngOnInit()
     },
     {
-      label: 'Inserir Categoria', icon: 'ph-fill ph-plus-square',
+      label: 'Inserir', icon: this.iconeInserir,
       action: () => this.inserirCategoria_Click()
     }
   ]
 
   protected readonly acoesTabela: PoTableAction[] = [
     { label: 'Editar', icon: this.iconeEditar, action: this.editarCategoria.bind(this) },
-    { label: 'Excluir', icon: 'ph-fill ph-minus-circle', action: this.excluirCategoria.bind(this) }
+    { label: 'Excluir', icon: this.iconeExcluir, action: this.excluirCategoria.bind(this) }
   ]
 
   @ViewChild('modalCategoria', { static: false })

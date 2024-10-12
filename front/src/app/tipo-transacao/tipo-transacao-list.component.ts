@@ -34,7 +34,7 @@ export class TipoTransacaoListComponent extends GastusBaseComponent implements O
 
   protected readonly acoesPagina: PoPageAction[] = [
     {
-      label: 'Atualizar', icon: 'ph-fill ph-arrows-clockwise',
+      label: 'Atualizar', icon: this.iconeAtualizar,
       action: () => this.carregarTiposTransacao()
     },
     {

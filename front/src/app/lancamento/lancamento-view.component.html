@@ -25,7 +25,8 @@
 
   </po-table>
 
-  <app-lancamento-edit #modalLancamento></app-lancamento-edit>
+  <app-lancamento-edit #modalLancamento
+                       (modalClosed)="fechouModal()"></app-lancamento-edit>
 </po-page-default>
 
 <div *ngIf="loading"

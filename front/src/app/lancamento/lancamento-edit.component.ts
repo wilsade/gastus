@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { ILancamento } from '../_models/ILancamento';
@@ -33,12 +33,17 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   @Input()
   lancamento: ILancamento = this._service.getEmptyLancamento();
 
+  @Output()
+  modalClosed: EventEmitter<void> = new EventEmitter<void>();
+
   protected readonly confirmou: PoModalAction = {
     label: 'Salvar',
     disabled: false,
     action: () => {
       if (this.lancamento.Id > 0)
         this.editarLancamento(this.lancamento);
+      else
+        this.inserirLancamento(this.lancamento);
       console.log(this.lancamento);
     }
   }
@@ -47,6 +52,7 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     label: 'Cancelar e fechar',
     action: () => {
       this.modal.close();
+      this.modalClosed.emit();
     }
   }
 
@@ -82,6 +88,16 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     })
   }
 
+  inserirLancamento(lancamento: ILancamento): void {
+    this._service.inserirLancamento(lancamento).subscribe({
+      next: data => {
+        this._notification.information('Lançamento inserido com sucesso');
+        this.lancamento = data;
+      },
+      error: err => this.tratarErro(err)
+    })
+  }
+
   /**
    * Exibe a tela para edição
    * @param item Lançamento
@@ -94,6 +110,12 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     this.lancamento.IdSubCategoria = oldSub;
     this.modal.open();
     this.verificarBotaoSalvar();
+  }
+
+  showInsertModal(): void {
+    this.lancamento = this._service.getEmptyLancamento();
+    this.titulo = 'Inclusão de lançamento';
+    this.modal.open();
   }
 
   protected alterouComboCategoria(item: any): void {

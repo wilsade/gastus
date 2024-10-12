@@ -55,6 +55,14 @@ export class LancamentoService {
     return this._http.delete<number>(`${this.lancamentosUrl}/${id}`);
   }
 
+  inserirLancamento(item: ILancamento): Observable<ILancamento> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.post<ILancamento>(this.lancamentosUrl, item, { headers });
+  }
+
   private formatarValores(lancamentos: ILancamento[]): void {
     let saldo = 0;
     lancamentos.forEach(lancamento => {
