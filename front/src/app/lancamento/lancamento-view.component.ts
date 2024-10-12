@@ -5,18 +5,21 @@ import { ILancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { CommonModule } from '@angular/common';
 import { LancamentoEditComponent } from './lancamento-edit.component';
+import { InputDialogService } from '../shared/input-dialog.service';
 
 @Component({
   selector: 'app-lancamento-view',
   standalone: true,
   imports: [CommonModule, PoModule, LancamentoEditComponent],
+  providers: [InputDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './lancamento-view.component.html'
 })
 export class LancamentoViewComponent extends GastusBaseComponent implements OnInit {
 
   constructor(protected override _notification: PoNotificationService,
-    private readonly _service: LancamentoService) {
+    private readonly _service: LancamentoService,
+    private readonly _modalDlg: InputDialogService) {
     super(_notification);
   }
 
@@ -43,11 +46,33 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   ]
 
   acoesTabela: PoTableAction[] = [
-    { label: 'Editar', icon: this.iconeEditar, action: this.editarLancamento.bind(this) }
+    { label: 'Editar', icon: this.iconeEditar, action: this.editarLancamento.bind(this) },
+    { label: 'Excluir', icon: this.iconeExcluir, action: this.excluirLancamento.bind(this) },
+
   ]
 
   ngOnInit(): void {
     this.carregarLancamentos();
+  }
+
+  private excluirLancamento(item: ILancamento): void {
+    this._modalDlg.confirm({
+      title: 'Exclusão de Lançamento',
+      message: `Atenção!<br>Deseja realmente EXCLUIR O lançamento <b>${item.Id} - ${item.Titulo}</b>?`,
+      confirm: () => {
+        this._service.excluirLancamento(item.Id).subscribe({
+          next: data => {
+            if (data > 0) {
+              this.lancamentos = this.lancamentos.filter(cat => cat.Id !== item.Id);
+              this._notification.information('Lançamento excluído');
+            }
+          },
+          error: err => {
+            this.tratarErro(err);
+          }
+        })
+      }
+    });
   }
 
   private editarLancamento(item: ILancamento): void {

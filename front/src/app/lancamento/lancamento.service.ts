@@ -51,6 +51,10 @@ export class LancamentoService {
     return this._http.put<number>(this.lancamentosUrl, lancamento, { headers });
   }
 
+  excluirLancamento(id: number): Observable<number> {
+    return this._http.delete<number>(`${this.lancamentosUrl}/${id}`);
+  }
+
   private formatarValores(lancamentos: ILancamento[]): void {
     let saldo = 0;
     lancamentos.forEach(lancamento => {

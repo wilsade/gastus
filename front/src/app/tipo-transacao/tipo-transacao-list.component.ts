@@ -49,8 +49,8 @@ export class TipoTransacaoListComponent extends GastusBaseComponent implements O
   ]
 
   protected readonly acoesTabela: PoTableAction[] = [
-    { label: 'Editar', icon: 'ph-fill ph-pencil-simple', action: this.editarTipoTransacao.bind(this) },
-    { label: 'Excluir', icon: 'ph-fill ph-minus-circle', action: this.excluirTipoTransacao.bind(this) }
+    { label: 'Editar', icon: this.iconeEditar, action: this.editarTipoTransacao.bind(this) },
+    { label: 'Excluir', icon: this.iconeExcluir, action: this.excluirTipoTransacao.bind(this) }
   ]
 
   ngOnInit(): void {

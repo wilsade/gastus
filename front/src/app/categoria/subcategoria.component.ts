@@ -32,7 +32,7 @@ export class SubcategoriaComponent extends GastusBaseComponent {
 
   protected acoesTabela: Array<PoTableAction> = [
     { label: 'Editar', icon: this.iconeEditar, action: this.editar_Click.bind(this) },
-    { label: 'Excluir', icon: 'ph-fill ph-minus-circle', action: this.excluir_Click.bind(this) }
+    { label: 'Excluir', icon: this.iconeExcluir, action: this.excluir_Click.bind(this) }
   ]
 
   protected inserirSubCategoria_Click(): void {

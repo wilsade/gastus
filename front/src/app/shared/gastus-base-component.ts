@@ -7,6 +7,7 @@ export abstract class GastusBaseComponent {
   constructor(protected readonly _notification: PoNotificationService) { }
 
   iconeEditar = 'ph-fill ph-pencil-simple';
+  iconeExcluir = 'ph-fill ph-minus-circle';
 
   /**
    * Criar a coluna para o Identificador da entidade
