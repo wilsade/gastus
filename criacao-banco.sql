@@ -46,9 +46,10 @@ CREATE TABLE IF NOT EXISTS Aplicacao (
 
 -- Criação da tabela de Lançamentos da aplicacao
 CREATE TABLE IF NOT EXISTS LancamentoAplicacao (
-    Id INTEGER PRIMARY KEY,
+    IdAplicacao INTEGER NOT NULL,
+    Id INTEGER NOT NULL,
     Data Date NOT NULL,
     Valor REAL NOT NULL,
-    IdAplicacao INTEGER NOT NULL,
+	PRIMARY KEY (IdAplicacao, Id)
     FOREIGN KEY (IdAplicacao) REFERENCES Aplicacao(Id)
 );

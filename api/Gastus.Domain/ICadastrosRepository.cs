@@ -144,5 +144,27 @@
     /// <param name="model">Dados da modificação</param>
     /// <returns>Número de registros alterados</returns>
     int EditAplicacao(BaseEditModel model);
+
+    /// <summary>
+    /// Recuperar todos os lançamentos de uma aplicação
+    /// </summary>
+    /// <param name="idAplicacao">Identificador da aplicação</param>
+    /// <returns>Lançamentos da aplicação</returns>
+    List<LancamentoAplicacaoModel> GetAllLancamentosAplicacao(int idAplicacao);
+
+    /// <summary>
+    /// Inserir um Lançamento de aplicação
+    /// </summary>
+    /// <param name="insertModel">Dados de inserção</param>
+    /// <returns>Lançamento inserido</returns>
+    LancamentoAplicacaoModel AddLancamentoAplicacao(LancamentoAplicacaoInsertModel insertModel);
+
+    /// <summary>
+    /// Excluir um Lançamento de uma aplicação
+    /// </summary>
+    /// <param name="idAplicacao">Identificador da aplicação</param>
+    /// <param name="id">Identificador do lançamento a ser excluído</param>
+    /// <returns>Número de registros excluídos</returns>
+    int DeleteLancamentoAplicacao(int idAplicacao, int id);
   }
 }

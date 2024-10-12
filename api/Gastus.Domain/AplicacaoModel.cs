@@ -47,6 +47,29 @@
   public class LancamentoAplicacaoModel : BaseModel
   {
     /// <summary>
+    /// Inicialização da classe: <see cref="LancamentoAplicacaoModel"/>.
+    /// </summary>
+    public LancamentoAplicacaoModel()
+    {
+
+    }
+
+    /// <summary>
+    /// Inicialização da classe: <see cref="LancamentoAplicacaoModel"/>.
+    /// </summary>
+    /// <param name="id">Identificador</param>
+    /// <param name="data">Data</param>
+    /// <param name="valor">Valor</param>
+    /// <param name="idAplicacao">Identificador da aplicação</param>
+    public LancamentoAplicacaoModel(int id, DateTime data, decimal valor, int idAplicacao)
+    {
+      Id = id;
+      Data = data;
+      Valor = valor;
+      IdAplicacao = idAplicacao;
+    }
+
+    /// <summary>
     /// Identificador da aplicação
     /// </summary>
     public int IdAplicacao { get; set; }
@@ -55,6 +78,27 @@
     /// Data
     /// </summary>
     public DateTime Data { get; set; }
+
+    /// <summary>
+    /// Valor
+    /// </summary>
+    public decimal Valor { get; set; }
+  }
+
+  /// <summary>
+  /// Representa um modelo de inserção para Lançamento de aplicação
+  /// </summary>
+  public class LancamentoAplicacaoInsertModel
+  {
+    /// <summary>
+    /// Identificador da aplicação
+    /// </summary>
+    public int IdAplicacao { get; set; }
+
+    /// <summary>
+    /// Data
+    /// </summary>
+    public string Data { get; set; }
 
     /// <summary>
     /// Valor

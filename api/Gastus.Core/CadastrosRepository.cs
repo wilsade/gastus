@@ -30,6 +30,22 @@ namespace Gastus.Core
     }
 
     /// <summary>
+    /// Recuperar o próximo Id de um Lançamento de aplicação
+    /// </summary>
+    /// <param name="connection">Conexão com o banco de dados</param>
+    /// <param name="idAplicacao">Identificador da Aplicação</param>
+    /// <returns>Próximo Id</returns>
+    static int GetNextLancamentoAplicacaoId(SQLiteConnection connection, int idAplicacao)
+    {
+      const string sql = @"
+        SELECT IFNULL(MAX(Id), 0) + 1 NextId 
+        FROM LancamentoAplicacao
+        WHERE IdAplicacao = @idAplicacao";
+      int nextId = connection.QuerySingle<int>(sql, new { idAplicacao });
+      return nextId;
+    }
+
+    /// <summary>
     /// Recuperar todas as subCategorias
     /// </summary>
     /// <param name="connection">Conexão com o banco de dados</param>
@@ -330,6 +346,57 @@ namespace Gastus.Core
       const string sql = "UPDATE Aplicacao SET NOME = @Nome WHERE ID = @Id";
       using var connection = GetConnection(false);
       int rows = connection.Execute(sql, model);
+      return rows;
+    }
+
+    /// <summary>
+    /// Recuperar todos os lançamentos de uma aplicação
+    /// </summary>
+    /// <param name="idAplicacao">Identificador da aplicação</param>
+    /// <returns>Lançamentos da aplicação</returns>
+    public List<LancamentoAplicacaoModel> GetAllLancamentosAplicacao(int idAplicacao)
+    {
+      const string sql = @"SELECT * FROM LancamentoAplicacao WHERE IdAplicacao = @IdAplicacao";
+      using var connection = GetConnection(false);
+      List<LancamentoAplicacaoModel> lancamentos = connection.Query<LancamentoAplicacaoModel>(
+        sql, new { IdAplicacao = idAplicacao }).ToList();
+      return lancamentos;
+    }
+
+    /// <summary>
+    /// Inserir um Lançamento de aplicação
+    /// </summary>
+    /// <param name="insertModel">Modelo de inserção</param>
+    /// <returns>Lançamento inserido</returns>
+    public LancamentoAplicacaoModel AddLancamentoAplicacao(LancamentoAplicacaoInsertModel insertModel)
+    {
+      const string sql = @"
+        INSERT INTO LANCAMENTOAPLICACAO (IdAplicacao, Id, Data, Valor)
+        VALUES (@IdAplicacao, @Id, @Data, @Valor)";
+      var connection = GetConnection(false);
+      var nova = new LancamentoAplicacaoModel(
+        GetNextLancamentoAplicacaoId(connection, insertModel.IdAplicacao),
+        DateTime.Parse(insertModel.Data),
+        insertModel.Valor,
+        insertModel.IdAplicacao);
+      _ = connection.Execute(sql, nova);
+      return nova;
+    }
+
+    /// <summary>
+    /// Excluir um Lançamento de uma aplicação
+    /// </summary>
+    /// <param name="idAplicacao">Identificador da aplicação</param>
+    /// <param name="id">Identificador da categoria a ser excluída</param>
+    /// <returns>Número de registros excluídos</returns>
+    public int DeleteLancamentoAplicacao(int idAplicacao, int id)
+    {
+      const string sql = @"
+        DELETE FROM LancamentoAplicacao
+        WHERE IdAplicacao = @idAplicacao
+          AND Id = @id";
+      var connection = GetConnection(false);
+      int rows = connection.Execute(sql, new { idAplicacao, id });
       return rows;
     }
   }
