@@ -99,7 +99,7 @@ namespace Gastus.Api.Controllers
     /// <param name="model">Dados da modificação</param>
     /// <returns>NoContent se não houve alteração; OK em caso de sucesso</returns>
     [HttpPut()]
-    public IActionResult EditTipoTransacao([FromBody] LancamentoModel model)
+    public IActionResult EditLancamento([FromBody] LancamentoModel model)
     {
       try
       {

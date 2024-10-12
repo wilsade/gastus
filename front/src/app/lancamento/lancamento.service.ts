@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ILancamento } from '../_models/ILancamento';
 import { map, Observable } from 'rxjs';
 import { CategoriaService } from '../categoria/categoria.service';
@@ -36,6 +36,19 @@ export class LancamentoService {
         return categorias.map(categoria => new ComboCategoria(categoria));
       })
     );
+  }
+
+  /**
+   * Editar um lançamento
+   * @param lancamento Lançamento a ser editado
+   * @returns Total de linha alteradas
+   */
+  editarLancamento(lancamento: ILancamento): Observable<number> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.put<number>(this.lancamentosUrl, lancamento, { headers });
   }
 
   private formatarValores(lancamentos: ILancamento[]): void {

@@ -37,6 +37,8 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     label: 'Salvar',
     disabled: false,
     action: () => {
+      if (this.lancamento.Id > 0)
+        this.editarLancamento(this.lancamento);
       console.log(this.lancamento);
     }
   }
@@ -70,6 +72,16 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     })
   }
 
+  editarLancamento(lancamento: ILancamento): void {
+    this._service.editarLancamento(lancamento).subscribe({
+      next: data => {
+        if (data > 0)
+          this._notification.information('Lançamento atualizado com sucesso');
+      },
+      error: err => this.tratarErro(err)
+    })
+  }
+
   /**
    * Exibe a tela para edição
    * @param item Lançamento
@@ -81,6 +93,7 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     this.alterouComboCategoria(this.lancamento.IdCategoria);
     this.lancamento.IdSubCategoria = oldSub;
     this.modal.open();
+    this.verificarBotaoSalvar();
   }
 
   protected alterouComboCategoria(item: any): void {
@@ -107,6 +120,6 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     const categoriaOK = StrUtils.hasValue(this.lancamento.IdCategoria);
     const subCategoriaOK = StrUtils.hasValue(this.lancamento.IdSubCategoria);
     const valorOK = StrUtils.hasValue(this.lancamento.Valor);
-    this.cancelou.disabled = !dataOk || !tituloOK || !categoriaOK || !subCategoriaOK || !valorOK;
+    this.confirmou.disabled = !dataOk || !tituloOK || !categoriaOK || !subCategoriaOK || !valorOK;
   }
 }
