@@ -6,8 +6,8 @@ export interface IAplicacao extends BaseModel {
 }
 
 export interface ILancamentoAplicacao {
+  IdAplicacao: number;
   Id: number;
   Data: Date;
   Valor: number;
-  IdAplicacao: number;
 }

@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { AplicacaoService } from './aplicacao.service';
 import { IAplicacao } from '../_models/IAplicacao';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-aplicacao-view',
   standalone: true,
-  imports: [PoModule],
+  imports: [PoModule, CommonModule],
   providers: [InputDialogService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './aplicacao-view.component.html'
 })
 export class AplicacaoViewComponent extends GastusBaseComponent implements OnInit {
@@ -90,6 +92,10 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
 
   private editarAplicacao(item: IAplicacao): void {
     this._notification.warning(`Editar: ${item.Nome}`);
+  }
+
+  protected isShow(item: IAplicacao, index: number): boolean {
+    return true;
   }
 
 }

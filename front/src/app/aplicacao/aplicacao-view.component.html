@@ -4,5 +4,18 @@
             [p-sort]="true"
             [p-actions]="acoesTabela"
             [p-columns]="colunas"
-            [p-items]="aplicacoes"></po-table>
+            [p-items]="aplicacoes">
+
+    <ng-template p-table-row-template
+                 let-rowItem
+                 let-i="rowIndex"
+                 [p-table-row-template-show]="isShow">
+      <detail-row [row]="rowItem">
+        <div *ngFor="let item of rowItem.Lancamentos">
+          <p>{{ item.Valor }}</p>
+        </div>
+      </detail-row>
+    </ng-template>
+
+  </po-table>
 </po-page-default>
