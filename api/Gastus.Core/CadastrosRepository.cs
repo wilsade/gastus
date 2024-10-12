@@ -73,7 +73,11 @@ namespace Gastus.Core
     /// <returns>Lançamentos da aplicação</returns>
     static List<LancamentoAplicacaoModel> GetAllLancamentosAplicacao(SQLiteConnection connection, int idAplicacao)
     {
-      const string sql = @"SELECT * FROM LancamentoAplicacao WHERE IdAplicacao = @IdAplicacao";
+      const string sql = @"
+SELECT * 
+FROM LancamentoAplicacao 
+WHERE IdAplicacao = @IdAplicacao
+ORDER BY Data";
       List<LancamentoAplicacaoModel> lancamentos = connection.Query<LancamentoAplicacaoModel>(
         sql, new { IdAplicacao = idAplicacao }).ToList();
       return lancamentos;

@@ -90,4 +90,29 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
     this._notification.warning(`Editar: ${item.Nome}`);
   }
 
+  protected clicouTitulo(item: IAplicacao): void {
+    console.log('titulo', item);
+  }
+
+  protected inserirLancamento_Click(item: IAplicacao): void {
+    console.log('inserir lancamento', item);
+  }
+
+  protected excluirAplicacao_Click(item: IAplicacao): void {
+    this._modalDlg.confirm({
+      title: 'Exclusão de aplicação',
+      message: `Atenção!<br><br>Deseja realmente EXCLUIR a aplicação <b>${item.Nome}</b>?`,
+      confirm: () => {
+        this._service.excluirAplicacao(item.Id).subscribe({
+          next: data => {
+            if (data > 0) {
+              this.aplicacoes = this.aplicacoes.filter(a => a.Id != item.Id);
+              this._notification.information({ message: 'Aplicação excluída', duration: 1000 });
+            }
+          },
+          error: err => this.tratarErro(err)
+        })
+      }
+    })
+  }
 }

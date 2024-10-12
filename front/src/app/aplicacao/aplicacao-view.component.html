@@ -3,6 +3,12 @@
 
   <div *ngFor="let item of aplicacoes">
     <po-widget class="po-md-4"
+               title="Clique para editar a aplicação"
+               (p-title-action)="clicouTitulo(item)"
+               p-primary-label="Inserir lançamento"
+               (p-primary-action)="inserirLancamento_Click(item)"
+               p-secondary-label="Excluir aplicação"
+               (p-secondary-action)="excluirAplicacao_Click(item)"
                [p-title]="item.Nome">
       <app-lancamentos-aplicacao [lancamentos]="item.Lancamentos"></app-lancamentos-aplicacao>
 

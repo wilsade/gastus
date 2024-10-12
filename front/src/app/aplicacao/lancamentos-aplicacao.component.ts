@@ -32,7 +32,7 @@ export class LancamentosAplicacaoComponent extends GastusBaseComponent {
       label: 'Excluir', icon: this.iconeExcluir, action: (item: ILancamentoAplicacao) => {
         this._modalDlg.confirm({
           title: 'Exclusão de lançamento',
-          message: `Atenção!<br><br>Deseja realmente EXCLUIR O lançamento? <br>
+          message: `Atenção!<br><br>Deseja realmente EXCLUIR o lançamento? <br>
             <b>Data:</b> ${this.convertToDateString(item.Data)}<br>
             <b>Valor:</b> ${StrUtils.formatValue(item.Valor)}?`,
           confirm: () => this.excluirLancamento(item)
