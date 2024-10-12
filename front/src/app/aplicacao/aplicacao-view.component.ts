@@ -86,12 +86,23 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
     });
   }
 
-  private editarAplicacao(item: IAplicacao): void {
-    this._notification.warning(`Editar: ${item.Nome}`);
-  }
-
-  protected clicouTitulo(item: IAplicacao): void {
-    console.log('titulo', item);
+  protected editarAplicacao(item: IAplicacao): void {
+    this._modalDlg.showInput({
+      title: 'Editar Aplicação',
+      label: 'Informe o nome da aplicação',
+      valor: item.Nome,
+      onConfirm: (valor: string) => {
+        item.Nome = valor;
+        this._service.editarAplicacao(item).subscribe({
+          next: data => {
+            if (data > 0) {
+              this._notification.success({ message: 'Aplicação alterada', duration: 1000 });
+            }
+          },
+          error: err => this.tratarErro(err)
+        })
+      }
+    })
   }
 
   protected inserirLancamento_Click(item: IAplicacao): void {

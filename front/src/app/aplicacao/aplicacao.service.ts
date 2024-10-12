@@ -44,4 +44,12 @@ export class AplicacaoService {
   excluirLancamentoAplicacao(idAplicacao: number, id: number): Observable<number> {
     return this._http.delete<number>(`${this.lancamentosAplicacaoUrl}/${idAplicacao}/${id}`);
   }
+
+  editarAplicacao(aplicacao: IAplicacao): Observable<number> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.put<number>(this.aplicacaoUrl, aplicacao, { headers });
+  }
 }
