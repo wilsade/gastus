@@ -64,7 +64,8 @@ namespace Gastus.Core
         FROM LANCAMENTO L
           JOIN CATEGORIA C ON L.IdCategoria = C.Id
           JOIN SUBCATEGORIA S ON L.IdCategoria = S.IdCategoria AND L.IdSubCategoria = S.Id
-          LEFT JOIN TIPOTRANSACAO T ON L.IdTipoTransacao = T.Id";
+          LEFT JOIN TIPOTRANSACAO T ON L.IdTipoTransacao = T.Id
+        ORDER BY L.DATA";
       var connection = GetConnection(false);
       List<LancamentoViewModel> lancamentos = connection.Query<LancamentoViewModel>
         (sql).ToList();
