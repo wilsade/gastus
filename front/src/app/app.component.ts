@@ -18,8 +18,8 @@ import { NomesRotas } from './app.routes';
 })
 export class AppComponent {
   readonly menus: Array<PoMenuItem> = [
-    { label: 'Categorias', shortLabel: 'Cat.', icon: 'ph ph-browsers', link: `./${NomesRotas.CATEGORIAS}` },
-    { label: 'Tipos de transação', shortLabel: 'Trans.', icon: 'ph ph-credit-card', link: `./${NomesRotas.TIPOS_TRANSACAO}` },
-    { label: 'Lançamentos', shortLabel: 'Lanc.', icon: 'ph ph-cash-register', link: `./${NomesRotas.LANCAMENTOS}` },
+    { label: 'Categorias', shortLabel: 'Categorias', icon: 'ph ph-browsers', link: `./${NomesRotas.CATEGORIAS}` },
+    { label: 'Tipos de transação', shortLabel: 'T. Transação', icon: 'ph ph-credit-card', link: `./${NomesRotas.TIPOS_TRANSACAO}` },
+    { label: 'Lançamentos', shortLabel: 'Lançamentos', icon: 'ph ph-cash-register', link: `./${NomesRotas.LANCAMENTOS}` },
   ];
 }
