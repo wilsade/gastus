@@ -10,6 +10,7 @@ import { IAplicacao } from '../_models/IAplicacao';
 export class AplicacaoService {
 
   aplicacaoUrl = `${environment.apiUrl}/aplicacoes`;
+  lancamentosAplicacaoUrl = `${environment.apiUrl}/lancamentosAplicacao`;
 
   constructor(private readonly _http: HttpClient) { }
 
@@ -38,5 +39,9 @@ export class AplicacaoService {
 
   excluirAplicacao(id: number): Observable<number> {
     return this._http.delete<number>(`${this.aplicacaoUrl}/${id}`);
+  }
+
+  excluirLancamentoAplicacao(idAplicacao: number, id: number): Observable<number> {
+    return this._http.delete<number>(`${this.lancamentosAplicacaoUrl}/${idAplicacao}/${id}`);
   }
 }

@@ -1,15 +1,16 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
-import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoPageAction, PoTableAction } from '@po-ui/ng-components';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { AplicacaoService } from './aplicacao.service';
 import { IAplicacao } from '../_models/IAplicacao';
 import { CommonModule } from '@angular/common';
+import { LancamentosAplicacaoComponent } from "./lancamentos-aplicacao.component";
 
 @Component({
   selector: 'app-aplicacao-view',
   standalone: true,
-  imports: [PoModule, CommonModule],
+  imports: [PoModule, CommonModule, LancamentosAplicacaoComponent],
   providers: [InputDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './aplicacao-view.component.html'
@@ -24,11 +25,6 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
 
   protected aplicacoes: IAplicacao[] = [];
 
-  protected readonly colunas: PoTableColumn[] = [
-    this.createColumnId(),
-    this.createColumnNome()
-  ]
-
   protected acoesPagina: PoPageAction[] = [
     {
       label: 'Atualizar', icon: this.iconeAtualizar,
@@ -37,7 +33,7 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
     {
       label: 'Inserir', action: () => {
         this._modalDlg.showInput({
-          title: 'Inserção de Aplicação',
+          title: 'Inserir Aplicação',
           label: 'Informe o Nome da aplicação',
           onConfirm: (valor: string) => this.incluirAplicacao(valor)
         })
@@ -92,10 +88,6 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
 
   private editarAplicacao(item: IAplicacao): void {
     this._notification.warning(`Editar: ${item.Nome}`);
-  }
-
-  protected isShow(item: IAplicacao, index: number): boolean {
-    return true;
   }
 
 }

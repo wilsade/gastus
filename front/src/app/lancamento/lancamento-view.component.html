@@ -17,17 +17,11 @@
                   </div>
 
                   <div *ngIf="column.property === 'Valor'">
-                        <span style="color: red;"
-                              *ngIf="row.Valor < 0">{{formatValue(row.Valor)}}</span>
-                        <span style="color: blue;"
-                              *ngIf="row.Valor > 0">{{formatValue(row.Valor)}}</span>
+                        <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
                   </div>
 
                   <div *ngIf="column.property === 'SALDO'">
-                        <span style="color: red;"
-                              *ngIf="row.SALDO < 0">{{formatValue(row.SALDO)}}</span>
-                        <span style="color: blue;"
-                              *ngIf="row.SALDO > 0">{{formatValue(row.SALDO)}}</span>
+                        <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
                   </div>
             </ng-template>
 

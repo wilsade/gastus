@@ -6,11 +6,12 @@ import { LancamentoService } from './lancamento.service';
 import { CommonModule } from '@angular/common';
 import { LancamentoEditComponent } from './lancamento-edit.component';
 import { InputDialogService } from '../shared/input-dialog.service';
+import { ColunaValorComponent } from "../shared/coluna-valor.component";
 
 @Component({
   selector: 'app-lancamento-view',
   standalone: true,
-  imports: [CommonModule, PoModule, LancamentoEditComponent],
+  imports: [CommonModule, PoModule, LancamentoEditComponent, ColunaValorComponent],
   providers: [InputDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './lancamento-view.component.html'
@@ -110,17 +111,5 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
 
   protected fechouModal(): void {
     this.carregarLancamentos();
-  }
-
-  protected formatValue(item: number): string {
-    const formattedValue = item.toFixed(2).replace('.', ',');
-    const parts = formattedValue.split(',');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    const formattedWithThousands = parts.join(',');
-
-    if (item < 0)
-      return `(${formattedWithThousands.replace('-', '')})`;
-    else
-      return formattedWithThousands;
   }
 }
