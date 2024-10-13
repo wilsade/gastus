@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IOrcamento } from '../_models/IOrcamento';
+import { IOrcamento, IOrcamentoView } from '../_models/IOrcamento';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -20,8 +20,8 @@ export class OrcamentoService {
     }
   }
 
-  getOrcamentos(): Observable<IOrcamento[]> {
-    return this._http.get<IOrcamento[]>(this.orcamentosUrl);
+  getOrcamentos(): Observable<IOrcamentoView[]> {
+    return this._http.get<IOrcamentoView[]>(this.orcamentosUrl);
   }
 
   inserirOrcamento(item: IOrcamento): Observable<IOrcamento> {

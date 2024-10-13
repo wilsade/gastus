@@ -22,7 +22,7 @@ namespace Gastus.Api.Controllers
     {
       try
       {
-        List<OrcamentoModel> lista = _repository.GetAllOrcamentos();
+        List<OrcamentoViewModel> lista = _repository.GetAllOrcamentos();
         return Ok(lista);
       }
       catch (Exception ex)

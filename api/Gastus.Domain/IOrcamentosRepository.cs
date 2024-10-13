@@ -31,7 +31,7 @@ namespace Gastus.Domain
     /// Recuperar todos os Orçamento
     /// </summary>
     /// <returns>Todos os Orçamento</returns>
-    List<OrcamentoModel> GetAllOrcamentos();
+    List<OrcamentoViewModel> GetAllOrcamentos();
 
     /// <summary>
     /// Recuperar um Orçamento

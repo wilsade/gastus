@@ -114,4 +114,52 @@
     /// </summary>
     public string Descricao { get; set; }
   }
+
+  /// <summary>
+  /// Representa uma visão de orçamento por mês
+  /// </summary>
+  public class OrcamentoViewModel
+  {
+    /// <summary>
+    /// Número do mês (1 a 12).
+    /// </summary>
+    public int NumMes { get; set; }
+
+    /// <summary>
+    /// Nome do mês correspondente ao orçamento.
+    /// </summary>
+    public string NomeMes { get; set; }
+
+    /// <summary>
+    /// Total orçado para o mês
+    /// </summary>
+    public decimal Total { get; set; }
+
+    /// <summary>
+    /// Itens orçados para o mês
+    /// </summary>
+    public List<OrcamentoModel> Items { get; set; } = [];
+
+    /// <summary>
+    /// Retorna um código hash para esta instância,
+    /// adequado para uso em algoritmos hash e estrutura de dados como uma tabela hash.
+    /// </summary>
+    /// <returns>Código hash para esta instância</returns>
+    public override int GetHashCode()
+    {
+      return NumMes.GetHashCode() ^ NomeMes.GetHashCode();
+    }
+
+    /// <summary>
+    /// Indica se este objeto é igual a outro
+    /// </summary>
+    /// <param name="obj">Obj</param>
+    /// <returns>true se o objeto é igual a outro</returns>
+    public override bool Equals(object obj)
+    {
+      if (obj is not OrcamentoViewModel other)
+        return false;
+      return NumMes == other.NumMes && NomeMes == other.NomeMes;
+    }
+  }
 }

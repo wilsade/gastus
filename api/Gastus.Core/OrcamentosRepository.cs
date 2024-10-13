@@ -56,7 +56,7 @@ namespace Gastus.Core
     /// Recuperar todos os Orçamento
     /// </summary>
     /// <returns>Todos os Orçamento</returns>
-    public List<OrcamentoModel> GetAllOrcamentos()
+    public List<OrcamentoViewModel> GetAllOrcamentos()
     {
       var connection = GetConnection(false);
       const string sql = @"
@@ -68,8 +68,21 @@ FROM ORCAMENTO L
     ON L.IdCategoria = S.IdCategoria
     AND L.IdSubCategoria = S.Id
 ORDER BY L.NumMes, NomeCategoria, NomeSubCategoria";
-      var lista = connection.Query<OrcamentoModel>(sql).ToList();
-      return lista;
+      var lista = connection.Query<OrcamentoModel>(sql);
+
+      var agrupado = lista
+            .GroupBy(o => new { o.NumMes, o.NomeMes })
+            .Select(grupo => new OrcamentoViewModel
+            {
+              NumMes = grupo.Key.NumMes,
+              NomeMes = grupo.Key.NomeMes,
+              Total = grupo.Sum(o => o.Valor),
+              Items = [.. grupo]
+            })
+            .OrderBy(vm => vm.NumMes)
+            .ToList();
+
+      return agrupado;
     }
 
     /// <summary>

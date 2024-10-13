@@ -11,3 +11,10 @@ export interface IOrcamento extends BaseModel {
   Valor: number;
   Descricao?: string;
 }
+
+export interface IOrcamentoView {
+  NumMes: number;
+  NomeMes: string;
+  Total: number;
+  Items: IOrcamento[];
+}
