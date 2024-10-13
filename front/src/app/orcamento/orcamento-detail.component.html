@@ -1,3 +1,17 @@
 <po-modal #modal>
-
+  <div class="po-row">
+    <po-input class="po-md-2"
+              p-required="true"
+              p-label="Id."
+              disabled="true"
+              [(ngModel)]="orcamento.Id"></po-input>
+    <po-input class="po-md-2"
+              p-required="true"
+              p-label="NumMes"
+              [(ngModel)]="orcamento.NumMes"></po-input>
+    <po-input class="po-md-4"
+              p-required="true"
+              p-label="NomeMes"
+              [(ngModel)]="orcamento.NomeMes"></po-input>
+  </div>
 </po-modal>

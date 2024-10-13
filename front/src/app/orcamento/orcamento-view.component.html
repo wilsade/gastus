@@ -1,7 +1,16 @@
 <po-page-default p-title="Orçamento"
                  [p-actions]="acoesPagina">
 
-  <po-table [p-items]="orcamentos"></po-table>
+  <po-table [p-items]="orcamentos">
+
+    <div *p-table-row-template="let rowItem, let i=rowIndex">
+      <detail-row [row]="rowItem">
+        <po-table [p-actions]="acoesTabela"
+                  [p-items]="rowItem.Items"></po-table>
+      </detail-row>
+    </div>
+
+  </po-table>
 
   <app-orcamento-detail #modalDetail></app-orcamento-detail>
 </po-page-default>

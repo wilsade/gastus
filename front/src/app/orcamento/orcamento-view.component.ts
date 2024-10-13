@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
-import { PoModule, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoPageAction, PoTableAction } from '@po-ui/ng-components';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
-import { IOrcamentoView } from '../_models/IOrcamento';
+import { IOrcamento, IOrcamentoView } from '../_models/IOrcamento';
 import { OrcamentoService } from './orcamento.service';
 import { OrcamentoDetailComponent } from './orcamento-detail.component';
 
@@ -36,12 +36,21 @@ export class OrcamentoViewComponent extends GastusBaseComponent implements OnIni
     { label: 'Inserir', icon: this.iconeInserir, action: () => this.abrirModalParaInsercao() }
   ]
 
+  protected acoesTabela: PoTableAction[] = [
+    { label: 'Editar', icon: this.iconeEditar, action: this.abrirModalParaEdicao.bind(this) }
+  ]
+
   ngOnInit(): void {
     this.carregarOrcamentos();
   }
 
   private abrirModalParaInsercao(): void {
-    this.modalDetail.showInsertmodal();
+    console.log('nao implementado');
+
+  }
+
+  private abrirModalParaEdicao(item: IOrcamento): void {
+    this.modalDetail.showEditmodal(item);
   }
 
   private carregarOrcamentos() {
