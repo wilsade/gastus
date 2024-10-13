@@ -9,8 +9,7 @@ namespace Gastus.Api.Controllers
   /// </summary>
   [ApiController]
   [Route("api/[controller]")]
-  public class LancamentosController(ICadastrosRepository cadastrosRepository,
-    ILancamentosRepository lancamentosRepository) : GastusBaseController(cadastrosRepository)
+  public class LancamentosController(ILancamentosRepository lancamentosRepository) : GastusBaseController
   {
     private readonly ILancamentosRepository _lancamentosRepository = lancamentosRepository;
 

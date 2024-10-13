@@ -9,19 +9,13 @@ namespace Gastus.Api.Controllers
   /// <summary>
   /// Inicialização da classe: <see cref="GastusBaseController"/>.
   /// </summary>
-  /// <param name="repository">Repositório</param>
-  public abstract class GastusBaseController(ICadastrosRepository repository) : ControllerBase
+  public abstract class GastusBaseController : ControllerBase
   {
     /// <summary>
-    /// Repository
+    /// Retornar uma exceção formatada
     /// </summary>
-    protected readonly ICadastrosRepository _repository = repository;
-
-    /// <summary>
-    /// Return Bad Request Exception
-    /// </summary>
-    /// <param name="ex">Ex</param>
-    /// <returns></returns>
+    /// <param name="ex">Exceção</param>
+    /// <returns>Mensagem com status</returns>
     protected IActionResult ReturnBadRequestException(Exception ex)
     {
       if (ex is SQLiteException sqlEx)
@@ -32,5 +26,17 @@ namespace Gastus.Api.Controllers
           message = ex.InnerException?.Message ?? ex.Message
         });
     }
+  }
+
+  /// <summary>
+  /// Inicialização da classe: <see cref="GastusBaseCadastrosController"/>.
+  /// </summary>
+  /// <param name="repository">Repositório</param>
+  public abstract class GastusBaseCadastrosController(ICadastrosRepository repository) : GastusBaseController
+  {
+    /// <summary>
+    /// Repository
+    /// </summary>
+    protected readonly ICadastrosRepository _repository = repository;
   }
 }

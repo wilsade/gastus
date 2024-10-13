@@ -5,27 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gastus.Api.Controllers
 {
   /// <summary>
-  /// Controller para Categorias
+  /// Controller para Orçamento
   /// </summary>
-  /// <remarks>
-  /// Inicialização da classe: <see cref="CategoriasController"/>.
-  /// </remarks>
-  /// <param name="repository">Repositório</param>
   [ApiController]
   [Route("api/[controller]")]
-  public class CategoriasController(ICadastrosRepository repository) : GastusBaseCadastrosController(repository)
+  public class OrcamentosController(IOrcamentosRepository repository) : GastusBaseController
   {
+    readonly IOrcamentosRepository _repository = repository;
+
     /// <summary>
-    /// Recuperar todas as categorias cadastradas
+    /// Recuperar todas os Orçamento
     /// </summary>
-    /// <param name="loadSubs">true para carregar as subcategorias</param>
-    /// <returns>All categorias</returns>
+    /// <returns>Todos os Orçamento</returns>
     [HttpGet()]
-    public IActionResult GetAllCategorias(bool loadSubs)
+    public IActionResult GetAll()
     {
       try
       {
-        List<CategoriaModel> lista = _repository.GetAllCategorias(loadSubs);
+        List<OrcamentoModel> lista = _repository.GetAllOrcamentos();
         return Ok(lista);
       }
       catch (Exception ex)
@@ -35,19 +32,18 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Recuperar uma categoria
+    /// Recuperar um Orçamento
     /// </summary>
-    /// <param name="id">Identificador da categoria</param>
-    /// <returns>Categoria</returns>
+    /// <param name="id">Identificador do Orçamento</param>
+    /// <returns>Orçamento</returns>
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
       try
       {
-        CategoriaModel model = _repository.GetCategoria(id);
+        OrcamentoModel model = _repository.GetOrcamento(id);
         if (model == null)
-          return NotFound($"Categoria com ID={id} não encontrado.");
-
+          return NotFound($"Orçamento com ID={id} não encontrado.");
         return Ok(model);
       }
       catch (Exception ex)
@@ -57,16 +53,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Inserir uma categoria
+    /// Inserir um Orçamento
     /// </summary>
-    /// <param name="categoria">Categoria</param>
-    /// <returns>Categoria inserida</returns>
+    /// <param name="insertModel">Modelo de inserção</param>
+    /// <returns>Orçamento inserido</returns>
     [HttpPost()]
-    public IActionResult AddCategoria([FromBody] BaseInsertModel categoria)
+    public IActionResult AddOrcamento([FromBody] OrcamentoInsertModel insertModel)
     {
       try
       {
-        CategoriaModel model = _repository.AddCategoria(categoria);
+        OrcamentoModel model = _repository.AddOrcamento(insertModel);
         return Ok(model);
       }
       catch (Exception ex)
@@ -76,16 +72,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Excluir uma categoria
+    /// Excluir um Orçamento
     /// </summary>
-    /// <param name="id">Identificador da categoria</param>
+    /// <param name="id">Identificador do Orçamento</param>
     /// <returns>NotFound se não houve exclusão; OK em caso de sucesso</returns>
     [HttpDelete("{id}")]
-    public IActionResult DeleteCategoria(int id)
+    public IActionResult DeleteOrcamento(int id)
     {
       try
       {
-        int rowsAffected = _repository.DeleteCategoria(id);
+        int rowsAffected = _repository.DeleteOrcamento(id);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NotFound();
@@ -97,16 +93,16 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Editar uma categoria
+    /// Editar um Orçamento
     /// </summary>
     /// <param name="model">Dados da modificação</param>
     /// <returns>NoContent se não houve alteração; OK em caso de sucesso</returns>
     [HttpPut()]
-    public IActionResult EditCategoria([FromBody] BaseEditModel model)
+    public IActionResult EditOrcamento([FromBody] OrcamentoModel model)
     {
       try
       {
-        int rowsAffected = _repository.EditCategoria(model);
+        int rowsAffected = _repository.EditOrcamento(model);
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NotFound();

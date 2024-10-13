@@ -25,6 +25,7 @@ namespace Gastus.Api
       string DATABASE_FILE_NAME = $@"Data Source={gastusPath};Version=3;";
       builder.Services.AddSingleton<ICadastrosRepository>(x => new CadastrosRepository(DATABASE_FILE_NAME));
       builder.Services.AddSingleton<ILancamentosRepository>(x => new LancamentosRepository(DATABASE_FILE_NAME));
+      builder.Services.AddSingleton<IOrcamentosRepository>(x => new OrcamentosRepository(DATABASE_FILE_NAME));
 
       builder.Services.AddControllers()
         .AddJsonOptions(options =>

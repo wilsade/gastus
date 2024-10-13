@@ -9,7 +9,7 @@ namespace Gastus.Api.Controllers
   /// </summary>
   [ApiController]
   [Route("api/[controller]")]
-  public class AplicacoesController(ICadastrosRepository repository) : GastusBaseController(repository)
+  public class AplicacoesController(ICadastrosRepository repository) : GastusBaseCadastrosController(repository)
   {
     /// <summary>
     /// Recuperar todas as Aplicações com seus respectivos Lançamentos

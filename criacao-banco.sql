@@ -53,3 +53,15 @@ CREATE TABLE IF NOT EXISTS LancamentoAplicacao (
 	PRIMARY KEY (IdAplicacao, Id)
     FOREIGN KEY (IdAplicacao) REFERENCES Aplicacao(Id)
 );
+
+-- Criação da tabela de Orçamento
+CREATE TABLE IF NOT EXISTS Orcamento (
+	Id INTEGER PRIMARY KEY,
+	IdCategoria INTEGER NOT NULL,
+	IdSubCategoria INTEGER NOT NULL,
+	NumMes INTEGER NOT NULL,
+	NomeMes TEXT NOT NULL,
+	Valor REAL NOT NULL,
+	Descricao TEXT,
+	FOREIGN KEY (IdCategoria, IdSubCategoria) REFERENCES SubCategoria(IdCategoria, Id)
+);
