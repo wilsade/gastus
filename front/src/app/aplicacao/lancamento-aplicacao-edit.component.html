@@ -1,0 +1,22 @@
+<po-modal #modal
+          [p-primary-action]="confirmou"
+          [p-secondary-action]="cancelou"
+          p-title="Inserção de lançamento">
+  <h3>{{titulo}}</h3><br>
+  <po-datepicker class="po-md-6"
+                 p-required="true"
+                 name="dataLancamento"
+                 p-format="dd/MM/yyyy"
+                 [(ngModel)]="dataLancamento"
+                 (ngModelChange)="alterouCampo()"
+                 p-label="Data"></po-datepicker>
+
+  <po-decimal class="po-md-4"
+              p-label="Valor"
+              p-required="true"
+              name="valorLancamento"
+              p-icon="ph ph-money-wavy"
+              [ngModel]="valorLancamento"
+              (ngModelChange)="valorLancamento = $event"
+              (ngModelChange)="alterouCampo()"></po-decimal>
+</po-modal>

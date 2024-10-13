@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { map, Observable } from 'rxjs';
-import { IAplicacao } from '../_models/IAplicacao';
+import { IAplicacao, ILancamentoAplicacao } from '../_models/IAplicacao';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,10 @@ export class AplicacaoService {
   lancamentosAplicacaoUrl = `${environment.apiUrl}/lancamentosAplicacao`;
 
   constructor(private readonly _http: HttpClient) { }
+
+  getEmptyAplicao(): IAplicacao {
+    return { Id: 0, Nome: '', Lancamentos: [] }
+  }
 
   /**
    * Listar todas as aplicações
@@ -51,5 +55,13 @@ export class AplicacaoService {
     });
 
     return this._http.put<number>(this.aplicacaoUrl, aplicacao, { headers });
+  }
+
+  inserirLancamentoAplicacao(lancamento: ILancamentoAplicacao): Observable<ILancamentoAplicacao> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.post<ILancamentoAplicacao>(this.lancamentosAplicacaoUrl, lancamento, { headers });
   }
 }

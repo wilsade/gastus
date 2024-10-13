@@ -3,6 +3,7 @@
 
   <div *ngFor="let item of aplicacoes">
     <po-widget class="po-md-4"
+               style="margin-bottom: 10px;"
                title="Clique para editar a aplicação"
                (p-title-action)="editarAplicacao(item)"
                p-primary-label="Inserir lançamento"
@@ -10,9 +11,15 @@
                p-secondary-label="Excluir aplicação"
                (p-secondary-action)="excluirAplicacao_Click(item)"
                [p-title]="item.Nome">
-      <app-lancamentos-aplicacao [lancamentos]="item.Lancamentos"></app-lancamentos-aplicacao>
+      <app-lancamentos-aplicacao [aplicacao]="item"></app-lancamentos-aplicacao>
 
     </po-widget>
   </div>
-
+  <app-lancamento-aplicacao-edit #modalInsert
+                                 (salvou)="salvouLancamento()"></app-lancamento-aplicacao-edit>
 </po-page-default>
+
+<div *ngIf="loading"
+     class="sample-container">
+  <po-loading-overlay></po-loading-overlay>
+</div>

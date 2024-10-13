@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { PoModule, PoNotificationService, PoPageAction, PoTableAction } from '@po-ui/ng-components';
 import { InputDialogService } from '../shared/input-dialog.service';
@@ -6,11 +6,12 @@ import { AplicacaoService } from './aplicacao.service';
 import { IAplicacao } from '../_models/IAplicacao';
 import { CommonModule } from '@angular/common';
 import { LancamentosAplicacaoComponent } from "./lancamentos-aplicacao.component";
+import { LancamentoAplicacaoEditComponent } from './lancamento-aplicacao-edit.component';
 
 @Component({
   selector: 'app-aplicacao-view',
   standalone: true,
-  imports: [PoModule, CommonModule, LancamentosAplicacaoComponent],
+  imports: [PoModule, CommonModule, LancamentosAplicacaoComponent, LancamentoAplicacaoEditComponent],
   providers: [InputDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './aplicacao-view.component.html'
@@ -23,6 +24,10 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
     super(_notification);
   }
 
+  @ViewChild('modalInsert')
+  modalInsert: LancamentoAplicacaoEditComponent;
+
+  protected loading = false;
   protected aplicacoes: IAplicacao[] = [];
 
   protected acoesPagina: PoPageAction[] = [
@@ -51,11 +56,16 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
   }
 
   private carregarAplicacoes() {
+    this.loading = true;
     this._service.getAplicacoes().subscribe({
       next: data => {
         this.aplicacoes = data;
       },
-      error: err => this.tratarErro(err)
+      error: err => {
+        this.loading = false;
+        this.tratarErro(err)
+      },
+      complete: () => this.loading = false
     })
   }
 
@@ -106,7 +116,7 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
   }
 
   protected inserirLancamento_Click(item: IAplicacao): void {
-    console.log('inserir lancamento', item);
+    this.modalInsert.showInsertModal(item.Id, item.Nome);
   }
 
   protected excluirAplicacao_Click(item: IAplicacao): void {
@@ -125,5 +135,9 @@ export class AplicacaoViewComponent extends GastusBaseComponent implements OnIni
         })
       }
     })
+  }
+
+  protected salvouLancamento(): void {
+    this.carregarAplicacoes();
   }
 }

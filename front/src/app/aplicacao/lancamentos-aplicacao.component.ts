@@ -1,17 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { PoModule, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
-import { ILancamentoAplicacao } from '../_models/IAplicacao';
+import { IAplicacao, ILancamentoAplicacao } from '../_models/IAplicacao';
 import { CommonModule } from '@angular/common';
 import { ColunaValorComponent } from '../shared/coluna-valor.component';
 import { AplicacaoService } from './aplicacao.service';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { StrUtils } from '../shared/str-utils';
+import { LancamentoAplicacaoEditComponent } from "./lancamento-aplicacao-edit.component";
 
 @Component({
   selector: 'app-lancamentos-aplicacao',
   standalone: true,
-  imports: [PoModule, CommonModule, ColunaValorComponent],
+  imports: [PoModule, CommonModule, ColunaValorComponent, LancamentoAplicacaoEditComponent],
   providers: [InputDialogService],
   templateUrl: './lancamentos-aplicacao.component.html'
 })
@@ -23,11 +24,14 @@ export class LancamentosAplicacaoComponent extends GastusBaseComponent {
     super(_notification);
   }
 
+  @ViewChild('modalEdit')
+  modalEdit: LancamentoAplicacaoEditComponent;
+
   @Input()
-  lancamentos: ILancamentoAplicacao[] = [];
+  aplicacao: IAplicacao = this._service.getEmptyAplicao();
 
   protected readonly acoesTabela: PoTableAction[] = [
-    { label: 'Editar', icon: this.iconeEditar },
+    { label: 'Editar', icon: this.iconeEditar, action: this.editarLancamento.bind(this) },
     {
       label: 'Excluir', icon: this.iconeExcluir, action: (item: ILancamentoAplicacao) => {
         this._modalDlg.confirm({
@@ -50,12 +54,16 @@ export class LancamentosAplicacaoComponent extends GastusBaseComponent {
     this._service.excluirLancamentoAplicacao(lancamento.IdAplicacao, lancamento.Id).subscribe({
       next: data => {
         if (data > 0) {
-          this.lancamentos = this.lancamentos.filter(lanc => lanc.Id != lancamento.Id);
+          this.aplicacao.Lancamentos = this.aplicacao.Lancamentos.filter(lanc => lanc.Id != lancamento.Id);
           this._notification.information({ message: 'Lançamento excluído', duration: 1000 });
         }
       },
       error: err => this.tratarErro(err)
-    })
+    });
+  }
 
+  private editarLancamento(lancamento: ILancamentoAplicacao): void {
+    console.log('editar lancamento');
+    //this.modalEdit.showInsertModal(1, 'xx');
   }
 }

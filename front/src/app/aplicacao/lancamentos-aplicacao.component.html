@@ -3,7 +3,7 @@
           [p-spacing]="spacingSmall"
           [p-actions]="acoesTabela"
           [p-columns]="colunasLancamentos"
-          [p-items]="lancamentos">
+          [p-items]="aplicacao.Lancamentos">
 
   <ng-template p-table-cell-template
                let-column="column"
@@ -15,3 +15,5 @@
   </ng-template>
 
 </po-table>
+
+<app-lancamento-aplicacao-edit #modalEdit></app-lancamento-aplicacao-edit>
