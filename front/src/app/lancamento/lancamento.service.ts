@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ILancamento } from '../_models/ILancamento';
 import { map, Observable } from 'rxjs';
 import { CategoriaService } from '../categoria/categoria.service';
-import { ComboCategoria, ICategoria } from '../_models/ICategoria';
 
 @Injectable({
   providedIn: 'root'
@@ -28,14 +27,6 @@ export class LancamentoService {
         this.formatarValores(response);
         return response;
       }));
-  }
-
-  getComboCategorias(): Observable<ComboCategoria[]> {
-    return this._serviceCategoria.getCategorias(true).pipe(
-      map((categorias: ICategoria[]) => {
-        return categorias.map(categoria => new ComboCategoria(categoria));
-      })
-    );
   }
 
   /**

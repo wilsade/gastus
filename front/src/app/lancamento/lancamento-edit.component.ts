@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ComboCategoria } from '../_models/ICategoria';
 import { StrUtils } from '../shared/str-utils';
 import { TipoTransacaoService } from '../tipo-transacao/tipo-transacao.service';
+import { CategoriaService } from '../categoria/categoria.service';
 
 @Component({
   selector: 'app-lancamento-edit',
@@ -18,6 +19,7 @@ import { TipoTransacaoService } from '../tipo-transacao/tipo-transacao.service';
 export class LancamentoEditComponent extends GastusBaseComponent implements OnInit {
   constructor(protected override _notification: PoNotificationService,
     private readonly _service: LancamentoService,
+    private readonly _categoriaService: CategoriaService,
     private readonly _tipoTransacaoService: TipoTransacaoService) {
     super(_notification);
   }
@@ -55,7 +57,7 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this._service.getComboCategorias().subscribe({
+    this._categoriaService.getComboCategorias().subscribe({
       next: data => {
         this.comboCategorias = data;
       },

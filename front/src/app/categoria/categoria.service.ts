@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { ICategoria, ISubCategoria } from '../_models/ICategoria';
+import { ComboCategoria, ICategoria, ISubCategoria } from '../_models/ICategoria';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,14 @@ export class CategoriaService {
       map((response: any) => {
         return response;
       }));
+  }
+
+  getComboCategorias(): Observable<ComboCategoria[]> {
+    return this.getCategorias(true).pipe(
+      map((categorias: ICategoria[]) => {
+        return categorias.map(categoria => new ComboCategoria(categoria));
+      })
+    );
   }
 
   getCategoriaById(id: number): Observable<ICategoria> {
