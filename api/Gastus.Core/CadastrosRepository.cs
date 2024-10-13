@@ -310,7 +310,7 @@ ORDER BY Data";
     public List<AplicacaoModel> GetAllAplicacoes()
     {
       using SQLiteConnection connection = GetConnection(false);
-      var query = "SELECT Id, Nome FROM Aplicacao";
+      var query = "SELECT Id, Nome FROM Aplicacao ORDER BY Nome";
 
       var aplicacoes = connection.Query<AplicacaoModel>(query).ToList();
 

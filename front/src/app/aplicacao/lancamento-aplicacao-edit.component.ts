@@ -29,18 +29,29 @@ export class LancamentoAplicacaoEditComponent extends GastusBaseComponent {
   dataLancamento: Date | undefined = undefined;
   valorLancamento: number | undefined = undefined;
   private _idAplicacao = 0;
+  private _id = 0;
+  private _isInsert = false;
 
   protected readonly confirmou: PoModalAction = {
     label: 'Salvar e fechar',
     disabled: true,
     action: () => {
-      this._service.inserirLancamentoAplicacao(this.getLancamentoAplicacao()).subscribe({
-        next: data => {
-          this.salvou.emit();
-          this.modal.close();
-        },
-        error: err => this.tratarErro(err)
-      })
+      if (this._isInsert)
+        this._service.inserirLancamentoAplicacao(this.getLancamentoAplicacao()).subscribe({
+          next: data => {
+            this.modal.close();
+            this.salvou.emit();
+          },
+          error: err => this.tratarErro(err)
+        });
+      else
+        this._service.editarLancamentoAplicacao(this.getLancamentoAplicacao()).subscribe({
+          next: data => {
+            this.modal.close();
+            this.salvou.emit();
+          },
+          error: err => this.tratarErro(err)
+        });
     }
   }
 
@@ -53,15 +64,28 @@ export class LancamentoAplicacaoEditComponent extends GastusBaseComponent {
 
   private getLancamentoAplicacao(): ILancamentoAplicacao {
     return {
-      IdAplicacao: this._idAplicacao, Id: 0,
+      IdAplicacao: this._idAplicacao, Id: this._id,
       Data: this.dataLancamento!, Valor: this.valorLancamento!
     };
   }
 
   showInsertModal(idAplicacao: number, nomeAplicacao: string): void {
+    this.modal.title = 'Inserção de lançamento';
+    this._isInsert = true;
     this.dataLancamento = undefined;
     this.valorLancamento = undefined;
     this._idAplicacao = idAplicacao;
+    this.titulo = nomeAplicacao;
+    this.modal.open();
+  }
+
+  showEditModal(idAplicacao: number, nomeAplicacao: string, lancamento: ILancamentoAplicacao): void {
+    this.modal.title = 'Alteração de lançamento';
+    this._isInsert = false;
+    this._idAplicacao = idAplicacao;
+    this._id = lancamento.Id;
+    this.dataLancamento = new Date(lancamento.Data);
+    this.valorLancamento = lancamento.Valor;
     this.titulo = nomeAplicacao;
     this.modal.open();
   }

@@ -64,4 +64,12 @@ export class AplicacaoService {
 
     return this._http.post<ILancamentoAplicacao>(this.lancamentosAplicacaoUrl, lancamento, { headers });
   }
+
+  editarLancamentoAplicacao(lancamento: ILancamentoAplicacao): Observable<ILancamentoAplicacao> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.put<ILancamentoAplicacao>(this.lancamentosAplicacaoUrl, lancamento, { headers });
+  }
 }

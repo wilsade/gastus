@@ -63,7 +63,6 @@ export class LancamentosAplicacaoComponent extends GastusBaseComponent {
   }
 
   private editarLancamento(lancamento: ILancamentoAplicacao): void {
-    console.log('editar lancamento');
-    //this.modalEdit.showInsertModal(1, 'xx');
+    this.modalEdit.showEditModal(this.aplicacao.Id, this.aplicacao.Nome, lancamento);
   }
 }
