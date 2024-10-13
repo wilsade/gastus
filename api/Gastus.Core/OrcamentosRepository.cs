@@ -1,12 +1,6 @@
-﻿
-using System.Data;
-using System.Drawing;
-
-using Dapper;
+﻿using Dapper;
 
 using Gastus.Domain;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Gastus.Core
 {
@@ -65,7 +59,15 @@ namespace Gastus.Core
     public List<OrcamentoModel> GetAllOrcamentos()
     {
       var connection = GetConnection(false);
-      const string sql = "SELECT * FROM ORCAMENTO ORDER BY NumMes, IdCategoria, IdSubCategoria";
+      const string sql = @"
+SELECT L.*, C.Nome NomeCategoria, S.Nome NomeSubCategoria
+FROM ORCAMENTO L
+  JOIN CATEGORIA C
+    ON L.IdCategoria = C.Id
+  JOIN SUBCATEGORIA S
+    ON L.IdCategoria = S.IdCategoria
+    AND L.IdSubCategoria = S.Id
+ORDER BY L.NumMes, NomeCategoria, NomeSubCategoria";
       var lista = connection.Query<OrcamentoModel>(sql).ToList();
       return lista;
     }

@@ -39,6 +39,16 @@
     /// Identificador
     /// </summary>
     public int Id { get; set; }
+
+    /// <summary>
+    /// Nome da categoria
+    /// </summary>
+    public string NomeCategoria { get; set; }
+
+    /// <summary>
+    /// Nome da subcategoria
+    /// </summary>
+    public string NomeSubCategoria { get; set; }
   }
 
   /// <summary>

@@ -14,7 +14,7 @@ namespace Gastus.Api.Controllers
     readonly IOrcamentosRepository _repository = repository;
 
     /// <summary>
-    /// Recuperar todos os Orçamento
+    /// Recuperar todos o Orçamento
     /// </summary>
     /// <returns>Todos os Orçamento</returns>
     [HttpGet()]
