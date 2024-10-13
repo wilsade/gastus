@@ -1,5 +1,12 @@
 ﻿
+using System.Data;
+using System.Drawing;
+
+using Dapper;
+
 using Gastus.Domain;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Gastus.Core
 {
@@ -16,7 +23,19 @@ namespace Gastus.Core
     /// <returns></returns>
     public OrcamentoModel AddOrcamento(OrcamentoInsertModel insertModel)
     {
-      throw new NotImplementedException();
+      var connection = GetConnection(false);
+      const string sql = @"
+        INSERT INTO ORCAMENTO (Id, IdCategoria, IdSubCategoria, NumMes, NomeMes, Valor, Descricao)
+        VALUES (@Id, @IdCategoria, @IdSubCategoria, @NumMes, @NomeMes, @Valor, @Descricao)";
+      var novoOrcamento = new OrcamentoModel(GetNextIdFromTabela(connection, "Orcamento"),
+        insertModel.IdCategoria,
+        insertModel.IdSubCategoria,
+        insertModel.NumMes,
+        insertModel.NomeMes,
+        insertModel.Valor,
+        insertModel.Descricao);
+      _ = connection.Execute(sql, novoOrcamento);
+      return novoOrcamento;
     }
 
     /// <summary>
@@ -45,7 +64,10 @@ namespace Gastus.Core
     /// <returns>Todos os Orçamento</returns>
     public List<OrcamentoModel> GetAllOrcamentos()
     {
-      throw new NotImplementedException();
+      var connection = GetConnection(false);
+      const string sql = "SELECT * FROM ORCAMENTO ORDER BY NumMes, IdCategoria, IdSubCategoria";
+      var lista = connection.Query<OrcamentoModel>(sql).ToList();
+      return lista;
     }
 
     /// <summary>

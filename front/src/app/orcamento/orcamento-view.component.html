@@ -1,0 +1,12 @@
+<po-page-default p-title="Orçamento"
+                 [p-actions]="acoesPagina">
+
+  <po-table [p-items]="orcamentos"></po-table>
+
+  <app-orcamento-detail #modalDetail></app-orcamento-detail>
+</po-page-default>
+
+<div *ngIf="loading"
+     class="sample-container">
+  <po-loading-overlay></po-loading-overlay>
+</div>

@@ -9,12 +9,12 @@ namespace Gastus.Api.Controllers
   /// </summary>
   [ApiController]
   [Route("api/[controller]")]
-  public class OrcamentosController(IOrcamentosRepository repository) : GastusBaseController
+  public class OrcamentoController(IOrcamentosRepository repository) : GastusBaseController
   {
     readonly IOrcamentosRepository _repository = repository;
 
     /// <summary>
-    /// Recuperar todas os Orçamento
+    /// Recuperar todos os Orçamento
     /// </summary>
     /// <returns>Todos os Orçamento</returns>
     [HttpGet()]
