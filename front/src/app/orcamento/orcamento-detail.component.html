@@ -13,5 +13,19 @@
               p-required="true"
               p-label="NomeMes"
               [(ngModel)]="orcamento.NomeMes"></po-input>
+
+    <po-select p-label="Mês"
+               [p-options]="meses"
+               name="NumMes"
+               [ngModel]="orcamento.NumMes"
+               (ngModelChange)="alterouComboMes($event)"></po-select>
+
+    <po-decimal class="po-md-4"
+                p-label="Valor"
+                p-required="true"
+                name="valor"
+                p-icon="ph ph-money-wavy"
+                [ngModel]="orcamento.Valor"
+                (ngModelChange)="orcamento.Valor = $event"></po-decimal>
   </div>
 </po-modal>
