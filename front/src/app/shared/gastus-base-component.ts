@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { PoNotificationService, PoTableColumn, PoTableColumnSpacing } from "@po-ui/ng-components";
+import { PoNotificationService, PoSelectOption, PoTableColumn, PoTableColumnSpacing } from "@po-ui/ng-components";
 import { StrUtils } from "./str-utils";
 
 export abstract class GastusBaseComponent {
@@ -46,6 +46,23 @@ export abstract class GastusBaseComponent {
 
   protected convertToDateString(valor: Date): string {
     return new Date(valor).toLocaleDateString();
+  }
+
+  protected getMeses(): PoSelectOption[] {
+    return [
+      { value: 1, label: 'Janeiro' },
+      { value: 2, label: 'Fevereiro' },
+      { value: 3, label: 'Março' },
+      { value: 4, label: 'Abril' },
+      { value: 5, label: 'Maio' },
+      { value: 6, label: 'Junho' },
+      { value: 7, label: 'Julho' },
+      { value: 8, label: 'Agosto' },
+      { value: 9, label: 'Setembro' },
+      { value: 10, label: 'Outubro' },
+      { value: 11, label: 'Novembro' },
+      { value: 12, label: 'Dezembro' }
+    ]
   }
 
 }
