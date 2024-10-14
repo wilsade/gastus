@@ -1,0 +1,14 @@
+<po-select class="po-md-6"
+           name="IdCategoria"
+           p-label="Categoria"
+           [p-options]="categorias"
+           [ngModel]="IdCategoria"
+           (ngModelChange)="alterouCategoria($event)"></po-select>
+
+
+<po-select class="po-md-6"
+           name="IdSubCategoria"
+           p-label="SubCategoria"
+           [p-options]="subCategorias"
+           [ngModel]="IdSubCategoria"
+           (ngModelChange)="alterouSubCategoria($event)"></po-select>
