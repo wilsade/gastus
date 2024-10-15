@@ -4,33 +4,32 @@ import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { ILancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { FormsModule } from '@angular/forms';
-import { ComboCategoria } from '../_models/ICategoria';
 import { StrUtils } from '../shared/str-utils';
 import { TipoTransacaoService } from '../tipo-transacao/tipo-transacao.service';
-import { CategoriaService } from '../categoria/categoria.service';
+import { CategoriaControlsComponent } from "../shared/categoria-controls.component";
 
 @Component({
   selector: 'app-lancamento-edit',
   standalone: true,
-  imports: [PoModule, FormsModule],
+  imports: [PoModule, FormsModule, CategoriaControlsComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './lancamento-edit.component.html'
 })
 export class LancamentoEditComponent extends GastusBaseComponent implements OnInit {
   constructor(protected override _notification: PoNotificationService,
     private readonly _service: LancamentoService,
-    private readonly _categoriaService: CategoriaService,
     private readonly _tipoTransacaoService: TipoTransacaoService) {
     super(_notification);
   }
 
   protected titulo = '';
-  protected comboCategorias: ComboCategoria[] = [];
-  protected comboSubCategorias: PoSelectOption[] = [];
   protected tiposTransacao: PoSelectOption[] = [];
 
   @ViewChild('modal')
   protected modal: PoModalComponent;
+
+  @ViewChild('categoriaControls')
+  categoriaControls: CategoriaControlsComponent;
 
   @Input()
   lancamento: ILancamento = this._service.getEmptyLancamento();
@@ -57,14 +56,6 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this._categoriaService.getComboCategorias().subscribe({
-      next: data => {
-        this.comboCategorias = data;
-      },
-      error: err => {
-        this.tratarErro(err);
-      }
-    });
     this._tipoTransacaoService.getTiposTransacao().subscribe({
       next: data => {
         this.tiposTransacao = [];
@@ -112,9 +103,9 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   showEditModal(item: ILancamento): void {
     this.titulo = `Alterar Lançamento: ${item.Id} - ${item.Titulo}`;
     this.lancamento = item;
-    const oldSub = this.lancamento.IdSubCategoria;
-    this.alterouComboCategoria(this.lancamento.IdCategoria);
-    this.lancamento.IdSubCategoria = oldSub;
+
+    this.categoriaControls.loadSubCategorias(item.IdCategoria, item.IdSubCategoria);
+
     this.modal.open();
     this.verificarBotaoSalvar();
   }
@@ -125,17 +116,11 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
     this.modal.open();
   }
 
-  protected alterouComboCategoria(item: any): void {
-    const categoriaSelecionada = this.comboCategorias.find(c => c.value == item);
-    this.comboSubCategorias = [];
-    if (categoriaSelecionada) {
-      this.comboSubCategorias = categoriaSelecionada.Filhas;
-      this.lancamento.IdSubCategoria = 0;
-    }
+  protected alterouComboCategoria(item: number): void {
     this.verificarBotaoSalvar();
   }
 
-  protected alterouComboSubCategoria(): void {
+  protected alterouComboSubCategoria(item: number): void {
     this.verificarBotaoSalvar();
   }
 
@@ -146,8 +131,8 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   private verificarBotaoSalvar(): void {
     const dataOk = StrUtils.hasValue(this.lancamento.Data);
     const tituloOK = StrUtils.hasValue(this.lancamento.Titulo);
-    const categoriaOK = StrUtils.hasValue(this.lancamento.IdCategoria);
-    const subCategoriaOK = StrUtils.hasValue(this.lancamento.IdSubCategoria);
+    const categoriaOK = StrUtils.hasValue(this.lancamento.IdCategoria) && this.lancamento.IdCategoria > 0;
+    const subCategoriaOK = StrUtils.hasValue(this.lancamento.IdSubCategoria) && this.lancamento.IdSubCategoria > 0;
     const valorOK = StrUtils.hasValue(this.lancamento.Valor);
     this.confirmou.disabled = !dataOk || !tituloOK || !categoriaOK || !subCategoriaOK || !valorOK;
   }
