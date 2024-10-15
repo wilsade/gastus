@@ -33,18 +33,12 @@
   </div>
 
   <div class="po-row">
-    <po-select class="po-md-6"
-               [p-options]="comboCategorias"
-               [ngModel]="lancamento.IdCategoria"
-               (ngModelChange)="lancamento.IdCategoria = $event"
-               (ngModelChange)="alterouComboCategoria($event)"
-               p-label="Categoria"></po-select>
-    <po-select class="po-md-6"
-               [p-options]="comboSubCategorias"
-               [ngModel]="lancamento.IdSubCategoria"
-               (ngModelChange)="lancamento.IdSubCategoria = $event"
-               (ngModelChange)="alterouComboSubCategoria()"
-               p-label="SubCategoria"></po-select>
+    <app-categoria-controls #categoriaControls
+                            class="po-md-12"
+                            [(IdCategoria)]="lancamento.IdCategoria"
+                            [(IdSubCategoria)]="lancamento.IdSubCategoria"
+                            (IdCategoriaChange)="alterouComboCategoria($event)"
+                            (IdSubCategoriaChange)="alterouComboSubCategoria($event)"></app-categoria-controls>
   </div>
 
   <div class="po-row">
