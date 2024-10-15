@@ -80,6 +80,13 @@ export class OrcamentoDetailComponent extends GastusBaseComponent {
 
   private verificarBotaoSalvar(): void {
     this.confirmou.disabled = !StrUtils.hasValue(this.orcamento.NumMes) ||
-      !StrUtils.hasValue(this.orcamento.Valor);
+      !StrUtils.hasValue(this.orcamento.Valor) ||
+      (this.orcamento.IdCategoria <= 0) ||
+      !StrUtils.hasValue(this.orcamento.IdSubCategoria) ||
+      (this.orcamento.IdSubCategoria <= 0);
+  }
+
+  protected alterouCategorias(id: number): void {
+    this.verificarBotaoSalvar();
   }
 }
