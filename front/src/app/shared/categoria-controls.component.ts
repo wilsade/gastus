@@ -3,7 +3,7 @@ import { GastusBaseComponent } from './gastus-base-component';
 import { PoModule, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 import { FormsModule } from '@angular/forms';
 import { CategoriaService } from '../categoria/categoria.service';
-import { ComboCategoria, ISubCategoria } from '../_models/ICategoria';
+import { ComboCategoria } from '../_models/ICategoria';
 
 @Component({
   selector: 'app-categoria-controls',
