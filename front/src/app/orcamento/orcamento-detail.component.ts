@@ -31,12 +31,11 @@ export class OrcamentoDetailComponent extends GastusBaseComponent {
 
   showEditmodal(item: IOrcamento): void {
     this.orcamento = item;
-    this.categoriaControls.loadSubCategorias(item.IdCategoria);
+    this.categoriaControls.loadSubCategorias(item.IdCategoria, item.IdSubCategoria);
     this.modal.open();
   }
 
   protected alterouComboMes(numMes: number): void {
     this.orcamento.NumMes = numMes;
-    this.orcamento.NomeMes = this.meses.find(m => m.value === numMes)?.label ?? '';
   }
 }

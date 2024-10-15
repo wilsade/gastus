@@ -19,13 +19,12 @@ namespace Gastus.Core
     {
       var connection = GetConnection(false);
       const string sql = @"
-        INSERT INTO ORCAMENTO (Id, IdCategoria, IdSubCategoria, NumMes, NomeMes, Valor, Descricao)
-        VALUES (@Id, @IdCategoria, @IdSubCategoria, @NumMes, @NomeMes, @Valor, @Descricao)";
+        INSERT INTO ORCAMENTO (Id, IdCategoria, IdSubCategoria, NumMes, Valor, Descricao)
+        VALUES (@Id, @IdCategoria, @IdSubCategoria, @NumMes, @Valor, @Descricao)";
       var novoOrcamento = new OrcamentoModel(GetNextIdFromTabela(connection, "Orcamento"),
         insertModel.IdCategoria,
         insertModel.IdSubCategoria,
         insertModel.NumMes,
-        insertModel.NomeMes,
         insertModel.Valor,
         insertModel.Descricao);
       _ = connection.Execute(sql, novoOrcamento);
@@ -71,11 +70,10 @@ ORDER BY L.NumMes, NomeCategoria, NomeSubCategoria";
       var lista = connection.Query<OrcamentoModel>(sql);
 
       var agrupado = lista
-            .GroupBy(o => new { o.NumMes, o.NomeMes })
+            .GroupBy(o => new { o.NumMes })
             .Select(grupo => new OrcamentoViewModel
             {
               NumMes = grupo.Key.NumMes,
-              NomeMes = grupo.Key.NomeMes,
               Total = grupo.Sum(o => o.Valor),
               Items = [.. grupo]
             })

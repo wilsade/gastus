@@ -15,7 +15,7 @@ export class OrcamentoService {
 
   getEmptyOrcamento(): IOrcamento {
     return {
-      Id: 0, IdCategoria: 0, IdSubCategoria: 0, NomeMes: '', NumMes: -1,
+      Id: 0, IdCategoria: 0, IdSubCategoria: 0, NumMes: -1,
       Valor: 0, Descricao: ''
     }
   }

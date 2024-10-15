@@ -20,17 +20,15 @@
     /// <param name="idCategoria">Identificador da categoria.</param>
     /// <param name="idSubCategoria">Identificador da subcategoria.</param>
     /// <param name="numMes">Número do mês (1 a 12).</param>
-    /// <param name="nomeMes">Nome do mês correspondente ao orçamento.</param>
     /// <param name="valor">Valor do orçamento.</param>
     /// <param name="descricao">Descrição opcional do orçamento.</param>
     public OrcamentoModel(int id, int idCategoria, int idSubCategoria,
-      int numMes, string nomeMes, decimal valor, string descricao)
+      int numMes, decimal valor, string descricao)
     {
       Id = id;
       IdCategoria = idCategoria;
       IdSubCategoria = idSubCategoria;
       NumMes = numMes;
-      NomeMes = nomeMes;
       Valor = valor;
       Descricao = descricao;
     }
@@ -70,16 +68,14 @@
     /// <param name="idCategoria">Identificador da categoria.</param>
     /// <param name="idSubCategoria">Identificador da subcategoria.</param>
     /// <param name="numMes">Número do mês (1 a 12).</param>
-    /// <param name="nomeMes">Nome do mês correspondente ao orçamento.</param>
     /// <param name="valor">Valor do orçamento.</param>
     /// <param name="descricao">Descrição opcional do orçamento.</param>
     public OrcamentoInsertModel(int idCategoria, int idSubCategoria,
-      int numMes, string nomeMes, decimal valor, string descricao)
+      int numMes, decimal valor, string descricao)
     {
       IdCategoria = idCategoria;
       IdSubCategoria = idSubCategoria;
       NumMes = numMes;
-      NomeMes = nomeMes;
       Valor = valor;
       Descricao = descricao;
     }
@@ -98,11 +94,6 @@
     /// Número do mês (1 a 12).
     /// </summary>
     public int NumMes { get; set; }
-
-    /// <summary>
-    /// Nome do mês correspondente ao orçamento.
-    /// </summary>
-    public string NomeMes { get; set; }
 
     /// <summary>
     /// Valor do orçamento.
@@ -126,11 +117,6 @@
     public int NumMes { get; set; }
 
     /// <summary>
-    /// Nome do mês correspondente ao orçamento.
-    /// </summary>
-    public string NomeMes { get; set; }
-
-    /// <summary>
     /// Total orçado para o mês
     /// </summary>
     public decimal Total { get; set; }
@@ -147,7 +133,7 @@
     /// <returns>Código hash para esta instância</returns>
     public override int GetHashCode()
     {
-      return NumMes.GetHashCode() ^ NomeMes.GetHashCode();
+      return NumMes.GetHashCode();
     }
 
     /// <summary>
@@ -159,7 +145,7 @@
     {
       if (obj is not OrcamentoViewModel other)
         return false;
-      return NumMes == other.NumMes && NomeMes == other.NomeMes;
+      return NumMes == other.NumMes;
     }
   }
 }

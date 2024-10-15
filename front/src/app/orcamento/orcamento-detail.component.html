@@ -5,23 +5,14 @@
               p-label="Id."
               disabled="true"
               [(ngModel)]="orcamento.Id"></po-input>
-    <po-input class="po-md-2"
-              p-required="true"
-              p-label="NumMes"
-              [(ngModel)]="orcamento.NumMes"></po-input>
-    <po-input class="po-md-2"
-              p-required="true"
-              p-label="NomeMes"
-              [(ngModel)]="orcamento.NomeMes"></po-input>
-
-    <po-select class="po-md-2"
+    <po-select class="po-md-4"
                p-label="Mês"
                [p-options]="meses"
                name="NumMes"
                [ngModel]="orcamento.NumMes"
                (ngModelChange)="alterouComboMes($event)"></po-select>
 
-    <po-decimal class="po-md-4"
+    <po-decimal class="po-md-6"
                 p-label="Valor"
                 p-required="true"
                 name="valor"
@@ -31,17 +22,16 @@
   </div>
 
   <div class="po-row">
-    <po-input class="po-md-6"
-              p-required="true"
-              p-label="Categoria"
-              [(ngModel)]="orcamento.IdCategoria"></po-input>
-    <po-input class="po-md-6"
-              p-required="true"
-              p-label="SubCategoria"
-              [(ngModel)]="orcamento.IdSubCategoria"></po-input>
     <app-categoria-controls #categoriaControls
                             class="po-md-12"
                             [(IdCategoria)]="orcamento.IdCategoria"
                             [(IdSubCategoria)]="orcamento.IdSubCategoria"></app-categoria-controls>
+  </div>
+
+  <div class="po-row">
+    <po-input class="po-md-12"
+              p-required="false"
+              p-label="Título"
+              [(ngModel)]="orcamento.Descricao"></po-input>
   </div>
 </po-modal>

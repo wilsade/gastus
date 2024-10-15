@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS Orcamento (
 	IdCategoria INTEGER NOT NULL,
 	IdSubCategoria INTEGER NOT NULL,
 	NumMes INTEGER NOT NULL,
-	NomeMes TEXT NOT NULL,
 	Valor REAL NOT NULL,
 	Descricao TEXT,
 	FOREIGN KEY (IdCategoria, IdSubCategoria) REFERENCES SubCategoria(IdCategoria, Id)

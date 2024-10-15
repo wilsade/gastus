@@ -3,7 +3,7 @@ import { GastusBaseComponent } from './gastus-base-component';
 import { PoModule, PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 import { FormsModule } from '@angular/forms';
 import { CategoriaService } from '../categoria/categoria.service';
-import { ComboCategoria } from '../_models/ICategoria';
+import { ComboCategoria, ISubCategoria } from '../_models/ICategoria';
 
 @Component({
   selector: 'app-categoria-controls',
@@ -61,12 +61,14 @@ export class CategoriaControlsComponent extends GastusBaseComponent implements O
     this.IdSubCategoriaChange.emit(this.IdSubCategoria);
   }
 
-  loadSubCategorias(idCategoria: number): void {
+  loadSubCategorias(idCategoria: number, idSubCategoria: number | undefined = undefined): void {
     const categoriaSelecionada = this.categorias.find(c => c.value == idCategoria);
     this.subCategorias = [];
     if (categoriaSelecionada) {
       this.subCategorias = categoriaSelecionada.Filhas;
       this.IdSubCategoria = 0;
     }
+    if (idSubCategoria)
+      this.IdSubCategoria = idSubCategoria;
   }
 }
