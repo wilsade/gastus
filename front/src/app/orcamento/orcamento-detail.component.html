@@ -27,7 +27,9 @@
     <app-categoria-controls #categoriaControls
                             class="po-md-12"
                             [(IdCategoria)]="orcamento.IdCategoria"
-                            [(IdSubCategoria)]="orcamento.IdSubCategoria"></app-categoria-controls>
+                            [(IdSubCategoria)]="orcamento.IdSubCategoria"
+                            (IdCategoriaChange)="alterouCategorias($event)"
+                            (IdSubCategoriaChange)="alterouCategorias($event)"></app-categoria-controls>
   </div>
 
   <div class="po-row">
