@@ -67,4 +67,8 @@ export class OrcamentoViewComponent extends GastusBaseComponent implements OnIni
     })
   }
 
+  protected fechouModalDetail(): void {
+    this.carregarOrcamentos();
+  }
+
 }

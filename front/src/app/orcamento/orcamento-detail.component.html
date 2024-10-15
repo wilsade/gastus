@@ -1,4 +1,6 @@
-<po-modal #modal>
+<po-modal #modal
+          [p-primary-action]="confirmou"
+          [p-secondary-action]="cancelou">
   <div class="po-row">
     <po-input class="po-md-2"
               p-required="true"
@@ -18,7 +20,7 @@
                 name="valor"
                 p-icon="ph ph-money-wavy"
                 [ngModel]="orcamento.Valor"
-                (ngModelChange)="orcamento.Valor = $event"></po-decimal>
+                (ngModelChange)="alterouValor($event)"></po-decimal>
   </div>
 
   <div class="po-row">

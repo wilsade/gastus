@@ -12,7 +12,8 @@
 
   </po-table>
 
-  <app-orcamento-detail #modalDetail></app-orcamento-detail>
+  <app-orcamento-detail #modalDetail
+                        (onFechouModal)="fechouModalDetail()"></app-orcamento-detail>
 </po-page-default>
 
 <div *ngIf="loading"

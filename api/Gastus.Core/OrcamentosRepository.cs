@@ -48,7 +48,17 @@ namespace Gastus.Core
     /// <returns>Número de registgors afetados</returns>
     public int EditOrcamento(OrcamentoModel model)
     {
-      throw new NotImplementedException();
+      const string sql = @"
+        UPDATE ORCAMENTO
+        SET IdCategoria = @IdCategoria,
+          IdSubCategoria = @IdSubCategoria,
+          NumMes = @NumMes,
+          Valor = @Valor,
+          Descricao = @Descricao
+        WHERE Id = @Id";
+      var conn = GetConnection(false);
+      int rows = conn.Execute(sql, model);
+      return rows;
     }
 
     /// <summary>
