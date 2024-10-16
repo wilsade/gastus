@@ -1,19 +1,17 @@
 <po-page-default p-title="Orçamento"
                  [p-actions]="acoesPagina">
 
-  <po-table [p-items]="orcamentos">
+  <div *ngFor="let orcamento of orcamentos">
+    <po-widget class="po-md-6"
+               [p-title]="orcamento.NOMEMES">
+      <app-orcamento-items-view [orcamento]="orcamento"
+                                (onFechouEdicao)="fechouModalDetail()"></app-orcamento-items-view>
+      <div style="margin-top: 3px;">
+        <strong>Total: </strong> <span style="color: red;">{{getTotal(orcamento.Total)}}</span>
+      </div>
+    </po-widget>
+  </div>
 
-    <div *p-table-row-template="let rowItem, let i=rowIndex">
-      <detail-row [row]="rowItem">
-        <po-table [p-actions]="acoesTabela"
-                  [p-items]="rowItem.Items"></po-table>
-      </detail-row>
-    </div>
-
-  </po-table>
-
-  <app-orcamento-detail #modalDetail
-                        (onFechouModal)="fechouModalDetail()"></app-orcamento-detail>
 </po-page-default>
 
 <div *ngIf="loading"

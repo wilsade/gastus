@@ -1,0 +1,20 @@
+<po-table [p-hide-columns-manager]="true"
+          [p-striped]="true"
+          [p-actions]="acoesTabela"
+          [p-columns]="colunas"
+          [p-items]="orcamento.Items">
+
+  <ng-template p-table-cell-template
+               let-column="column"
+               let-row="row">
+
+    <div *ngIf="column.property === 'Valor'">
+      <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+    </div>
+
+  </ng-template>
+
+</po-table>
+
+<app-orcamento-detail #modalDetail
+                      (onFechouModal)="fechouModalDetail()"></app-orcamento-detail>
