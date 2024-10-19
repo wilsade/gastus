@@ -1,5 +1,11 @@
-<po-select p-label="Período"
+<po-select class="po-md-4"
+           p-label="Período"
            name="periodoSelecionado"
            [p-options]="periodos"
            [ngModel]="periodoSelecionado"
            (ngModelChange)="alterouPeriodo($event)"></po-select>
+<po-input class="po-md-8"
+          p-label="Filtrar lançamentos"
+          p-placeholder="Digite aqui para filtrar os lançamentos"
+          [(ngModel)]="filtro"
+          (ngModelChange)="alterouFiltro()"></po-input>

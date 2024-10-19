@@ -10,6 +10,12 @@ export interface ILancamento {
   SALDO: number;
 }
 
+export interface ILancamentoView extends ILancamento {
+  NomeCategoria: string;
+  NomeSubCategoria: string;
+  NomeTipoTranscao: string;
+}
+
 export enum TiposPeriodo {
   EsteMes = 1,
   Ultimos7Dias = 2,

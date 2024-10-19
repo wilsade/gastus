@@ -3,9 +3,10 @@
       <app-filtro-lancamentos #filtroLancamentos
                               [(lancamentosFiltrado)]="lancamentosExibidos"></app-filtro-lancamentos>
       <po-table #tableLancamentos
+                [p-hide-columns-manager]="true"
+                [p-hide-table-search]="true"
                 [p-striped]="true"
                 [p-height]="alturaVisao"
-                [p-hide-table-search]="false"
                 [p-actions]="acoesTabela"
                 [p-columns]="colunas"
                 [p-items]="lancamentosExibidos">

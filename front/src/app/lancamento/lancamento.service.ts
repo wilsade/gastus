@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ILancamento } from '../_models/ILancamento';
+import { ILancamento, ILancamentoView } from '../_models/ILancamento';
 import { map, Observable } from 'rxjs';
 import { CategoriaService } from '../categoria/categoria.service';
 
@@ -21,9 +21,9 @@ export class LancamentoService {
     }
   }
 
-  getLancamentos(): Observable<ILancamento[]> {
-    return this._http.get<ILancamento[]>(this.lancamentosUrl).pipe(
-      map((response: ILancamento[]) => {
+  getLancamentos(): Observable<ILancamentoView[]> {
+    return this._http.get<ILancamentoView[]>(this.lancamentosUrl).pipe(
+      map((response: ILancamentoView[]) => {
         this.formatarValores(response);
         return response;
       }));
@@ -54,7 +54,7 @@ export class LancamentoService {
     return this._http.post<ILancamento>(this.lancamentosUrl, item, { headers });
   }
 
-  private formatarValores(lancamentos: ILancamento[]): void {
+  private formatarValores(lancamentos: ILancamentoView[]): void {
     let saldo = 0;
     lancamentos.forEach(lancamento => {
 

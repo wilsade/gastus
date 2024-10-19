@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PoModule, PoSelectOption } from '@po-ui/ng-components';
-import { ILancamento, TiposPeriodo } from '../_models/ILancamento';
+import { ILancamentoView, TiposPeriodo } from '../_models/ILancamento';
 
 @Component({
   selector: 'app-filtro-lancamentos',
@@ -15,20 +15,20 @@ export class FiltroLancamentosComponent implements OnInit {
 
   constructor() { }
 
+  private _lancamentosOriginal: ILancamentoView[];
   protected periodos: PoSelectOption[];
-  periodoSelecionado: number;
-
-  private _lancamentosOriginal: ILancamento[];
+  protected periodoSelecionado: number;
+  protected filtro = '';
 
   @Input()
-  lancamentosFiltrado: ILancamento[];
+  lancamentosFiltrado: ILancamentoView[];
 
   @Output()
-  lancamentosFiltradoChange = new EventEmitter<ILancamento[]>();
+  lancamentosFiltradoChange = new EventEmitter<ILancamentoView[]>();
 
   ngOnInit(): void {
     this.periodos = this.getPeriodoOptions();
-    this.alterouPeriodo(TiposPeriodo.Ultimos7Dias.valueOf());
+    this.alterouPeriodo(TiposPeriodo.Ultimos15Dias.valueOf());
   }
 
   protected alterouPeriodo(valor: number): void {
@@ -57,7 +57,7 @@ export class FiltroLancamentosComponent implements OnInit {
     }
   }
 
-  filtrarLancamentos(itens: ILancamento[]): void {
+  filtrarLancamentos(itens: ILancamentoView[]): void {
     this._lancamentosOriginal = itens;
 
     if (!this._lancamentosOriginal || this._lancamentosOriginal.length == 0)
@@ -98,7 +98,23 @@ export class FiltroLancamentosComponent implements OnInit {
       this.lancamentosFiltrado = this._lancamentosOriginal.filter(
         (lancamento) => lancamento.Data >= dataInicio
       );
+
+    if (this.filtro) {
+      const filtrarPor = this.filtro.trim().toLowerCase();
+      this.lancamentosFiltrado = this.lancamentosFiltrado.filter(l =>
+        l.Data.toLocaleDateString().includes(filtrarPor) ||
+        l.Titulo.toLowerCase().includes(filtrarPor) ||
+        l.NomeCategoria.toLowerCase().includes(filtrarPor) ||
+        l.NomeSubCategoria.toLowerCase().includes(filtrarPor) ||
+        (l.NomeTipoTranscao && l.NomeTipoTranscao.toLowerCase().includes(filtrarPor)) ||
+        (l.Comentario && l.Comentario.toLowerCase().includes(filtrarPor))
+      );
+    }
     this.lancamentosFiltradoChange.emit(this.lancamentosFiltrado);
+  }
+
+  protected alterouFiltro(): void {
+    this.filtrarLancamentos(this._lancamentosOriginal);
   }
 
 }

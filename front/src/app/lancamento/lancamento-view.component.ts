@@ -1,7 +1,7 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
-import { ILancamento } from '../_models/ILancamento';
+import { ILancamento, ILancamentoView } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { CommonModule } from '@angular/common';
 import { LancamentoEditComponent } from './lancamento-edit.component';
@@ -29,8 +29,8 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   }
 
   loading = false;
-  protected lancamentos_original: ILancamento[] = [];
-  protected lancamentosExibidos: ILancamento[] = [];
+  protected lancamentos_original: ILancamentoView[] = [];
+  protected lancamentosExibidos: ILancamentoView[] = [];
 
   colunas: PoTableColumn[] = [
     this.createColumnId(false),
