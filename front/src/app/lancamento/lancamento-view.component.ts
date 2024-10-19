@@ -32,28 +32,18 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   protected lancamentos_original: ILancamentoView[] = [];
   protected lancamentosExibidos: ILancamentoView[] = [];
 
-  colunas: PoTableColumn[] = [
-    this.createColumnId(false),
-    { label: 'Data', property: 'Data', type: 'date', format: 'dd/MM/yyyy' },
-    { label: 'Título', property: 'Titulo', type: 'cellTemplate' },
-    { label: 'Comentário', property: 'Comentario' },
-    { label: 'Categoria', property: 'NomeCategoria' },
-    { label: 'SubCategoria', property: 'NomeSubCategoria' },
-    { label: 'Tipo', property: 'NomeTipoTransacao' },
-    { label: 'Valor', property: 'Valor', type: 'cellTemplate' },
-    { label: 'Saldo', property: 'SALDO', type: 'cellTemplate' }
-  ]
+  protected colunas: PoTableColumn[];
 
   @ViewChild('modalLancamento')
-  modalLancamento: LancamentoEditComponent;
+  protected modalLancamento: LancamentoEditComponent;
 
   @ViewChild('tableLancamentos')
-  tableLancamentos: PoTableComponent;
+  protected tableLancamentos: PoTableComponent;
 
   @ViewChild('filtroLancamentos')
-  filtroLancamentos: FiltroLancamentosComponent;
+  protected filtroLancamentos: FiltroLancamentosComponent;
 
-  acoesPagina: PoPageAction[] = [
+  protected acoesPagina: PoPageAction[] = [
     {
       label: 'Atualizar', icon: this.iconeAtualizar,
       action: () => this.carregarLancamentos()
@@ -61,14 +51,34 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
     { label: 'Inserir', icon: this.iconeInserir, action: () => this.modalLancamento.showInsertModal() }
   ]
 
-  acoesTabela: PoTableAction[] = [
+  protected acoesTabela: PoTableAction[] = [
     { label: 'Editar', icon: this.iconeEditar, action: this.editarLancamento.bind(this) },
     { label: 'Excluir', icon: this.iconeExcluir, action: this.excluirLancamento.bind(this) },
 
   ]
 
   ngOnInit(): void {
+    this.criarColunas(false, false, false);
     this.carregarLancamentos();
+  }
+
+  private criarColunas(idVisivel: boolean, comentarioVisivel: boolean, tipoVisivel: boolean): void {
+    this.colunas = [
+      this.createColumnId(idVisivel),
+      { label: 'Data', property: 'Data', type: 'date', format: 'dd/MM/yyyy' },
+      { label: 'Título', property: 'Titulo', type: 'cellTemplate' },
+      { label: 'Comentário', property: LancamentoService.COLUNA_COMENTARIO, visible: comentarioVisivel },
+      { label: 'Categoria', property: 'NomeCategoria' },
+      { label: 'SubCategoria', property: 'NomeSubCategoria' },
+      { label: 'Tipo', property: 'NomeTipoTransacao', visible: tipoVisivel },
+      { label: 'Valor', property: 'Valor', type: 'cellTemplate' },
+      { label: 'Saldo', property: 'SALDO', type: 'cellTemplate' }
+    ]
+  }
+
+  protected alterouColunas(colunas: string[]): void {
+    this.criarColunas(colunas.includes(LancamentoService.COLUNA_Id), colunas.includes(LancamentoService.COLUNA_COMENTARIO),
+      colunas.includes(LancamentoService.COLUNA_IdTipoTransacao))
   }
 
   private excluirLancamento(item: ILancamento): void {

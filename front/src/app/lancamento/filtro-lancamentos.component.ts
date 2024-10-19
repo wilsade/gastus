@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PoModule, PoSelectOption } from '@po-ui/ng-components';
+import { PoModule, PoMultiselectOption, PoSelectOption } from '@po-ui/ng-components';
 import { ILancamentoView, TiposPeriodo } from '../_models/ILancamento';
+import { LancamentoService } from './lancamento.service';
 
 @Component({
   selector: 'app-filtro-lancamentos',
@@ -15,10 +16,12 @@ export class FiltroLancamentosComponent implements OnInit {
 
   constructor() { }
 
+  private readonly OUTRAS_COLUNAS_LANCAMENTOS = 'OUTRAS_COLUNAS_LANCAMENTOS';
   private _lancamentosOriginal: ILancamentoView[];
   protected periodos: PoSelectOption[];
   protected periodoSelecionado: number;
   protected filtro = '';
+  colunas: Array<string> = [];
 
   @Input()
   lancamentosFiltrado: ILancamentoView[];
@@ -26,14 +29,35 @@ export class FiltroLancamentosComponent implements OnInit {
   @Output()
   lancamentosFiltradoChange = new EventEmitter<ILancamentoView[]>();
 
+  @Output()
+  colunasAlteradas = new EventEmitter<Array<string>>();
+
   ngOnInit(): void {
     this.periodos = this.getPeriodoOptions();
     this.alterouPeriodo(TiposPeriodo.Ultimos15Dias.valueOf());
+
+    const colunasArmazenadas = localStorage.getItem(this.OUTRAS_COLUNAS_LANCAMENTOS);
+    const colunasArray: string[] = colunasArmazenadas ? JSON.parse(colunasArmazenadas) : [];
+    if (colunasArray.length > 0) {
+      this.colunas = colunasArray;
+      this.colunasAlteradas.emit(this.colunas);
+    }
   }
+
+  protected readonly opcoesColunas: PoMultiselectOption[] = [
+    { label: 'Id', value: LancamentoService.COLUNA_Id },
+    { label: 'Comentário', value: LancamentoService.COLUNA_COMENTARIO },
+    { label: 'Tipo', value: LancamentoService.COLUNA_IdTipoTransacao }
+  ]
 
   protected alterouPeriodo(valor: number): void {
     this.periodoSelecionado = valor;
     this.filtrarLancamentos(this._lancamentosOriginal);
+  }
+
+  protected alterouColunas(itens: any): void {
+    localStorage.setItem(this.OUTRAS_COLUNAS_LANCAMENTOS, JSON.stringify(itens))
+    this.colunasAlteradas.emit(itens);
   }
 
   private getPeriodoOptions(): PoSelectOption[] {

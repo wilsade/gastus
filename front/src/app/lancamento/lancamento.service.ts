@@ -3,7 +3,6 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ILancamento, ILancamentoView } from '../_models/ILancamento';
 import { map, Observable } from 'rxjs';
-import { CategoriaService } from '../categoria/categoria.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +10,11 @@ import { CategoriaService } from '../categoria/categoria.service';
 export class LancamentoService {
   lancamentosUrl = `${environment.apiUrl}/lancamentos`;
 
-  constructor(private readonly _http: HttpClient,
-    private readonly _serviceCategoria: CategoriaService) { }
+  static readonly COLUNA_Id = 'Id';
+  static readonly COLUNA_COMENTARIO = 'Comentario';
+  static readonly COLUNA_IdTipoTransacao = 'IdTipoTransacao';
+
+  constructor(private readonly _http: HttpClient) { }
 
   getEmptyLancamento(): ILancamento {
     return {

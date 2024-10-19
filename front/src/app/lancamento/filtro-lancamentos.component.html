@@ -4,8 +4,15 @@
            [p-options]="periodos"
            [ngModel]="periodoSelecionado"
            (ngModelChange)="alterouPeriodo($event)"></po-select>
-<po-input class="po-md-8"
+<po-input class="po-md-4"
           p-label="Filtrar lançamentos"
           p-placeholder="Digite aqui para filtrar os lançamentos"
           [(ngModel)]="filtro"
           (ngModelChange)="alterouFiltro()"></po-input>
+
+<po-multiselect class="po-md-4"
+                p-label="Outras colunas"
+                p-placeholder="Outras colunas a serem exibidas"
+                [(ngModel)]="colunas"
+                [p-options]="opcoesColunas"
+                (ngModelChange)="alterouColunas($event)"></po-multiselect>

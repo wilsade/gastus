@@ -1,7 +1,8 @@
 <po-page-default p-title="Lançamentos"
                  [p-actions]="acoesPagina">
       <app-filtro-lancamentos #filtroLancamentos
-                              [(lancamentosFiltrado)]="lancamentosExibidos"></app-filtro-lancamentos>
+                              [(lancamentosFiltrado)]="lancamentosExibidos"
+                              (colunasAlteradas)="alterouColunas($event)"></app-filtro-lancamentos>
       <po-table #tableLancamentos
                 [p-hide-columns-manager]="true"
                 [p-hide-table-search]="true"
