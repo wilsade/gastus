@@ -7,11 +7,15 @@ import { CommonModule } from '@angular/common';
 import { LancamentoEditComponent } from './lancamento-edit.component';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { ColunaValorComponent } from "../shared/coluna-valor.component";
+import { StrUtils } from '../shared/str-utils';
+import { FiltroLancamentosComponent } from './filtro-lancamentos.component';
 
 @Component({
   selector: 'app-lancamento-view',
   standalone: true,
-  imports: [CommonModule, PoModule, LancamentoEditComponent, ColunaValorComponent],
+  imports: [CommonModule, PoModule, LancamentoEditComponent, ColunaValorComponent,
+    FiltroLancamentosComponent
+  ],
   providers: [InputDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './lancamento-view.component.html'
@@ -25,7 +29,8 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   }
 
   loading = false;
-  lancamentos: ILancamento[] = [];
+  protected lancamentos_original: ILancamento[] = [];
+  protected lancamentosExibidos: ILancamento[] = [];
 
   colunas: PoTableColumn[] = [
     this.createColumnId(false),
@@ -44,6 +49,9 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
 
   @ViewChild('tableLancamentos')
   tableLancamentos: PoTableComponent;
+
+  @ViewChild('filtroLancamentos')
+  filtroLancamentos: FiltroLancamentosComponent;
 
   acoesPagina: PoPageAction[] = [
     {
@@ -71,7 +79,7 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
         this._service.excluirLancamento(item.Id).subscribe({
           next: data => {
             if (data > 0) {
-              this.lancamentos = this.lancamentos.filter(cat => cat.Id !== item.Id);
+              this.carregarLancamentos();
               this._notification.information({ message: 'Lançamento excluído', duration: 1000 });
             }
           },
@@ -93,11 +101,14 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   }
 
   private carregarLancamentos() {
-    this.lancamentos = [];
+    this.lancamentos_original = [];
+    this.lancamentosExibidos = [];
     this.loading = true;
     this._service.getLancamentos().subscribe({
       next: data => {
-        this.lancamentos = data;
+        this.lancamentos_original = data;
+        this.lancamentosExibidos = [...this.lancamentos_original];
+        this.filtroLancamentos.filtrarLancamentos(this.lancamentos_original);
       },
       error: err => {
         this.loading = false;
@@ -111,5 +122,13 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
 
   protected fechouModal(): void {
     this.carregarLancamentos();
+  }
+
+  protected getTotal(lancamentos: ILancamento[]): string {
+    if (lancamentos && lancamentos.length > 0) {
+      const saldo = lancamentos[lancamentos.length - 1].SALDO;
+      return StrUtils.formatValue(saldo);
+    }
+    return '';
   }
 }

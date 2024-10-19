@@ -1,0 +1,5 @@
+<po-select p-label="Período"
+           name="periodoSelecionado"
+           [p-options]="periodos"
+           [ngModel]="periodoSelecionado"
+           (ngModelChange)="alterouPeriodo($event)"></po-select>

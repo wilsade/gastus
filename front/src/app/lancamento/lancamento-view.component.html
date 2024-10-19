@@ -1,12 +1,14 @@
 <po-page-default p-title="Lançamentos"
                  [p-actions]="acoesPagina">
+      <app-filtro-lancamentos #filtroLancamentos
+                              [(lancamentosFiltrado)]="lancamentosExibidos"></app-filtro-lancamentos>
       <po-table #tableLancamentos
                 [p-striped]="true"
                 [p-height]="alturaVisao"
                 [p-hide-table-search]="false"
                 [p-actions]="acoesTabela"
                 [p-columns]="colunas"
-                [p-items]="lancamentos">
+                [p-items]="lancamentosExibidos">
 
             <ng-template p-table-cell-template
                          let-column="column"
@@ -26,7 +28,13 @@
             </ng-template>
 
       </po-table>
-
+      <div class="po-row"
+           style="margin-top: 3px;">
+            <strong style="margin-right: 9px;">Lançamentos:</strong>
+            <span>{{lancamentosExibidos.length}} de {{lancamentos_original.length}}</span>
+            <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong> <span
+                  style="color: blue;">{{getTotal(lancamentos_original)}}</span>
+      </div>
       <app-lancamento-edit #modalLancamento
                            (onModalClosed)="fechouModal()"></app-lancamento-edit>
 </po-page-default>
