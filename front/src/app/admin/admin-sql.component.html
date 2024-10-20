@@ -1,0 +1,9 @@
+<po-page-default p-title="Execução de comandos SQL">
+  <po-code-editor class="po-md-12"
+                  [(ngModel)]="codigo"></po-code-editor>
+  <po-button class="po-md-2"
+             p-label="Query"
+             (p-click)="queryClick()"></po-button>
+  <po-table class="po-md-12"
+            [p-items]="query"></po-table>
+</po-page-default>
