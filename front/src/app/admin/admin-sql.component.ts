@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
-import { PoModule, PoNotificationService, PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
+import { PoDialogService, PoModule, PoNotificationService, PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
 
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { AdminService } from './admin.service';
@@ -16,7 +16,8 @@ import { CommonModule } from '@angular/common';
 export class AdminSqlComponent extends GastusBaseComponent {
 
   constructor(protected override _notification: PoNotificationService,
-    private readonly _service: AdminService) {
+    private readonly _service: AdminService,
+    private readonly _dlgModal: PoDialogService) {
     super(_notification);
   }
 
@@ -24,7 +25,7 @@ export class AdminSqlComponent extends GastusBaseComponent {
   minhaTabela: PoTableComponent;
 
   protected readonly QUERY = 'Consultar';
-  protected readonly EXECTUCE = 'Executar';
+  protected readonly EXECUTE = 'Executar';
   protected loading = false;
 
   protected codigoSQL = '';
@@ -33,6 +34,14 @@ export class AdminSqlComponent extends GastusBaseComponent {
   protected query = [];
 
   protected colunas: PoTableColumn[] = [];
+
+  private isSelect(): boolean {
+    return this.labelBotao === this.QUERY;
+  }
+
+  private isExecute(): boolean {
+    return this.labelBotao === this.EXECUTE;
+  }
 
   private gerarColunas(resultado: any[]): PoTableColumn[] {
     if (resultado.length === 0)
@@ -50,18 +59,18 @@ export class AdminSqlComponent extends GastusBaseComponent {
     if (!this.codigoSQL)
       return;
 
-    if (this.codigoSQL.toLowerCase().startsWith('select')) {
+    if (this.codigoSQL.startsWithInsensitive('select')) {
       this.labelBotao = this.QUERY;
       this.botaoDesabilitado = false;
-    } else if (this.codigoSQL.toLowerCase().startsWith('insert') ||
-      this.codigoSQL.toLowerCase().startsWith('update') ||
-      this.codigoSQL.toLowerCase().startsWith('delete')) {
-      this.labelBotao = this.EXECTUCE;
+    } else if (this.codigoSQL.startsWithInsensitive('insert') ||
+      this.codigoSQL.startsWithInsensitive('update') ||
+      this.codigoSQL.startsWithInsensitive('delete')) {
+      this.labelBotao = this.EXECUTE;
       this.botaoDesabilitado = false;
     }
   }
 
-  protected queryClick(): void {
+  private rodarSQLSelect(): void {
     this.loading = true;
     this._service.query(this.codigoSQL).subscribe({
       next: data => {
@@ -74,5 +83,30 @@ export class AdminSqlComponent extends GastusBaseComponent {
         this.tratarErro(err);
       }
     })
+  }
+
+  private rodarSQLExecute(): void {
+    this.loading = true;
+    this._service.execute(this.codigoSQL).subscribe({
+      next: data => {
+        this._notification.success({ message: `Total de registros afetados: ${data}`, duration: 5000 });
+        this.loading = false;
+      },
+      error: err => {
+        this.loading = false;
+        this.tratarErro(err);
+      }
+    })
+  }
+
+  protected queryClick(): void {
+    if (this.labelBotao === this.QUERY)
+      this.rodarSQLSelect();
+    else
+      this._dlgModal.confirm({
+        title: 'Alteração no banco de dados',
+        message: 'Deseja realmente executar este comando SQL no banco de dados?',
+        confirm: () => this.rodarSQLExecute()
+      });
   }
 }

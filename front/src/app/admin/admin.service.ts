@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AdminService {
 
-  private admimSQLUrl = `${environment.apiUrl}/admin/sql`;
+  private readonly admimSQLUrl = `${environment.apiUrl}/admin/sql`;
 
   constructor(private readonly _http: HttpClient) { }
 
@@ -17,7 +17,17 @@ export class AdminService {
       'Content-Type': 'application/json'
     });
 
-    var body = JSON.stringify(sqlSelect);
+    const body = JSON.stringify(sqlSelect);
     return this._http.post<any>(`${this.admimSQLUrl}/select`, body, { headers });
   }
+
+  execute(sqlSelect: string): Observable<number> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const body = JSON.stringify(sqlSelect);
+    return this._http.post<number>(`${this.admimSQLUrl}/execute`, body, { headers });
+  }
+
 }
