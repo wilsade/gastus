@@ -20,3 +20,40 @@ export class StrUtils {
       return formattedWithThousands;
   }
 }
+
+declare global {
+  interface String {
+    /**
+     * Remover todos os espaços da string
+     * @returns string sem espaços
+     */
+    removeSpaces(): string;
+
+    equalsInsensitive(other: string): boolean;
+    containsInsensitive(other: string): boolean;
+    startsWithInsensitive(other: string): boolean;
+  }
+}
+
+String.prototype.removeSpaces = function (this: string) { // NOSONAR
+  const removed = this.split(" ").join("");
+  return removed;
+};
+
+
+String.prototype.equalsInsensitive = function (this: string, other: string) { // NOSONAR
+  return this.localeCompare(other, undefined, { sensitivity: 'accent' }) === 0;
+};
+
+String.prototype.containsInsensitive = function (this: string, other: string) { // NOSONAR
+  if (!StrUtils.hasValue(this))
+    return false;
+  return this.toLocaleLowerCase().indexOf(other.toLocaleLowerCase()) != -1
+};
+
+// @ts-ignore
+String.prototype.startsWithInsensitive = function (this: string, other: string) { // NOSONAR
+  if (!StrUtils.hasValue(this))
+    return false;
+  return this.toLocaleLowerCase().startsWith(other.toLocaleLowerCase());
+};
