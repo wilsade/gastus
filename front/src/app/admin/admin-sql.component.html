@@ -14,10 +14,17 @@
   </div>
   <po-divider />
   <div class="po-row">
-    <po-table class="po-md-12"
+    <po-table #minhaTabela
+              class="po-md-12"
               [p-striped]="true"
               [p-hide-columns-manager]="true"
               [p-sort]="true"
+              [p-columns]="colunas"
               [p-items]="query"></po-table>
+  </div>
+
+  <div *ngIf="loading"
+       class="sample-container">
+    <po-loading-overlay></po-loading-overlay>
   </div>
 </po-page-default>

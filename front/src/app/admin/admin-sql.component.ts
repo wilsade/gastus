@@ -1,14 +1,15 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { PoModule, PoNotificationService } from '@po-ui/ng-components';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
+import { PoModule, PoNotificationService, PoTableColumn, PoTableComponent } from '@po-ui/ng-components';
 
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { AdminService } from './admin.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-sql',
   standalone: true,
-  imports: [PoModule, FormsModule],
+  imports: [PoModule, FormsModule, CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './admin-sql.component.html'
 })
@@ -19,35 +20,59 @@ export class AdminSqlComponent extends GastusBaseComponent {
     super(_notification);
   }
 
-  readonly QUERY = 'Consultar';
-  readonly EXECTUCE = 'Executar';
+  @ViewChild('minhaTabela')
+  minhaTabela: PoTableComponent;
+
+  protected readonly QUERY = 'Consultar';
+  protected readonly EXECTUCE = 'Executar';
+  protected loading = false;
 
   protected codigoSQL = '';
   protected labelBotao = this.QUERY;
   protected botaoDesabilitado = true;
   protected query = [];
 
+  protected colunas: PoTableColumn[] = [];
+
+  private gerarColunas(resultado: any[]): PoTableColumn[] {
+    if (resultado.length === 0)
+      return [];
+
+    return Object.keys(resultado[0]).map(key => ({
+      property: key,
+      label: key.charAt(0).toUpperCase() + key.slice(1)
+    }));
+  }
+
   protected alterouCodigoSQL(): void {
     this.labelBotao = this.QUERY;
-    if (!this.codigoSQL || this.codigoSQL.length <= 3) {
-      this.botaoDesabilitado = true;
+    this.botaoDesabilitado = true;
+    if (!this.codigoSQL)
       return;
-    }
+
     if (this.codigoSQL.toLowerCase().startsWith('select')) {
       this.labelBotao = this.QUERY;
       this.botaoDesabilitado = false;
-    } else {
+    } else if (this.codigoSQL.toLowerCase().startsWith('insert') ||
+      this.codigoSQL.toLowerCase().startsWith('update') ||
+      this.codigoSQL.toLowerCase().startsWith('delete')) {
       this.labelBotao = this.EXECTUCE;
       this.botaoDesabilitado = false;
     }
   }
 
   protected queryClick(): void {
+    this.loading = true;
     this._service.query(this.codigoSQL).subscribe({
       next: data => {
+        this.colunas = this.gerarColunas(data);
         this.query = data;
+        this.loading = false;
       },
-      error: err => this.tratarErro(err)
+      error: err => {
+        this.loading = false;
+        this.tratarErro(err);
+      }
     })
   }
 }
