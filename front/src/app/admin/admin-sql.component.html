@@ -1,9 +1,23 @@
 <po-page-default p-title="Execução de comandos SQL">
-  <po-code-editor class="po-md-12"
-                  [(ngModel)]="codigo"></po-code-editor>
-  <po-button class="po-md-2"
-             p-label="Query"
-             (p-click)="queryClick()"></po-button>
-  <po-table class="po-md-12"
-            [p-items]="query"></po-table>
+  <div class="po-row">
+    <po-textarea class="po-md-12"
+                 name="codigo"
+                 [p-rows]="6"
+                 [(ngModel)]="codigoSQL"
+                 (ngModelChange)="alterouCodigoSQL()"></po-textarea>
+  </div>
+  <div class="po-row">
+    <po-button class="po-md-2"
+               [p-label]="labelBotao"
+               [p-disabled]="botaoDesabilitado"
+               (p-click)="queryClick()"></po-button>
+  </div>
+  <po-divider />
+  <div class="po-row">
+    <po-table class="po-md-12"
+              [p-striped]="true"
+              [p-hide-columns-manager]="true"
+              [p-sort]="true"
+              [p-items]="query"></po-table>
+  </div>
 </po-page-default>
