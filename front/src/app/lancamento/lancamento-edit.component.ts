@@ -24,6 +24,7 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
 
   protected titulo = '';
   protected tiposTransacao: PoSelectOption[] = [];
+  readonly TRANSACAO_NULA = 0;
 
   @ViewChild('modal')
   protected modal: PoModalComponent;
@@ -58,7 +59,7 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   ngOnInit(): void {
     this._tipoTransacaoService.getTiposTransacao().subscribe({
       next: data => {
-        this.tiposTransacao = [];
+        this.tiposTransacao = [{ label: '< Limpar >', value: this.TRANSACAO_NULA }];
         data.forEach(t => {
           this.tiposTransacao.push({ label: t.Nome, value: t.Id });
         })
@@ -75,6 +76,8 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   }
 
   editarLancamento(lancamento: ILancamento): void {
+    if (lancamento.IdTipoTransacao == this.TRANSACAO_NULA)
+      lancamento.IdTipoTransacao = null;
     this._service.editarLancamento(lancamento).subscribe({
       next: data => {
         if (data > 0)
@@ -86,6 +89,8 @@ export class LancamentoEditComponent extends GastusBaseComponent implements OnIn
   }
 
   inserirLancamento(lancamento: ILancamento): void {
+    if (lancamento.IdTipoTransacao == this.TRANSACAO_NULA)
+      lancamento.IdTipoTransacao = null;
     this._service.inserirLancamento(lancamento).subscribe({
       next: data => {
         this.lancamento = data;
