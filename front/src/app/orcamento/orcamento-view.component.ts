@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { PoModule, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
@@ -7,11 +7,12 @@ import { IOrcamentoView } from '../_models/IOrcamento';
 import { OrcamentoService } from './orcamento.service';
 import { OrcamentoItemsViewComponent } from './orcamento-items-view.component';
 import { StrUtils } from '../shared/str-utils';
+import { OrcamentoInsercaoComponent } from "./orcamento-insercao.component";
 
 @Component({
   selector: 'app-orcamento-view',
   standalone: true,
-  imports: [CommonModule, PoModule, OrcamentoItemsViewComponent],
+  imports: [CommonModule, PoModule, OrcamentoItemsViewComponent, OrcamentoInsercaoComponent],
   providers: [InputDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './orcamento-view.component.html'
@@ -26,6 +27,9 @@ export class OrcamentoViewComponent extends GastusBaseComponent implements OnIni
   protected orcamentos: IOrcamentoView[] = [];
   protected loading = false;
 
+  @ViewChild('modalInsercao')
+  modalInsercao: OrcamentoInsercaoComponent;
+
   protected acoesPagina: PoPageAction[] = [
     {
       label: 'Atualizar', icon: this.iconeAtualizar,
@@ -39,7 +43,7 @@ export class OrcamentoViewComponent extends GastusBaseComponent implements OnIni
   }
 
   private abrirModalParaInsercao(): void {
-    console.log('nao implementado');
+    this.modalInsercao.showInsertModal();
   }
 
   private carregarOrcamentos() {

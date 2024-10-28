@@ -6,12 +6,12 @@ export abstract class GastusBaseComponent {
 
   constructor(protected readonly _notification: PoNotificationService) { }
 
-  iconeEditar = 'ph-fill ph-pencil-simple';
-  iconeExcluir = 'ph-fill ph-minus-circle';
-  iconeInserir = 'ph-fill ph-plus-square';
-  iconeAtualizar = 'ph-fill ph-arrows-clockwise';
-  alturaVisao = 400;
-  spacingSmall = PoTableColumnSpacing.Small;
+  protected iconeEditar = 'ph-fill ph-pencil-simple';
+  protected iconeExcluir = 'ph-fill ph-minus-circle';
+  protected iconeInserir = 'ph-fill ph-plus-square';
+  protected iconeAtualizar = 'ph-fill ph-arrows-clockwise';
+  protected alturaVisao = 400;
+  protected spacingSmall = PoTableColumnSpacing.Small;
 
   /**
    * Criar a coluna para o Identificador da entidade
