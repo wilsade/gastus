@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IOrcamento, IOrcamentoView } from '../_models/IOrcamento';
+import { IOrcamento, IOrcamentoInsertModel, IOrcamentoView } from '../_models/IOrcamento';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,6 +12,13 @@ export class OrcamentoService {
   orcamentosUrl = `${environment.apiUrl}/orcamento`;
 
   constructor(private readonly _http: HttpClient) { }
+
+  createEmptyInsertModel(): IOrcamentoInsertModel {
+    return {
+      IdCategoria: 0, IdSubCategoria: 0, NumMeses: [],
+      Valor: 0, Descricao: ''
+    }
+  }
 
   getEmptyOrcamento(): IOrcamento {
     return {
@@ -24,11 +31,11 @@ export class OrcamentoService {
     return this._http.get<IOrcamentoView[]>(this.orcamentosUrl);
   }
 
-  inserirOrcamento(item: IOrcamento): Observable<IOrcamento> {
+  inserirOrcamento(item: IOrcamentoInsertModel): Observable<IOrcamento[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    return this._http.post<IOrcamento>(this.orcamentosUrl, item, { headers });
+    return this._http.post<IOrcamento[]>(this.orcamentosUrl, item, { headers });
   }
 
   excluirOrcamento(id: number): Observable<number> {

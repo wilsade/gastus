@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriaControlsComponent } from "../shared/categoria-controls.component";
 import { StrUtils } from '../shared/str-utils';
+import { OrcamentoService } from './orcamento.service';
 
 @Component({
   selector: 'app-orcamento-insercao',
@@ -15,19 +16,16 @@ import { StrUtils } from '../shared/str-utils';
 })
 export class OrcamentoInsercaoComponent extends GastusBaseComponent {
 
-  constructor(protected override _notification: PoNotificationService) {
+  constructor(protected override _notification: PoNotificationService,
+    private readonly _service: OrcamentoService) {
     super(_notification);
   }
 
   @ViewChild('modalInsercao')
   protected modalInsercao: PoModalComponent;
 
+  protected orcamentoInsertModel = this._service.createEmptyInsertModel();
   protected listaMeses: PoMultiselectOption[] = this.getMeses();
-  protected mesesEscolhidos: Array<string> = [];
-  protected idCategoria = 0;
-  protected idSubCategoria = 0;
-  protected valor = 0;
-  protected descricao = '';
 
   protected confirmou: PoModalAction = {
     label: 'Salvar e novo', disabled: true, action: () => this.salvarENovo()
@@ -38,7 +36,19 @@ export class OrcamentoInsercaoComponent extends GastusBaseComponent {
   }
 
   private salvarENovo(): void {
-    console.log(this.mesesEscolhidos);
+    this._service.inserirOrcamento(this.orcamentoInsertModel).subscribe({
+      next: data => {
+        if (data.length > 0) {
+          this._notification.success({ message: `${data.length} orçamento(s) inserido(s) com sucesso!`, duration: 2500 });
+          this.orcamentoInsertModel = this._service.createEmptyInsertModel();
+          this.habilitarBotaoSalvar();
+        }
+      },
+      error: err => {
+        this.tratarErro(err);
+      },
+      complete: () => { }
+    });
   }
 
   private fecharModal(): void {
@@ -46,34 +56,35 @@ export class OrcamentoInsercaoComponent extends GastusBaseComponent {
   }
 
   private habilitarBotaoSalvar(): void {
-    this.confirmou.disabled = this.valor == 0 ||
-      this.mesesEscolhidos.length == 0 ||
-      (!StrUtils.hasValue(this.idCategoria) || this.idCategoria == 0) ||
-      (!StrUtils.hasValue(this.idSubCategoria) || this.idSubCategoria == 0)
+    this.confirmou.disabled = this.orcamentoInsertModel.Valor == 0 ||
+      this.orcamentoInsertModel.NumMeses.length == 0 ||
+      (!StrUtils.hasValue(this.orcamentoInsertModel.IdCategoria) || this.orcamentoInsertModel.IdCategoria == 0) ||
+      (!StrUtils.hasValue(this.orcamentoInsertModel.IdSubCategoria) || this.orcamentoInsertModel.IdSubCategoria == 0)
       ;
   }
 
-  protected alterouMeses(itens: string): void {
+  protected alterouMeses(itens: number[]): void {
+    this.orcamentoInsertModel.NumMeses = itens;
     this.habilitarBotaoSalvar();
   }
 
   protected alterouCategorias(item: number): void {
+    this.orcamentoInsertModel.IdCategoria = item;
     this.habilitarBotaoSalvar();
   }
 
   protected alterouSubCategorias(item: number): void {
+    this.orcamentoInsertModel.IdSubCategoria = item;
     this.habilitarBotaoSalvar();
   }
 
   protected alterouValor(valorAlterado: number): void {
-    this.valor = valorAlterado;
+    this.orcamentoInsertModel.Valor = valorAlterado;
     this.habilitarBotaoSalvar();
   }
 
   showInsertModal(): void {
-    this.idCategoria = this.idSubCategoria = 0;
-    this.valor = 0;
-    this.descricao = '';
+    this.orcamentoInsertModel = this._service.createEmptyInsertModel();
     this.modalInsercao.open();
   }
 }

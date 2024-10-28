@@ -6,8 +6,8 @@
   <div class="po-row">
     <app-categoria-controls #categoriaControls
                             class="po-md-12"
-                            [(IdCategoria)]="idCategoria"
-                            [(IdSubCategoria)]="idSubCategoria"
+                            [(IdCategoria)]="orcamentoInsertModel.IdCategoria"
+                            [(IdSubCategoria)]="orcamentoInsertModel.IdSubCategoria"
                             (IdCategoriaChange)="alterouCategorias($event)"
                             (IdSubCategoriaChange)="alterouCategorias($event)"></app-categoria-controls>
 
@@ -17,7 +17,7 @@
     <po-multiselect class="po-md-6"
                     p-label="Selecione os meses desejados"
                     [p-options]="listaMeses"
-                    [(ngModel)]="mesesEscolhidos"
+                    [(ngModel)]="orcamentoInsertModel.NumMeses"
                     (ngModelChange)="alterouMeses($event)">
     </po-multiselect>
 
@@ -26,7 +26,7 @@
                 p-required="true"
                 name="valor"
                 p-icon="ph ph-money-wavy"
-                [ngModel]="valor"
+                [ngModel]="orcamentoInsertModel.Valor"
                 (ngModelChange)="alterouValor($event)"></po-decimal>
   </div>
 
@@ -34,7 +34,7 @@
     <po-input class="po-md-12"
               p-required="false"
               p-label="Título"
-              [(ngModel)]="descricao"></po-input>
+              [(ngModel)]="orcamentoInsertModel.Descricao"></po-input>
   </div>
 
 
