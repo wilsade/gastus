@@ -14,7 +14,7 @@ namespace Gastus.Api.Controllers
     readonly IOrcamentosRepository _repository = repository;
 
     /// <summary>
-    /// Recuperar todos o Orçamento
+    /// Recuperar todos os Orçamentos
     /// </summary>
     /// <returns>Todos os Orçamento</returns>
     [HttpGet()]
@@ -53,17 +53,23 @@ namespace Gastus.Api.Controllers
     }
 
     /// <summary>
-    /// Inserir um Orçamento
+    /// Inserir Orçamentos
     /// </summary>
     /// <param name="insertModel">Modelo de inserção</param>
-    /// <returns>Orçamento inserido</returns>
+    /// <returns>Orçamentos inseridos</returns>
     [HttpPost()]
     public IActionResult AddOrcamento([FromBody] OrcamentoInsertModel insertModel)
     {
       try
       {
-        OrcamentoModel model = _repository.AddOrcamento(insertModel);
-        return Ok(model);
+        if (insertModel.NumMeses.Length == 0)
+          throw new ArgumentException($"Parâmetro não informado: {nameof(insertModel.NumMeses)}");
+
+        if (insertModel.NumMeses.Any(x => (x <= 0) || (x > 12)))
+          throw new ArgumentException($"{nameof(insertModel.NumMeses)} deve conter números entre 1 e 12");
+
+        List<OrcamentoModel> inseridos = _repository.AddOrcamentos(insertModel);
+        return Ok(inseridos);
       }
       catch (Exception ex)
       {
