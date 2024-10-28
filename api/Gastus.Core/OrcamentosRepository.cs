@@ -2,6 +2,8 @@
 
 using Gastus.Domain;
 
+using System.Collections.Generic;
+
 namespace Gastus.Core
 {
   /// <summary>
@@ -15,20 +17,26 @@ namespace Gastus.Core
     /// </summary>
     /// <param name="insertModel">Modelo de inserção</param>
     /// <returns></returns>
-    public OrcamentoModel AddOrcamento(OrcamentoInsertModel insertModel)
+    public List<OrcamentoModel> AddOrcamentos(OrcamentoInsertModel insertModel)
     {
       var connection = GetConnection(false);
       const string sql = @"
         INSERT INTO ORCAMENTO (Id, IdCategoria, IdSubCategoria, NumMes, Valor, Descricao)
         VALUES (@Id, @IdCategoria, @IdSubCategoria, @NumMes, @Valor, @Descricao)";
-      var novoOrcamento = new OrcamentoModel(GetNextIdFromTabela(connection, "Orcamento"),
-        insertModel.IdCategoria,
-        insertModel.IdSubCategoria,
-        insertModel.NumMes,
-        insertModel.Valor,
-        insertModel.Descricao);
-      _ = connection.Execute(sql, novoOrcamento);
-      return novoOrcamento;
+
+      var inseridos = new List<OrcamentoModel>();
+      foreach (var numeroMes in insertModel.NumMeses)
+      {
+        var novoOrcamento = new OrcamentoModel(GetNextIdFromTabela(connection, "Orcamento"),
+          insertModel.IdCategoria,
+          insertModel.IdSubCategoria,
+          numeroMes,
+          insertModel.Valor,
+          insertModel.Descricao);
+        _ = connection.Execute(sql, novoOrcamento);
+        inseridos.Add(novoOrcamento);
+      }
+      return inseridos;
     }
 
     /// <summary>
