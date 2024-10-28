@@ -1,14 +1,23 @@
-import { BaseModel } from "./IBaseModel";
+/**
+ * Representa um item básico de orçamento.
+ */
+export interface IOrcamentoBaseModel {
+  IdCategoria: number;
+  IdSubCategoria: number;
+  Valor: number;
+  Descricao?: string;
+}
 
 /**
  * Representa um orçamento mensal associado a uma categoria e subcategoria.
  */
-export interface IOrcamento extends BaseModel {
-  IdCategoria: number;
-  IdSubCategoria: number;
+export interface IOrcamento extends IOrcamentoBaseModel {
+  Id: number;
   NumMes: number;
-  Valor: number;
-  Descricao?: string;
+}
+
+export interface IOrcamentoInsertModel extends IOrcamentoBaseModel {
+  NumMeses: Array<number>;
 }
 
 export interface IOrcamentoView {
