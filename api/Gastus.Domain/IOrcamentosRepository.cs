@@ -11,7 +11,7 @@ namespace Gastus.Domain
     /// </summary>
     /// <param name="insertModel">Modelo de inserção</param>
     /// <returns></returns>
-    OrcamentoModel AddOrcamento(OrcamentoInsertModel insertModel);
+    List<OrcamentoModel> AddOrcamentos(OrcamentoInsertModel insertModel);
 
     /// <summary>
     /// Excluir um Orçamento

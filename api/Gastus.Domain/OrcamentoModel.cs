@@ -1,9 +1,35 @@
 ﻿namespace Gastus.Domain
 {
   /// <summary>
+  /// Representa um item básico de Orçamento
+  /// </summary>
+  public abstract class OrcamentoBaseModel
+  {
+    /// <summary>
+    /// Identificador da categoria.
+    /// </summary>
+    public int IdCategoria { get; set; }
+
+    /// <summary>
+    /// Identificador da subcategoria.
+    /// </summary>
+    public int IdSubCategoria { get; set; }
+
+    /// <summary>
+    /// Valor do orçamento.
+    /// </summary>
+    public decimal Valor { get; set; }
+
+    /// <summary>
+    /// Descrição opcional do orçamento.
+    /// </summary>
+    public string Descricao { get; set; }
+  }
+
+  /// <summary>
   /// Representa um item de Orçamento
   /// </summary>
-  public class OrcamentoModel : OrcamentoInsertModel
+  public class OrcamentoModel : OrcamentoBaseModel
   {
     /// <summary>
     /// Inicialização da classe: <see cref="OrcamentoModel"/>.
@@ -47,12 +73,17 @@
     /// Nome da subcategoria
     /// </summary>
     public string NomeSubCategoria { get; set; }
+
+    /// <summary>
+    /// Número do mês (1 a 12).
+    /// </summary>
+    public int NumMes { get; set; }
   }
 
   /// <summary>
   /// Representa um item de Orçamento
   /// </summary>
-  public class OrcamentoInsertModel
+  public class OrcamentoInsertModel : OrcamentoBaseModel
   {
     /// <summary>
     /// Inicialização da classe: <see cref="OrcamentoInsertModel"/>.
@@ -67,43 +98,23 @@
     /// </summary>
     /// <param name="idCategoria">Identificador da categoria.</param>
     /// <param name="idSubCategoria">Identificador da subcategoria.</param>
-    /// <param name="numMes">Número do mês (1 a 12).</param>
+    /// <param name="numMeses">Números dos meses (1 a 12).</param>
     /// <param name="valor">Valor do orçamento.</param>
     /// <param name="descricao">Descrição opcional do orçamento.</param>
     public OrcamentoInsertModel(int idCategoria, int idSubCategoria,
-      int numMes, decimal valor, string descricao)
+      int[] numMeses, decimal valor, string descricao)
     {
       IdCategoria = idCategoria;
       IdSubCategoria = idSubCategoria;
-      NumMes = numMes;
+      NumMeses = numMeses;
       Valor = valor;
       Descricao = descricao;
     }
 
     /// <summary>
-    /// Identificador da categoria.
-    /// </summary>
-    public int IdCategoria { get; set; }
-
-    /// <summary>
-    /// Identificador da subcategoria.
-    /// </summary>
-    public int IdSubCategoria { get; set; }
-
-    /// <summary>
     /// Número do mês (1 a 12).
     /// </summary>
-    public int NumMes { get; set; }
-
-    /// <summary>
-    /// Valor do orçamento.
-    /// </summary>
-    public decimal Valor { get; set; }
-
-    /// <summary>
-    /// Descrição opcional do orçamento.
-    /// </summary>
-    public string Descricao { get; set; }
+    public int[] NumMeses { get; set; }
   }
 
   /// <summary>
