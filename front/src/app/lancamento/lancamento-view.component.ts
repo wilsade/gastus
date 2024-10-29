@@ -9,13 +9,13 @@ import { InputDialogService } from '../shared/input-dialog.service';
 import { ColunaValorComponent } from "../shared/coluna-valor.component";
 import { StrUtils } from '../shared/str-utils';
 import { FiltroLancamentosComponent } from './filtro-lancamentos.component';
+import { ImportarLancamentosComponent } from "./importar-lancamentos.component";
 
 @Component({
   selector: 'app-lancamento-view',
   standalone: true,
   imports: [CommonModule, PoModule, LancamentoEditComponent, ColunaValorComponent,
-    FiltroLancamentosComponent
-  ],
+    FiltroLancamentosComponent, ImportarLancamentosComponent],
   providers: [InputDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './lancamento-view.component.html'
@@ -43,12 +43,16 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
   @ViewChild('filtroLancamentos')
   protected filtroLancamentos: FiltroLancamentosComponent;
 
+  @ViewChild('modalImportacao')
+  modalImportacao: ImportarLancamentosComponent;
+
   protected acoesPagina: PoPageAction[] = [
     {
       label: 'Atualizar', icon: this.iconeAtualizar,
       action: () => this.carregarLancamentos()
     },
-    { label: 'Inserir', icon: this.iconeInserir, action: () => this.modalLancamento.showInsertModal() }
+    { label: 'Inserir', icon: this.iconeInserir, action: () => this.modalLancamento.showInsertModal() },
+    { label: 'Importar', action: () => this.modalImportacao.openModal() }
   ]
 
   protected acoesTabela: PoTableAction[] = [

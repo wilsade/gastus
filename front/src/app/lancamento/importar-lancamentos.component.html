@@ -1,0 +1,9 @@
+<po-modal #modalImportacao
+          p-size="xl"
+          p-title="Importação de lançamentos"
+          [p-primary-action]="confirmou">
+  <po-textarea class="po-md-12"
+               [p-rows]="9"
+               p-placeholder="Informe um item por linha separados por ponto-e-vírgula, pipe ou TAB"
+               [(ngModel)]="rawLines"></po-textarea>
+</po-modal>

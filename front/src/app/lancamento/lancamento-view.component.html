@@ -1,47 +1,49 @@
 <po-page-default p-title="Lançamentos"
                  [p-actions]="acoesPagina">
-      <app-filtro-lancamentos #filtroLancamentos
-                              [(lancamentosFiltrado)]="lancamentosExibidos"
-                              (colunasAlteradas)="alterouColunas($event)"></app-filtro-lancamentos>
-      <po-table #tableLancamentos
-                [p-hide-columns-manager]="true"
-                [p-hide-table-search]="true"
-                [p-striped]="true"
-                [p-height]="alturaVisao"
-                [p-actions]="acoesTabela"
-                [p-columns]="colunas"
-                [p-items]="lancamentosExibidos">
+  <app-filtro-lancamentos #filtroLancamentos
+                          [(lancamentosFiltrado)]="lancamentosExibidos"
+                          (colunasAlteradas)="alterouColunas($event)"></app-filtro-lancamentos>
+  <po-table #tableLancamentos
+            [p-hide-columns-manager]="true"
+            [p-hide-table-search]="true"
+            [p-striped]="true"
+            [p-height]="alturaVisao"
+            [p-actions]="acoesTabela"
+            [p-columns]="colunas"
+            [p-items]="lancamentosExibidos">
 
-            <ng-template p-table-cell-template
-                         let-column="column"
-                         let-row="row">
+    <ng-template p-table-cell-template
+                 let-column="column"
+                 let-row="row">
 
-                  <div *ngIf="column.property === 'Titulo'">
-                        <span (click)="clicouTitulo(row)">{{row.Titulo}}</span>
-                  </div>
-
-                  <div *ngIf="column.property === 'Valor'">
-                        <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
-                  </div>
-
-                  <div *ngIf="column.property === 'SALDO'">
-                        <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
-                  </div>
-            </ng-template>
-
-      </po-table>
-      <div class="po-row"
-           style="margin-top: 3px;">
-            <strong style="margin-right: 9px;">Lançamentos:</strong>
-            <span>{{lancamentosExibidos.length}} de {{lancamentos_original.length}}</span>
-            <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong> <span
-                  style="color: blue;">{{getTotal(lancamentos_original)}}</span>
+      <div *ngIf="column.property === 'Titulo'">
+        <span (click)="clicouTitulo(row)">{{row.Titulo}}</span>
       </div>
-      <app-lancamento-edit #modalLancamento
-                           (onModalClosed)="fechouModal()"></app-lancamento-edit>
+
+      <div *ngIf="column.property === 'Valor'">
+        <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+      </div>
+
+      <div *ngIf="column.property === 'SALDO'">
+        <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
+      </div>
+    </ng-template>
+
+  </po-table>
+  <div class="po-row"
+       style="margin-top: 3px;">
+    <strong style="margin-right: 9px;">Lançamentos:</strong>
+    <span>{{lancamentosExibidos.length}} de {{lancamentos_original.length}}</span>
+    <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong> <span
+          style="color: blue;">{{getTotal(lancamentos_original)}}</span>
+  </div>
+  <app-lancamento-edit #modalLancamento
+                       (onModalClosed)="fechouModal()"></app-lancamento-edit>
+
+  <app-importar-lancamentos #modalImportacao></app-importar-lancamentos>
 </po-page-default>
 
 <div *ngIf="loading"
      class="sample-container">
-      <po-loading-overlay></po-loading-overlay>
+  <po-loading-overlay></po-loading-overlay>
 </div>
