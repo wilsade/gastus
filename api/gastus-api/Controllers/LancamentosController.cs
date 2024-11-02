@@ -12,7 +12,7 @@ namespace Gastus.Api.Controllers
   /// </summary>
   [ApiController]
   [Route("api/[controller]")]
-  public class LancamentosController(ILancamentosRepository lancamentosRepository) : GastusBaseController
+  public partial class LancamentosController(ILancamentosRepository lancamentosRepository) : GastusBaseController
   {
     private readonly ILancamentosRepository _lancamentosRepository = lancamentosRepository;
 
@@ -126,10 +126,12 @@ namespace Gastus.Api.Controllers
       try
       {
         List<LancamentoViewModel> lancamentos = _lancamentosRepository.GetLancamentos();
-        var regexRetiraData = new Regex("[0-9\\/]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        Regex regexRetiraData = RetiraData();
+        Regex regexRetiraEspacos = RetiraEspacos();
         lancamentos.ForEach(lancamento =>
         {
-          string semData = regexRetiraData.Replace(lancamento.Titulo, "").Replace("  ", " ");
+          string semData = regexRetiraData.Replace(lancamento.Titulo, "");
+          semData = regexRetiraEspacos.Replace(semData, " ");
           lancamento.Titulo = semData.Trim();
         });
 
@@ -151,5 +153,11 @@ namespace Gastus.Api.Controllers
         return ReturnBadRequestException(ex);
       }
     }
+
+    [GeneratedRegex("[0-9]*\\/[0-9]+", RegexOptions.IgnoreCase | RegexOptions.Compiled, "pt-BR")]
+    private static partial Regex RetiraData();
+
+    [GeneratedRegex("\\s+", RegexOptions.IgnoreCase | RegexOptions.Compiled, "pt-BR")]
+    private static partial Regex RetiraEspacos();
   }
 }
