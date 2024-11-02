@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule, PoNotificationService } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StrUtils } from '../shared/str-utils';
-import { IImportarLancamento } from '../_models/ILancamento';
+import { IImportarLancamento, ILancamentoView, ILookupLancamento } from '../_models/ILancamento';
+import { LancamentoService } from './lancamento.service';
 
 @Component({
   selector: 'app-importar-lancamentos',
@@ -14,7 +15,8 @@ import { IImportarLancamento } from '../_models/ILancamento';
 })
 export class ImportarLancamentosComponent extends GastusBaseComponent {
 
-  constructor(protected override _notification: PoNotificationService) {
+  constructor(protected override _notification: PoNotificationService,
+    private readonly _service: LancamentoService) {
     super(_notification);
   }
 
@@ -25,8 +27,12 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   @ViewChild('modalImportacao')
   protected modalImportacao: PoModalComponent;
 
+  @ViewChild('stepper')
+  stepper: PoStepperComponent;
+
   protected rawLines = '';
   protected dadosImportacao: IImportarLancamento[] = []
+  private _lookupByTitulo: ILookupLancamento[] = [];
 
   protected readonly confirmou: PoModalAction = {
     label: 'Importar',
@@ -43,13 +49,35 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   protected readonly colunasGrid: Array<any> = [
-    { property: 'Data', label: 'Data do lançamento' },
-    { property: 'Titulo', label: 'Título' },
-    { property: 'Valor', label: 'Valor' },
-    { property: 'NomeCategoria', label: 'Categoria' },
-    { property: 'NomeSubCategoria', label: 'SubCategoria' },
-    { property: 'Comentario', label: 'Comentário' }
+    { property: 'Data', label: 'Data do lançamento', required: true },
+    { property: 'Titulo', label: 'Título', required: true },
+    { property: 'Valor', label: 'Valor', required: true },
+    { property: 'NomeCategoria', label: 'Categoria', required: true },
+    { property: 'NomeSubCategoria', label: 'SubCategoria', required: true },
+    { property: 'Comentario', label: 'Comentário' },
+    { property: 'NomeTipoTransacao', label: 'Tipo de transação' }
   ]
+
+  private loadLookUpByTitulo(): void {
+    if (this._lookupByTitulo.length > 0)
+      return;
+    console.log('iniciando lookup');
+    this._service.getLookupByTitulo().subscribe({
+      next: data => {
+        this._lookupByTitulo = data;
+      },
+      error: err => this.tratarErro(err)
+    })
+  }
+
+  private tryGetLookup(titulo: string): ILookupLancamento | undefined {
+    const aux = titulo.replace(/[0-9]*\/[0-9]+/g, "")
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const achei = this._lookupByTitulo.find(x => x.Titulo == aux);
+    return achei;
+  }
 
   private preencherDadosImportacao(): void {
     this.dadosImportacao = [];
@@ -58,13 +86,17 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       linha = linha.replace('DÃBITO', 'DÉBITO');
       const itens = linha.split(/[\t;|]/);
 
+      const titulo = itens[1];
+      const lookup = this.tryGetLookup(titulo);
+
       this.dadosImportacao = [...this.dadosImportacao, {
         Data: itens[0],
         Titulo: itens[1],
         Valor: itens[2],
-        NomeCategoria: '',
-        NomeSubCategoria: '',
-        Comentario: ''
+        NomeCategoria: lookup ? lookup.NomeCategoria : '',
+        NomeSubCategoria: lookup ? lookup.NomeSubCategoria : '',
+        Comentario: lookup ? lookup.Comentario : '',
+        NomeTipoTransacao: lookup ? lookup.NomeTipoTransacao : ''
       }];
     });
   }
@@ -82,6 +114,10 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   openModal(): void {
+    this.stepper.first();
+    this.rawLines = '';
+    this.dadosImportacao = [];
+    this.loadLookUpByTitulo();
     this.modalImportacao.open();
   }
 }

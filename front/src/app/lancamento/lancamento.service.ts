@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ILancamento, ILancamentoView } from '../_models/ILancamento';
+import { ILancamento, ILancamentoView, ILookupLancamento } from '../_models/ILancamento';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -54,6 +54,10 @@ export class LancamentoService {
     });
 
     return this._http.post<ILancamento>(this.lancamentosUrl, item, { headers });
+  }
+
+  getLookupByTitulo(): Observable<ILookupLancamento[]> {
+    return this._http.get<ILookupLancamento[]>(`${this.lancamentosUrl}/bytitulo`);
   }
 
   private formatarValores(lancamentos: ILancamentoView[]): void {

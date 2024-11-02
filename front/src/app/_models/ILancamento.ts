@@ -16,6 +16,14 @@ export interface ILancamentoView extends ILancamento {
   NomeTipoTranscao: string;
 }
 
+export interface ILookupLancamento {
+  Titulo: string;
+  NomeCategoria: string;
+  NomeSubCategoria: string;
+  Comentario: string;
+  NomeTipoTransacao: string;
+}
+
 export interface IImportarLancamento {
   Data: string;
   Titulo: string;
@@ -23,6 +31,7 @@ export interface IImportarLancamento {
   NomeCategoria: string;
   NomeSubCategoria: string;
   Comentario: string;
+  NomeTipoTransacao: string;
 }
 
 export enum TiposPeriodo {

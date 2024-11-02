@@ -3,7 +3,8 @@
           p-title="Importação de lançamentos"
           [p-primary-action]="confirmou">
 
-        <po-stepper (p-change-step)="alterouStep($event)">
+        <po-stepper #stepper
+                    (p-change-step)="alterouStep($event)">
                 <po-step [p-label]="INFORMAR_DADOS"
                          [p-can-active-next-step]="podeAvancarDosDados.bind(this)">
 
