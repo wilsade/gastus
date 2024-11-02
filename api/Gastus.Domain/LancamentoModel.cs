@@ -92,6 +92,12 @@
     /// Data do lançamento
     /// </summary>
     public DateTime Data { get; set; }
+
+    /// <summary>
+    /// Retorna uma string representando esta instância
+    /// </summary>
+    /// <returns>string representando esta instância</returns>
+    public override string ToString() => $"[{Data}] {Titulo}";
   }
 
   /// <summary>

@@ -1,4 +1,7 @@
-﻿using Gastus.Domain;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+using Gastus.Domain;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -106,6 +109,42 @@ namespace Gastus.Api.Controllers
         if (rowsAffected > 0)
           return Ok(rowsAffected);
         return NotFound();
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
+
+    /// <summary>
+    /// Agrupar lançamentos por título
+    /// </summary>
+    /// <returns>Lançamentos agrupados</returns>
+    [HttpGet("bytitulo")]
+    public IActionResult LookupByTitulo()
+    {
+      try
+      {
+        List<LancamentoViewModel> lancamentos = _lancamentosRepository.GetLancamentos();
+        var regexRetiraData = new Regex("[0-9\\/]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        lancamentos.ForEach(lancamento =>
+        {
+          string semData = regexRetiraData.Replace(lancamento.Titulo, "").Replace("  ", " ");
+          lancamento.Titulo = semData.Trim();
+        });
+
+        var agrupado = lancamentos.GroupBy(x => x.Titulo);
+        var retorno = (from item in agrupado
+                       let ultimo = item.OrderByDescending(x => x.Data).First()
+                       select new
+                       {
+                         Titulo = item.Key,
+                         ultimo.NomeCategoria,
+                         ultimo.NomeSubCategoria,
+                         ultimo.Comentario,
+                         ultimo.NomeTipoTransacao
+                       }).OrderBy(x => x.Titulo);
+        return Ok(retorno);
       }
       catch (Exception ex)
       {
