@@ -84,7 +84,14 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     const linhas = this.rawLines.split('\n');
     linhas.forEach(linha => {
       linha = linha.replace('DÃBITO', 'DÉBITO');
+      if (!StrUtils.hasValue(linha))
+        return;
+
       const itens = linha.split(/[\t;|]/);
+      if (itens.length < 3) {
+        this.showWarning(`Linha inválida: ${linha}`);
+        return;
+      }
 
       const titulo = itens[1];
       const lookup = this.tryGetLookup(titulo);
