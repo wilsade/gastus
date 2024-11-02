@@ -65,4 +65,8 @@ export abstract class GastusBaseComponent {
     ]
   }
 
+  protected showWarning(message: string, timeout: number = 1500): void {
+    this._notification.warning({ message: message, duration: timeout });
+  }
+
 }

@@ -46,7 +46,7 @@ namespace Gastus.Core
     /// <returns>Número de registros afetados</returns>
     public int DeleteOrcamento(int id)
     {
-      throw new NotImplementedException();
+      return DeleteById("Orcamento", id);
     }
 
     /// <summary>

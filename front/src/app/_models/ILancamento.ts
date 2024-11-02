@@ -16,6 +16,15 @@ export interface ILancamentoView extends ILancamento {
   NomeTipoTranscao: string;
 }
 
+export interface IImportarLancamento {
+  Data: string;
+  Titulo: string;
+  Valor: string;
+  NomeCategoria: string;
+  NomeSubCategoria: string;
+  Comentario: string;
+}
+
 export enum TiposPeriodo {
   EsteMes = 1,
   Ultimos7Dias = 2,
