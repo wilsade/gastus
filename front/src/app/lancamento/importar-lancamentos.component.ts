@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoGridComponent, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent } from '@po-ui/ng-components';
+import { PoGridComponent, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,11 +8,12 @@ import { IImportarLancamento, ILookupLancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { CategoriaControlsComponent } from "../shared/categoria-controls.component";
+import { ColunaValorComponent } from '../shared/coluna-valor.component';
 
 @Component({
   selector: 'app-importar-lancamentos',
   standalone: true,
-  imports: [PoModule, FormsModule, CommonModule, CategoriaControlsComponent],
+  imports: [PoModule, FormsModule, CommonModule, CategoriaControlsComponent, ColunaValorComponent],
   providers: [InputDialogService],
   templateUrl: './importar-lancamentos.component.html'
 })
@@ -60,6 +61,18 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     { property: 'NomeTipoTransacao', label: 'Tipo de transação' }
   ]
 
+  protected readonly colunasTabela: PoTableColumn[] = [
+    { label: '#', property: 'Num' },
+    { label: 'Data', property: 'Data' },
+    { label: 'Título', property: 'Titulo' },
+    { label: 'Valor', property: 'Valor', type: 'cellTemplate' },
+    { label: 'Categoria', property: 'NomeCategoria', type: 'cellTemplate' },
+    { label: 'SubCategoria', property: 'NomeSubCategoria', type: 'cellTemplate' },
+    { label: 'Comentário', property: 'Comentario', type: 'cellTemplate' },
+    { label: 'T. Transação', property: 'NomeTipoTransacao', type: 'cellTemplate' },
+  ]
+
+
   private loadLookUpByTitulo(): void {
     if (this._lookupByTitulo.length > 0)
       return;
@@ -96,14 +109,12 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         return;
       }
 
-      const titulo = itens[1];
-      const lookup = this.tryGetLookup(titulo);
-
+      const lookup = this.tryGetLookup(itens[1]);
       this.dadosImportacao = [...this.dadosImportacao, {
         Num: num++,
         Data: itens[0],
         Titulo: itens[1],
-        Valor: itens[2],
+        Valor: parseFloat(itens[2].replace(',', '.')),
         IdCategoria: lookup ? lookup.IdCategoria : 0,
         NomeCategoria: lookup ? lookup.NomeCategoria : '',
         IdSubCategoria: lookup ? lookup.IdSubCategoria : 0,

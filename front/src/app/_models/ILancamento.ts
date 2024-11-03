@@ -30,7 +30,7 @@ export interface ILookupLancamento {
 export interface IImportarLancamento extends ILookupLancamento {
   Num: number;
   Data: string;
-  Valor: string;
+  Valor: number;
 }
 
 export enum TiposPeriodo {
