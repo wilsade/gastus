@@ -141,9 +141,12 @@ namespace Gastus.Api.Controllers
                        select new
                        {
                          Titulo = item.Key,
+                         ultimo.IdCategoria,
                          ultimo.NomeCategoria,
+                         ultimo.IdSubCategoria,
                          ultimo.NomeSubCategoria,
                          ultimo.Comentario,
+                         ultimo.IdTipoTransacao,
                          ultimo.NomeTipoTransacao
                        }).OrderBy(x => x.Titulo);
         return Ok(retorno);
