@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoGridComponent, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent, PoTableColumn } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -35,9 +35,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   @ViewChild('stepper')
   stepper: PoStepperComponent;
 
-  @ViewChild('grid')
-  grid: PoGridComponent;
-
   protected rawLines = '';
   protected dadosImportacao: IImportarLancamento[] = []
   private _lookupByTitulo: ILookupLancamento[] = [];
@@ -50,17 +47,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     }
   }
 
-  protected readonly colunasGrid: Array<any> = [
-    { property: 'Num', label: '#', readonly: true },
-    { property: 'Data', label: 'Data do lançamento', required: true },
-    { property: 'Titulo', label: 'Título', required: true },
-    { property: 'Valor', label: 'Valor', required: true },
-    { property: 'NomeCategoria', label: 'Categoria', required: true },
-    { property: 'NomeSubCategoria', label: 'SubCategoria', required: true },
-    { property: 'Comentario', label: 'Comentário' },
-    { property: 'NomeTipoTransacao', label: 'Tipo de transação' }
-  ]
-
   protected readonly colunasTabela: PoTableColumn[] = [
     { label: '#', property: 'Num' },
     { label: 'Data', property: 'Data' },
@@ -71,7 +57,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     { label: 'Comentário', property: 'Comentario', type: 'cellTemplate' },
     { label: 'T. Transação', property: 'NomeTipoTransacao', type: 'cellTemplate' },
   ]
-
 
   private loadLookUpByTitulo(): void {
     if (this._lookupByTitulo.length > 0)
