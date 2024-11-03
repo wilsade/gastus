@@ -15,8 +15,10 @@
 
                 </po-step>
 
-                <po-step [p-label]="PREENCHER_TABELA">
-                        <po-grid [p-columns]="colunasGrid"
+                <po-step [p-label]="PREENCHER_TABELA"
+                         [p-can-active-next-step]="podeAvancarDaTabela.bind(this)">
+                        <po-grid #grid
+                                 [p-columns]="colunasGrid"
                                  [p-data]="dadosImportacao"></po-grid>
                 </po-step>
                 <po-step [p-label]="FINALIZACAO"></po-step>

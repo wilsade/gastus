@@ -1,22 +1,26 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent } from '@po-ui/ng-components';
+import { PoGridComponent, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StrUtils } from '../shared/str-utils';
-import { IImportarLancamento, ILancamentoView, ILookupLancamento } from '../_models/ILancamento';
+import { IImportarLancamento, ILookupLancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
+import { InputDialogService } from '../shared/input-dialog.service';
+import { CategoriaControlsComponent } from "../shared/categoria-controls.component";
 
 @Component({
   selector: 'app-importar-lancamentos',
   standalone: true,
-  imports: [PoModule, FormsModule, CommonModule],
+  imports: [PoModule, FormsModule, CommonModule, CategoriaControlsComponent],
+  providers: [InputDialogService],
   templateUrl: './importar-lancamentos.component.html'
 })
 export class ImportarLancamentosComponent extends GastusBaseComponent {
 
   constructor(protected override _notification: PoNotificationService,
-    private readonly _service: LancamentoService) {
+    private readonly _service: LancamentoService,
+    private readonly _modalDialog: InputDialogService) {
     super(_notification);
   }
 
@@ -30,25 +34,23 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   @ViewChild('stepper')
   stepper: PoStepperComponent;
 
+  @ViewChild('grid')
+  grid: PoGridComponent;
+
   protected rawLines = '';
   protected dadosImportacao: IImportarLancamento[] = []
   private _lookupByTitulo: ILookupLancamento[] = [];
 
   protected readonly confirmou: PoModalAction = {
-    label: 'Importar',
-    disabled: true,
+    label: 'Avançar',
+    disabled: false,
     action: () => {
-      console.log('rawLines', this.rawLines);
-      const linhas = this.rawLines.split('\n');
-      linhas.forEach(linha => {
-        linha = linha.replace('DÃBITO', 'DÉBITO');
-        const itens = linha.split(/[\t;|]/);
-        console.log('itens', itens);
-      });
+      this.stepper.next();
     }
   }
 
   protected readonly colunasGrid: Array<any> = [
+    { property: 'Num', label: '#', readonly: true },
     { property: 'Data', label: 'Data do lançamento', required: true },
     { property: 'Titulo', label: 'Título', required: true },
     { property: 'Valor', label: 'Valor', required: true },
@@ -82,6 +84,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   private preencherDadosImportacao(): void {
     this.dadosImportacao = [];
     const linhas = this.rawLines.split('\n');
+    let num = 1;
     linhas.forEach(linha => {
       linha = linha.replace('DÃBITO', 'DÉBITO');
       if (!StrUtils.hasValue(linha))
@@ -97,12 +100,16 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       const lookup = this.tryGetLookup(titulo);
 
       this.dadosImportacao = [...this.dadosImportacao, {
+        Num: num++,
         Data: itens[0],
         Titulo: itens[1],
         Valor: itens[2],
+        IdCategoria: lookup ? lookup.IdCategoria : 0,
         NomeCategoria: lookup ? lookup.NomeCategoria : '',
+        IdSubCategoria: lookup ? lookup.IdSubCategoria : 0,
         NomeSubCategoria: lookup ? lookup.NomeSubCategoria : '',
         Comentario: lookup ? lookup.Comentario : '',
+        IdTipoTransacao: lookup ? lookup.IdTipoTransacao : 0,
         NomeTipoTransacao: lookup ? lookup.NomeTipoTransacao : ''
       }];
     });
@@ -118,6 +125,27 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     if (!ok)
       this.showWarning('Informe os dados de importação');
     return ok;
+  }
+
+  protected podeAvancarDaTabela(): boolean {
+    let camposEmBranco: string[] = [];
+    this.dadosImportacao.forEach(x => {
+      this.verificarCamposEmBranco(x, camposEmBranco);
+    })
+    if (camposEmBranco.length > 0) {
+      this._notification.warning({
+        message: 'Campos em branco', supportMessage: camposEmBranco.join(', ')
+      });
+      return false;
+    }
+    return true;
+  }
+
+  private verificarCamposEmBranco(row: IImportarLancamento, array: string[]): void {
+    if (!StrUtils.hasValue(row.Data) || !StrUtils.hasValue(row.Titulo) ||
+      !StrUtils.hasValue(row.Valor) || !StrUtils.hasValue(row.NomeCategoria) ||
+      !StrUtils.hasValue(row.NomeSubCategoria))
+      array.push(`Linha: ${row.Num}`);
   }
 
   openModal(): void {

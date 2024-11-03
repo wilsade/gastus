@@ -18,20 +18,19 @@ export interface ILancamentoView extends ILancamento {
 
 export interface ILookupLancamento {
   Titulo: string;
+  IdCategoria: number;
   NomeCategoria: string;
+  IdSubCategoria: number;
   NomeSubCategoria: string;
   Comentario: string;
+  IdTipoTransacao: number | null;
   NomeTipoTransacao: string;
 }
 
-export interface IImportarLancamento {
+export interface IImportarLancamento extends ILookupLancamento {
+  Num: number;
   Data: string;
-  Titulo: string;
   Valor: string;
-  NomeCategoria: string;
-  NomeSubCategoria: string;
-  Comentario: string;
-  NomeTipoTransacao: string;
 }
 
 export enum TiposPeriodo {
