@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoStepperComponent, PoTableColumn } from '@po-ui/ng-components';
+import { PoComboOption, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoStepperComponent, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,7 @@ import { LancamentoService } from './lancamento.service';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { CategoriaControlsComponent } from "../shared/categoria-controls.component";
 import { ColunaValorComponent } from '../shared/coluna-valor.component';
+import { TipoTransacaoService } from '../tipo-transacao/tipo-transacao.service';
 
 @Component({
   selector: 'app-importar-lancamentos',
@@ -21,6 +22,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
 
   constructor(protected override _notification: PoNotificationService,
     private readonly _service: LancamentoService,
+    private readonly _tipoTransacaoService: TipoTransacaoService,
     private readonly _modalDialog: InputDialogService) {
     super(_notification);
   }
@@ -28,6 +30,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected readonly INFORMAR_DADOS = 'Informar dados';
   protected readonly PREENCHER_TABELA = 'Preencher tabela';
   protected readonly FINALIZACAO = 'Finalização';
+  readonly TRANSACAO_NULA = 0;
 
   @ViewChild('modalImportacao')
   protected modalImportacao: PoModalComponent;
@@ -38,6 +41,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected rawLines = '';
   protected dadosImportacao: IImportarLancamento[] = []
   private _lookupByTitulo: ILookupLancamento[] = [];
+  protected tiposTransacao: PoSelectOption[] = [];
 
   protected readonly confirmou: PoModalAction = {
     label: 'Avançar',
@@ -55,7 +59,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     { label: 'Categoria', property: 'NomeCategoria', type: 'cellTemplate' },
     { label: 'SubCategoria', property: 'NomeSubCategoria', type: 'cellTemplate' },
     { label: 'Comentário', property: 'Comentario', type: 'cellTemplate' },
-    { label: 'T. Transação', property: 'NomeTipoTransacao', type: 'cellTemplate' },
+    { label: 'Transação', property: 'NomeTipoTransacao', type: 'cellTemplate' },
   ]
 
   private loadLookUpByTitulo(): void {
@@ -130,7 +134,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     })
     if (camposEmBranco.length > 0) {
       this._notification.warning({
-        message: 'Campos em branco', supportMessage: camposEmBranco.join(', ')
+        message: 'Categoria/SubCategoria em branco', supportMessage: camposEmBranco.join(', ')
       });
       return false;
     }
@@ -138,10 +142,26 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   private verificarCamposEmBranco(row: IImportarLancamento, array: string[]): void {
-    if (!StrUtils.hasValue(row.Data) || !StrUtils.hasValue(row.Titulo) ||
-      !StrUtils.hasValue(row.Valor) || !StrUtils.hasValue(row.NomeCategoria) ||
-      !StrUtils.hasValue(row.NomeSubCategoria))
+    if (!StrUtils.hasValue(row.NomeCategoria) || !StrUtils.hasValue(row.NomeSubCategoria))
       array.push(`Linha: ${row.Num}`);
+  }
+
+  private loadComboTiposTransacao() {
+    if (this.tiposTransacao.length > 0)
+      return;
+    console.log('Carregando tipos de transação');
+
+    this._tipoTransacaoService.getTiposTransacao().subscribe({
+      next: data => {
+        this.tiposTransacao = [{ label: '< Limpar >', value: this.TRANSACAO_NULA }];
+        data.forEach(t => {
+          this.tiposTransacao = [...this.tiposTransacao, {
+            label: t.Nome, value: t.Id
+          }];
+        });
+      },
+      error: err => this.tratarErro(err)
+    })
   }
 
   openModal(): void {
@@ -149,6 +169,8 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this.rawLines = '';
     this.dadosImportacao = [];
     this.loadLookUpByTitulo();
+    this.loadComboTiposTransacao();
     this.modalImportacao.open();
   }
+
 }

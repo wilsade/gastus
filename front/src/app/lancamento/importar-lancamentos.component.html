@@ -48,8 +48,10 @@
           </div>
 
           <div *ngIf="column.property === 'NomeTipoTransacao'">
-            <po-input class="po-md-12"
-                      [(ngModel)]="row.NomeTipoTransacao"></po-input>
+            <po-select class="po-md-12"
+                       [p-options]="tiposTransacao"
+                       [ngModel]="row.IdTipoTransacao"
+                       (ngModelChange)="row.IdTipoTransacao = $event"></po-select>
           </div>
 
         </ng-template>
