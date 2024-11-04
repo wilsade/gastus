@@ -19,6 +19,17 @@ export class StrUtils {
     else
       return formattedWithThousands;
   }
+
+  /**
+   * Converter string no formato dd/MM/yyyy para Date
+   * @param date_str Data no formato dd/MM/yyyy
+   * @returns Date
+   */
+  static strToDate(date_str: string): Date {
+    const [day, month, year] = date_str.split('/').map(Number);
+    const date = new Date(year, month - 1, day, 0, 0, 0, 0);
+    return date;
+  }
 }
 
 declare global {
