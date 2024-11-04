@@ -116,6 +116,7 @@ export class FiltroLancamentosComponent implements OnInit {
         break;
     }
 
+    dataInicio?.setHours(0, 0, 0, 0);
     if (dataInicio == null)
       this.lancamentosFiltrado = [...this._lancamentosOriginal];
     else
