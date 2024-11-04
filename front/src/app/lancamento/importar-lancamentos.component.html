@@ -58,6 +58,11 @@
 
       </po-table>
     </po-step>
-    <po-step [p-label]="FINALIZACAO"></po-step>
+    <po-step [p-label]="VALIDACAO_CONFIRMACAO"
+             [p-can-active-next-step]="podeAvancarDaValidacao.bind(this)">
+      <po-checkbox p-label="Confirmar importação"
+                   [(ngModel)]="confirmouImportacao"></po-checkbox>
+      <po-table [p-items]="lancamentosParaInsercao"></po-table></po-step>
+    <po-step [p-label]="TERMINO"></po-step>
   </po-stepper>
 </po-modal>
