@@ -72,7 +72,7 @@ export class LancamentoAplicacaoEditComponent extends GastusBaseComponent {
   showInsertModal(idAplicacao: number, nomeAplicacao: string): void {
     this.modal.title = 'Inserção de lançamento';
     this._isInsert = true;
-    this.dataLancamento = undefined;
+    this.dataLancamento = new Date();
     this.valorLancamento = undefined;
     this._idAplicacao = idAplicacao;
     this.titulo = nomeAplicacao;
