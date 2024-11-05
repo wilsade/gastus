@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System.Collections.Generic;
+using System.Data.SQLite;
 
 using Dapper;
 
@@ -30,26 +31,8 @@ namespace Gastus.Core
     /// <returns>Lançamento inserido</returns>
     public LancamentoModel AddLancamento(LancamentoInsertModel insertModel)
     {
-      const string sql = @"
-        INSERT INTO Lancamento (Id, Data, Titulo, Comentario, IdCategoria, IdSubCategoria, IdTipoTransacao, Valor)
-        VALUES (@Id, @Data, @Titulo, @Comentario, @IdCategoria, @IdSubCategoria, @IdTipoTransacao, @Valor);";
-      using var connection = GetConnection(false);
-      var novoLancamento = new LancamentoModel(GetNextId(connection),
-        DateTime.Parse(insertModel.Data), insertModel.Titulo, insertModel.Comentario,
-        insertModel.IdCategoria, insertModel.IdSubCategoria, insertModel.IdTipoTransacao,
-        insertModel.Valor);
-      _ = connection.Execute(sql, new
-      {
-        novoLancamento.Id,
-        novoLancamento.Data,
-        novoLancamento.Titulo,
-        novoLancamento.Comentario,
-        novoLancamento.IdCategoria,
-        novoLancamento.IdSubCategoria,
-        novoLancamento.IdTipoTransacao,
-        novoLancamento.Valor
-      });
-      return novoLancamento;
+      var lst = ImportarLancamentos([insertModel]);
+      return lst.FirstOrDefault();
     }
 
     /// <summary>
@@ -119,6 +102,40 @@ namespace Gastus.Core
 
       using var connection = GetConnection(true);
       return connection.Execute(sql, model);
+    }
+
+    /// <summary>
+    /// Importar lançamentos
+    /// </summary>
+    /// <param name="lancamentos">Lançamentos a serem importados</param>
+    /// <returns>Lançamentos importados</returns>
+    public List<LancamentoModel> ImportarLancamentos(List<LancamentoInsertModel> lancamentos)
+    {
+      const string sql = @"
+        INSERT INTO Lancamento (Id, Data, Titulo, Comentario, IdCategoria, IdSubCategoria, IdTipoTransacao, Valor)
+        VALUES (@Id, @Data, @Titulo, @Comentario, @IdCategoria, @IdSubCategoria, @IdTipoTransacao, @Valor);";
+      var lst = new List<LancamentoModel>();
+      using var connection = GetConnection(false);
+      foreach (var insertModel in lancamentos)
+      {
+        var novoLancamento = new LancamentoModel(GetNextId(connection),
+        DateTime.Parse(insertModel.Data), insertModel.Titulo, insertModel.Comentario,
+        insertModel.IdCategoria, insertModel.IdSubCategoria, insertModel.IdTipoTransacao,
+        insertModel.Valor);
+        _ = connection.Execute(sql, new
+        {
+          novoLancamento.Id,
+          novoLancamento.Data,
+          novoLancamento.Titulo,
+          novoLancamento.Comentario,
+          novoLancamento.IdCategoria,
+          novoLancamento.IdSubCategoria,
+          novoLancamento.IdTipoTransacao,
+          novoLancamento.Valor
+        });
+        lst.Add(novoLancamento);
+      }
+      return lst;
     }
   }
 }
