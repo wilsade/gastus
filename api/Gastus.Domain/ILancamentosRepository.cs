@@ -38,5 +38,12 @@
     /// <param name="model">Dados da modificação</param>
     /// <returns>Número de registros afetados</returns>
     int EditLancamento(LancamentoModel model);
+
+    /// <summary>
+    /// Importar lançamentos
+    /// </summary>
+    /// <param name="lancamentos">Lançamentos a serem importados</param>
+    /// <returns>Lançamentos importados</returns>
+    List<LancamentoModel> ImportarLancamentos(List<LancamentoInsertModel> lancamentos);
   }
 }
