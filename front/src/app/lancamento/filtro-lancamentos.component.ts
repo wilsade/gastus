@@ -131,7 +131,7 @@ export class FiltroLancamentosComponent implements OnInit {
         l.Titulo.toLowerCase().includes(filtrarPor) ||
         l.NomeCategoria.toLowerCase().includes(filtrarPor) ||
         l.NomeSubCategoria.toLowerCase().includes(filtrarPor) ||
-        (l.NomeTipoTranscao && l.NomeTipoTranscao.toLowerCase().includes(filtrarPor)) ||
+        (l.NomeTipoTransacao && l.NomeTipoTransacao.toLowerCase().includes(filtrarPor)) ||
         (l.Comentario && l.Comentario.toLowerCase().includes(filtrarPor))
       );
     }

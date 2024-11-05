@@ -13,7 +13,7 @@ export interface ILancamento {
 export interface ILancamentoView extends ILancamento {
   NomeCategoria: string;
   NomeSubCategoria: string;
-  NomeTipoTranscao: string;
+  NomeTipoTransacao: string;
 }
 
 export interface ILookupLancamento {

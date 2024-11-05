@@ -60,9 +60,35 @@
     </po-step>
     <po-step [p-label]="VALIDACAO_CONFIRMACAO"
              [p-can-active-next-step]="podeAvancarDaValidacao.bind(this)">
-      <po-checkbox p-label="Confirmar importação"
-                   [(ngModel)]="confirmouImportacao"></po-checkbox>
-      <po-table [p-items]="lancamentosParaInsercao"></po-table></po-step>
+      <div class="po-row">
+        <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong> <span
+              style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
+        <po-checkbox class="po-md-6"
+                     p-label="Confirmar importação"
+                     [(ngModel)]="confirmouImportacao"></po-checkbox>
+
+      </div>
+      <po-divider></po-divider>
+      <po-table [p-striped]="true"
+                [p-hide-columns-manager]="true"
+                [p-columns]="colunasConfirmacao"
+                [p-items]="lancamentosParaInsercao">
+
+        <ng-template p-table-cell-template
+                     let-column="column"
+                     let-row="row">
+
+          <div *ngIf="column.property === 'Valor'">
+            <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+          </div>
+
+          <div *ngIf="column.property === 'SALDO'">
+            <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
+          </div>
+        </ng-template>
+
+      </po-table>
+    </po-step>
     <po-step [p-label]="TERMINO"></po-step>
   </po-stepper>
 </po-modal>

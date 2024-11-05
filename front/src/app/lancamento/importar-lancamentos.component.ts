@@ -4,7 +4,7 @@ import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StrUtils } from '../shared/str-utils';
-import { IImportarLancamento, ILancamento, ILookupLancamento } from '../_models/ILancamento';
+import { IImportarLancamento, ILancamento, ILancamentoView, ILookupLancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { InputDialogService } from '../shared/input-dialog.service';
 import { CategoriaControlsComponent } from "../shared/categoria-controls.component";
@@ -12,6 +12,7 @@ import { ColunaValorComponent } from '../shared/coluna-valor.component';
 import { TipoTransacaoService } from '../tipo-transacao/tipo-transacao.service';
 import { ICategoria } from '../_models/ICategoria';
 import { CategoriaService } from '../categoria/categoria.service';
+import { AdminService } from '../admin/admin.service';
 
 @Component({
   selector: 'app-importar-lancamentos',
@@ -26,6 +27,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     private readonly _service: LancamentoService,
     private readonly _tipoTransacaoService: TipoTransacaoService,
     private readonly _categoriaService: CategoriaService,
+    private readonly _adminService: AdminService,
     private readonly _modalDialog: InputDialogService) {
     super(_notification);
   }
@@ -35,6 +37,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected readonly VALIDACAO_CONFIRMACAO = 'Validação / Confirmação';
   protected readonly TERMINO = 'Término';
   readonly TRANSACAO_NULA = 0;
+  private _saldoAtual: number = 0;
 
   @ViewChild('modalImportacao')
   protected modalImportacao: PoModalComponent;
@@ -47,7 +50,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   private _lookupByTitulo: ILookupLancamento[] = [];
   protected tiposTransacao: PoSelectOption[] = [];
   private allCategorias: ICategoria[] = [];
-  protected lancamentosParaInsercao: ILancamento[] = [];
+  protected lancamentosParaInsercao: ILancamentoView[] = [];
   protected confirmouImportacao = false;
 
   protected readonly confirmou: PoModalAction = {
@@ -69,10 +72,18 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     { label: 'Transação', property: 'NomeTipoTransacao', type: 'cellTemplate' },
   ]
 
+  protected readonly colunasConfirmacao: PoTableColumn[] = [
+    { label: 'Data', property: 'Data', type: 'date' },
+    { label: 'Título', property: 'Titulo' },
+    { label: 'Comentário', property: 'Comentario' },
+    { label: 'Categoria', property: 'NomeCategoria' },
+    { label: 'SubCategoria', property: 'NomeSubCategoria' },
+    { label: 'Transação', property: 'NomeTipoTransacao' },
+    { label: 'Valor', property: 'Valor', type: 'cellTemplate' },
+    { label: 'Saldo', property: 'SALDO', type: 'cellTemplate' },
+  ]
+
   private loadLookUpByTitulo(): void {
-    if (this._lookupByTitulo.length > 0)
-      return;
-    console.log('iniciando lookup');
     this._service.getLookupByTitulo().subscribe({
       next: data => {
         this._lookupByTitulo = data;
@@ -132,21 +143,32 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   private criarLancamentosParaInsercao(): void {
     console.log('Criando lançamentos para inserção');
     this.lancamentosParaInsercao = [];
+
+    let somaSaldo = this._saldoAtual;
     this.dadosImportacao.forEach(x => {
 
+      somaSaldo += x.Valor;
       const categoria = this.allCategorias.find(c => c.Nome == x.NomeCategoria);
+      const subCategoria = categoria!.SubCategorias.find(s => s.Nome == x.NomeSubCategoria);
       this.lancamentosParaInsercao = [...this.lancamentosParaInsercao, {
         Id: 0,
         Data: StrUtils.strToDate(x.Data),
         Titulo: x.Titulo,
         Comentario: x.Comentario,
         IdCategoria: categoria!.Id,
-        IdSubCategoria: categoria!.SubCategorias.find(s => s.Nome == x.NomeSubCategoria)!.Id,
+        NomeCategoria: categoria!.Nome,
+        IdSubCategoria: subCategoria!.Id,
+        NomeSubCategoria: subCategoria!.Nome,
         Valor: x.Valor,
-        IdTipoTransacao: x.IdTipoTransacao,
-        SALDO: 0
+        IdTipoTransacao: x.IdTipoTransacao == this.TRANSACAO_NULA ? null : x.IdTipoTransacao,
+        NomeTipoTransacao: x.IdTipoTransacao == this.TRANSACAO_NULA ? '' : x.NomeTipoTransacao,
+        SALDO: somaSaldo
       }]
     });
+    console.log('lancamentos');
+    console.log(this.lancamentosParaInsercao);
+
+
   }
   protected podeAvancarDosDados(): boolean {
     const ok = StrUtils.hasValue(this.rawLines);
@@ -162,6 +184,8 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   protected podeAvancarDaTabela(): boolean {
+    if (this.dadosImportacao.length == 0)
+      return false;
     let camposEmBranco: string[] = [];
     let categoriasInvalidas: string[] = [];
     this.dadosImportacao.forEach(x => {
@@ -200,10 +224,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   private loadComboTiposTransacao() {
-    if (this.tiposTransacao.length > 0)
-      return;
-    console.log('Carregando tipos de transação');
-
     this._tipoTransacaoService.getTiposTransacao().subscribe({
       next: data => {
         this.tiposTransacao = [{ label: '< Limpar >', value: this.TRANSACAO_NULA }];
@@ -218,9 +238,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   private loadCategorias(): void {
-    if (this.allCategorias.length > 0)
-      return;
-    console.log('Carregando categorias');
     this._categoriaService.getCategorias(true).subscribe({
       next: data => {
         this.allCategorias = data;
@@ -232,6 +249,21 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
 
   }
 
+  protected getTotal(): string {
+    return StrUtils.formatValue(this._saldoAtual);
+  }
+
+  private loadSaldoAtual() {
+    this._adminService.query("SELECT SUM(VALOR) SALDO FROM LANCAMENTO").subscribe({
+      next: data => {
+        this._saldoAtual = data[0].SALDO;
+        console.log('saldo atual', this._saldoAtual);
+
+      },
+      error: err => this.tratarErro(err)
+    })
+  }
+
   openModal(): void {
     this.stepper.first();
     this.rawLines = '';
@@ -239,8 +271,10 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this.loadLookUpByTitulo();
     this.loadComboTiposTransacao();
     this.loadCategorias();
+    this.loadSaldoAtual();
     this.modalImportacao.open();
   }
+
 
 
 }
