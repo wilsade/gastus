@@ -70,4 +70,12 @@ export class LancamentoService {
       lancamento.SALDO = saldo;
     });
   }
+
+  importarLancamentos(dados: ILancamento[]): Observable<ILancamento[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.post<ILancamento[]>(`${this.lancamentosUrl}/import`, dados, { headers });
+  }
 }

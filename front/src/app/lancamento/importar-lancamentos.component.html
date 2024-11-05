@@ -5,7 +5,8 @@
 
   <po-stepper #stepper
               (p-change-step)="alterouStep($event)">
-    <po-step [p-label]="INFORMAR_DADOS"
+    <po-step *ngIf="!acabou"
+             [p-label]="INFORMAR_DADOS"
              [p-can-active-next-step]="podeAvancarDosDados.bind(this)">
 
       <po-textarea class="po-md-12"
@@ -15,7 +16,8 @@
 
     </po-step>
 
-    <po-step [p-label]="PREENCHER_TABELA"
+    <po-step *ngIf="!acabou"
+             [p-label]="PREENCHER_TABELA"
              [p-can-active-next-step]="podeAvancarDaTabela.bind(this)">
       <po-table [p-hide-columns-manager]="true"
                 [p-striped]="true"
@@ -58,7 +60,8 @@
 
       </po-table>
     </po-step>
-    <po-step [p-label]="VALIDACAO_CONFIRMACAO"
+    <po-step *ngIf="!acabou"
+             [p-label]="VALIDACAO_CONFIRMACAO"
              [p-can-active-next-step]="podeAvancarDaValidacao.bind(this)">
       <div class="po-row">
         <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong> <span
@@ -89,6 +92,16 @@
 
       </po-table>
     </po-step>
-    <po-step [p-label]="TERMINO"></po-step>
+    <po-step [p-label]="TERMINO">
+      <po-table [p-hide-columns-manager]="true"
+                [p-striped]="true"
+                [p-items]="lancamentosInseridos"></po-table>
+    </po-step>
   </po-stepper>
+
+  <div *ngIf="loading"
+       class="sample-container">
+    <po-loading-overlay></po-loading-overlay>
+  </div>
+
 </po-modal>

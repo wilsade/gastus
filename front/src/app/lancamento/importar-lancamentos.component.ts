@@ -32,32 +32,44 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     super(_notification);
   }
 
-  protected readonly INFORMAR_DADOS = 'Informar dados';
-  protected readonly PREENCHER_TABELA = 'Preencher tabela';
-  protected readonly VALIDACAO_CONFIRMACAO = 'Validação / Confirmação';
-  protected readonly TERMINO = 'Término';
-  readonly TRANSACAO_NULA = 0;
-  private _saldoAtual: number = 0;
-
   @ViewChild('modalImportacao')
   protected modalImportacao: PoModalComponent;
 
   @ViewChild('stepper')
   stepper: PoStepperComponent;
 
+  protected readonly INFORMAR_DADOS = 'Informar dados';
+  protected readonly PREENCHER_TABELA = 'Preencher tabela';
+  protected readonly VALIDACAO_CONFIRMACAO = 'Validação / Confirmação';
+  protected readonly TERMINO = 'Término';
+
+  private readonly TRANSACAO_NULA = 0;
+  private readonly AVANCAR = 'Avançar';
+  private readonly IMPORTAR = 'Importar';
+  private readonly FECHAR = 'Fechar';
+  private _saldoAtual: number = 0;
+  private _lookupByTitulo: ILookupLancamento[] = [];
+  private allCategorias: ICategoria[] = [];
+
   protected rawLines = '';
   protected dadosImportacao: IImportarLancamento[] = []
-  private _lookupByTitulo: ILookupLancamento[] = [];
   protected tiposTransacao: PoSelectOption[] = [];
-  private allCategorias: ICategoria[] = [];
   protected lancamentosParaInsercao: ILancamentoView[] = [];
   protected confirmouImportacao = false;
+  protected loading = false;
+  protected lancamentosInseridos: ILancamento[] = [];
+  protected acabou = false;
 
   protected readonly confirmou: PoModalAction = {
-    label: 'Avançar',
+    label: this.AVANCAR,
     disabled: false,
     action: () => {
-      this.stepper.next();
+      if (this.confirmou.label === this.IMPORTAR && this.confirmouImportacao)
+        this.processarImportacao();
+      else if (this.confirmou.label == this.FECHAR)
+        this.fecharModal();
+      else
+        this.stepper.next();
     }
   }
 
@@ -134,10 +146,16 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   protected alterouStep(step: any): void {
+    this.confirmou.label = this.AVANCAR;
     if (step.label === this.PREENCHER_TABELA)
       this.preencherDadosImportacao();
-    else if (step.label === this.VALIDACAO_CONFIRMACAO)
+    else if (step.label === this.VALIDACAO_CONFIRMACAO) {
       this.criarLancamentosParaInsercao();
+      this.confirmou.label = this.IMPORTAR;
+    }
+    else if (step.label === this.TERMINO) {
+      this.confirmou.label = this.FECHAR;
+    }
   }
 
   private criarLancamentosParaInsercao(): void {
@@ -165,10 +183,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         SALDO: somaSaldo
       }]
     });
-    console.log('lancamentos');
-    console.log(this.lancamentosParaInsercao);
-
-
   }
   protected podeAvancarDosDados(): boolean {
     const ok = StrUtils.hasValue(this.rawLines);
@@ -246,7 +260,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         this.tratarErro(err);
       }
     });
-
   }
 
   protected getTotal(): string {
@@ -257,11 +270,32 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this._adminService.query("SELECT SUM(VALOR) SALDO FROM LANCAMENTO").subscribe({
       next: data => {
         this._saldoAtual = data[0].SALDO;
-        console.log('saldo atual', this._saldoAtual);
-
       },
       error: err => this.tratarErro(err)
     })
+  }
+
+  private processarImportacao(): void {
+    this.loading = true;
+    this._service.importarLancamentos(this.lancamentosParaInsercao).subscribe({
+      next: data => {
+        this.lancamentosInseridos = data;
+        console.log(data);
+        this.loading = false;
+      },
+      error: err => {
+        this.loading = false;
+        this.tratarErro(err);
+      },
+      complete: () => {
+        this.stepper.next();
+        this.acabou = true;
+      }
+    })
+  }
+
+  private fecharModal(): void {
+    this.modalImportacao.close();
   }
 
   openModal(): void {
