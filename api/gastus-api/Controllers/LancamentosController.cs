@@ -14,6 +14,12 @@ namespace Gastus.Api.Controllers
   [Route("api/[controller]")]
   public partial class LancamentosController(ILancamentosRepository lancamentosRepository) : GastusBaseController
   {
+    [GeneratedRegex("[0-9]*\\/[0-9]+", RegexOptions.IgnoreCase | RegexOptions.Compiled, "pt-BR")]
+    private static partial Regex RetiraData();
+
+    [GeneratedRegex("\\s+", RegexOptions.IgnoreCase | RegexOptions.Compiled, "pt-BR")]
+    private static partial Regex RetiraEspacos();
+
     private readonly ILancamentosRepository _lancamentosRepository = lancamentosRepository;
 
     /// <summary>
@@ -157,10 +163,23 @@ namespace Gastus.Api.Controllers
       }
     }
 
-    [GeneratedRegex("[0-9]*\\/[0-9]+", RegexOptions.IgnoreCase | RegexOptions.Compiled, "pt-BR")]
-    private static partial Regex RetiraData();
-
-    [GeneratedRegex("\\s+", RegexOptions.IgnoreCase | RegexOptions.Compiled, "pt-BR")]
-    private static partial Regex RetiraEspacos();
+    /// <summary>
+    /// Importar lançamentos
+    /// </summary>
+    /// <param name="lancamentos">Lançamentos para importar</param>
+    /// <returns>Lancamentos importados</returns>
+    [HttpPost("import")]
+    public IActionResult Import([FromBody] List<LancamentoInsertModel> lancamentos)
+    {
+      try
+      {
+        List<LancamentoModel> inseridos = _lancamentosRepository.ImportarLancamentos(lancamentos);
+        return Ok(inseridos);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
   }
 }
