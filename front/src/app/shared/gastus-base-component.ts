@@ -65,6 +65,10 @@ export abstract class GastusBaseComponent {
     ]
   }
 
+  protected showSuccess(message: string, timeout: number = 1500): void {
+    this._notification.success({ message: message, duration: timeout });
+  }
+
   protected showWarning(message: string, timeout: number = 1500): void {
     this._notification.warning({ message: message, duration: timeout });
   }

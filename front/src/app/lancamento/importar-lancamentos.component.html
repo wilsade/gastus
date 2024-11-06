@@ -1,7 +1,8 @@
 <po-modal #modalImportacao
           p-size="auto"
           p-title="Importação de lançamentos"
-          [p-primary-action]="confirmou">
+          [p-primary-action]="confirmou"
+          [p-secondary-action]="cancelou">
 
   <po-stepper #stepper
               (p-change-step)="alterouStep($event)">

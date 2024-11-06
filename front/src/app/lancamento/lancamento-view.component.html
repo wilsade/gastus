@@ -40,7 +40,8 @@
   <app-lancamento-edit #modalLancamento
                        (onModalClosed)="fechouModal()"></app-lancamento-edit>
 
-  <app-importar-lancamentos #modalImportacao></app-importar-lancamentos>
+  <app-importar-lancamentos #modalImportacao
+                            (onFechouModal)="fechouImportacao($event)"></app-importar-lancamentos>
 </po-page-default>
 
 <div *ngIf="loading"

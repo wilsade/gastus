@@ -145,4 +145,9 @@ export class LancamentoViewComponent extends GastusBaseComponent implements OnIn
     }
     return '';
   }
+
+  protected fechouImportacao(importou: boolean): void {
+    if (importou)
+      this.carregarLancamentos();
+  }
 }

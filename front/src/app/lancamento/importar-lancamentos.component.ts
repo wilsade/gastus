@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoStepperComponent, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
@@ -38,6 +38,9 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   @ViewChild('stepper')
   stepper: PoStepperComponent;
 
+  @Output()
+  onFechouModal = new EventEmitter<boolean>();
+
   protected readonly INFORMAR_DADOS = 'Informar dados';
   protected readonly PREENCHER_TABELA = 'Preencher tabela';
   protected readonly VALIDACAO_CONFIRMACAO = 'Validação / Confirmação';
@@ -71,6 +74,11 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       else
         this.stepper.next();
     }
+  }
+
+  protected readonly cancelou: PoModalAction = {
+    label: 'Cancelar e fechar',
+    action: () => this.fecharModal()
   }
 
   protected readonly colunasTabela: PoTableColumn[] = [
@@ -280,7 +288,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this._service.importarLancamentos(this.lancamentosParaInsercao).subscribe({
       next: data => {
         this.lancamentosInseridos = data;
-        console.log(data);
+        this.showSuccess(`Total de lançamentos inseridos: ${data.length}`);
         this.loading = false;
       },
       error: err => {
@@ -290,12 +298,15 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       complete: () => {
         this.stepper.next();
         this.acabou = true;
+        this.cancelou.disabled = true;
+        this.modalImportacao.hideClose = true;
       }
     })
   }
 
   private fecharModal(): void {
     this.modalImportacao.close();
+    this.onFechouModal.emit(this.acabou);
   }
 
   openModal(): void {
