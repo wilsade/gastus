@@ -1,3 +1,5 @@
+import { formatDate } from "@angular/common";
+
 export class StrUtils {
   static hasValue(str: any): boolean {
     return str != undefined && str != null && str != '';
@@ -19,16 +21,63 @@ export class StrUtils {
     else
       return formattedWithThousands;
   }
+}
+
+type DateTypes = Date | string | number;
+export class DateUtils {
+  public static readonly DIA_MES_ANO = 'dd/MM/yyyy';
+  public static readonly EN_US = 'en-US';
 
   /**
    * Converter string no formato dd/MM/yyyy para Date
    * @param date_str Data no formato dd/MM/yyyy
    * @returns Date
    */
-  static strToDate(date_str: string): Date {
+  public static strToDate(date_str: string): Date {
     const [day, month, year] = date_str.split('/').map(Number);
     const date = new Date(year, month - 1, day, 0, 0, 0, 0);
     return date;
+  }
+
+  /**
+   * Formatar para data do Brasil (dd/MM/yyyy)
+   * @param data Data a ser formatada
+   * @returns Data em formado string
+   */
+  public static toBrazilDate(data: DateTypes): string {
+    const formatado = formatDate(data, this.DIA_MES_ANO, this.EN_US);
+    return formatado;
+  }
+
+  /**
+   * Formatar para data do Brasil (dd/MM/yyyy hh:mm)
+   * @param data Data a ser formatada
+   * @returns Data em formado string
+   */
+  public static toBrazilDateTimeWithMinuts(data: DateTypes): string {
+    const formatado = formatDate(data, `${this.DIA_MES_ANO} HH:mm`, this.EN_US);
+    return formatado;
+  }
+
+  /**
+   * Formatar para data do Brasil (dd/MM/yyyy hh:mm:ss)
+   * @param data Data a ser formatada
+   * @returns Data em formado string
+   */
+  public static toBrazilDateTimeWithSeconds(data: DateTypes): string {
+    const formatado = formatDate(data, `${this.DIA_MES_ANO} HH:mm:ss`, this.EN_US);
+    return formatado;
+  }
+
+  /**
+   * Formatar uma data conforme formado desejado
+   * @param data Data a ser formatada
+   * @param format Formato desejado. Ex: "dd-MM-yyyy_HH-mm"
+   * @returns Formatar data em string
+   */
+  public static toCustomFormat(data: DateTypes, format: string): string {
+    const formatado = formatDate(data, format, this.EN_US);
+    return formatado;
   }
 }
 
