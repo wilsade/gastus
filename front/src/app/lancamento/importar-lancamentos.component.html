@@ -36,13 +36,13 @@
           <div *ngIf="column.property === 'NomeCategoria'">
             <po-input class="po-md-12"
                       p-required="true"
-                      [(ngModel)]="row.NomeCategoria"></po-input>
+                      [(ngModel)]="row.NomeCategoria" (p-change)="alterouNomeCategoria(row)"></po-input>
           </div>
 
           <div *ngIf="column.property === 'NomeSubCategoria'">
             <po-input class="po-md-12"
                       p-required="true"
-                      [(ngModel)]="row.NomeSubCategoria"></po-input>
+                      [(ngModel)]="row.NomeSubCategoria" (p-change)="alterouNomeSubCategoria(row)"></po-input>
           </div>
 
           <div *ngIf="column.property === 'Comentario'">

@@ -318,6 +318,34 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this.onFechouModal.emit(this.acabou);
   }
 
+  protected alterouNomeCategoria(row: IImportarLancamento): void {
+    if (row.NomeCategoria.length >= 3) {
+      const acheiCategorias = this.allCategorias.filter(x => x.Nome.startsWithInsensitive(row.NomeCategoria));
+      if (acheiCategorias.length > 0)
+        row.NomeCategoria = acheiCategorias[0].Nome;
+      else {
+        const nomesDeCategorias = this.allCategorias.map(x => x.Nome);
+        this._modalDialog.alert({ title: 'Categorias disponíveis', message: nomesDeCategorias.join(", ") });
+      }
+
+    }
+  }
+
+  protected alterouNomeSubCategoria(row: IImportarLancamento): void {
+    if (StrUtils.hasValue(row.NomeCategoria) && row.NomeSubCategoria.length >= 3) {
+      const acheiCategoria = this.allCategorias.find(x => x.Nome == row.NomeCategoria);
+      if (acheiCategoria) {
+        const subcategorias = acheiCategoria.SubCategorias.filter(x => x.Nome.startsWithInsensitive(row.NomeSubCategoria));
+        if (subcategorias.length > 0)
+          row.NomeSubCategoria = subcategorias[0].Nome;
+        else {
+          const nomes = acheiCategoria.SubCategorias.map(x => x.Nome);
+          this._modalDialog.alert({ title: 'SubCategorias disponíveis', message: nomes.join(", ") });
+        }
+      }
+    }
+  }
+
   openModal(): void {
     this.stepper.first();
     this.rawLines = '';
