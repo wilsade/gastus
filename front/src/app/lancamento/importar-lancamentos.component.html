@@ -65,8 +65,10 @@
              [p-label]="VALIDACAO_CONFIRMACAO"
              [p-can-active-next-step]="podeAvancarDaValidacao.bind(this)">
       <div class="po-row">
-        <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong> <span
-              style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
+        <div><strong>Último lançamento: </strong><span>{{ultimoLancamento}}</span></div>
+        <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong>
+
+        <span style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
         <po-checkbox class="po-md-6"
                      p-label="Confirmar importação"
                      [(ngModel)]="confirmouImportacao"></po-checkbox>

@@ -3,11 +3,10 @@ import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSel
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { StrUtils } from '../shared/str-utils';
+import { DateUtils, StrUtils } from '../shared/str-utils';
 import { IImportarLancamento, ILancamento, ILancamentoView, ILookupLancamento } from '../_models/ILancamento';
 import { LancamentoService } from './lancamento.service';
 import { InputDialogService } from '../shared/input-dialog.service';
-import { CategoriaControlsComponent } from "../shared/categoria-controls.component";
 import { ColunaValorComponent } from '../shared/coluna-valor.component';
 import { TipoTransacaoService } from '../tipo-transacao/tipo-transacao.service';
 import { ICategoria } from '../_models/ICategoria';
@@ -17,7 +16,7 @@ import { AdminService } from '../admin/admin.service';
 @Component({
   selector: 'app-importar-lancamentos',
   standalone: true,
-  imports: [PoModule, FormsModule, CommonModule, CategoriaControlsComponent, ColunaValorComponent],
+  imports: [PoModule, FormsModule, CommonModule, ColunaValorComponent],
   providers: [InputDialogService],
   templateUrl: './importar-lancamentos.component.html'
 })
@@ -62,6 +61,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected loading = false;
   protected lancamentosInseridos: ILancamento[] = [];
   protected acabou = false;
+  protected ultimoLancamento = '';
 
   protected readonly confirmou: PoModalAction = {
     label: this.AVANCAR,
@@ -127,6 +127,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     let num = 1;
     linhas.forEach(linha => {
       linha = linha.replace('DÃBITO', 'DÉBITO');
+      linha = linha.replace('DÃƒÂ‰BITO', 'DÉBITO');
       if (!StrUtils.hasValue(linha))
         return;
 
@@ -178,7 +179,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       const subCategoria = categoria!.SubCategorias.find(s => s.Nome == x.NomeSubCategoria);
       this.lancamentosParaInsercao = [...this.lancamentosParaInsercao, {
         Id: 0,
-        Data: StrUtils.strToDate(x.Data),
+        Data: DateUtils.strToDate(x.Data),
         Titulo: x.Titulo,
         Comentario: x.Comentario,
         IdCategoria: categoria!.Id,
@@ -275,8 +276,16 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   private loadSaldoAtual() {
-    this._adminService.query("SELECT SUM(VALOR) SALDO FROM LANCAMENTO").subscribe({
+    const sql = `
+      SELECT ID, DATA, TITULO, (SELECT SUM(VALOR) FROM LANCAMENTO) SALDO
+      FROM LANCAMENTO
+      ORDER BY ID DESC
+      LIMIT 1;`
+
+    this._adminService.query(sql).subscribe({
       next: data => {
+        const registro = data[0];
+        this.ultimoLancamento = `${registro.Id}, ${DateUtils.toBrazilDate(registro.Data)}, ${registro.Titulo}`;
         this._saldoAtual = data[0].SALDO;
       },
       error: err => this.tratarErro(err)
