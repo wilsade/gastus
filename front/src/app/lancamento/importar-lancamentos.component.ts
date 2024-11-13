@@ -122,6 +122,10 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   private preencherDadosImportacao(): void {
+    if (this.lancamentosParaInsercao.length > 0) {
+      console.log('Já temos dados. Não vamos preencher novamente.');
+      return;
+    }
     this.dadosImportacao = [];
     const linhas = this.rawLines.split('\n');
     let num = 1;
@@ -198,6 +202,12 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     if (!ok)
       this.showWarning('Informe os dados de importação');
     return ok;
+  }
+
+  protected alterouTipoTransacao(transacaoEscolhida: number, row: IImportarLancamento): void {
+    const achei = this.tiposTransacao.find(x => x.value == transacaoEscolhida);
+    if (achei)
+      row.NomeTipoTransacao = achei.label;
   }
 
   protected podeAvancarDaValidacao(): boolean {
@@ -346,7 +356,16 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     }
   }
 
+  protected alterouRawLines(): void {
+    this.lancamentosParaInsercao = [];
+  }
+
   openModal(): void {
+    this.acabou = false;
+    this.cancelou.disabled = false;
+    this.modalImportacao.hideClose = false;
+    this.confirmou.label = this.AVANCAR;
+
     this.stepper.first();
     this.rawLines = '';
     this.dadosImportacao = [];

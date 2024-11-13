@@ -13,7 +13,8 @@
       <po-textarea class="po-md-12"
                    [p-rows]="9"
                    p-placeholder="Informe um item por linha separados por ponto-e-vírgula, pipe ou TAB"
-                   [(ngModel)]="rawLines"></po-textarea>
+                   [(ngModel)]="rawLines"
+                   (p-change)="alterouRawLines()"></po-textarea>
 
     </po-step>
 
@@ -36,13 +37,15 @@
           <div *ngIf="column.property === 'NomeCategoria'">
             <po-input class="po-md-12"
                       p-required="true"
-                      [(ngModel)]="row.NomeCategoria" (p-change)="alterouNomeCategoria(row)"></po-input>
+                      [(ngModel)]="row.NomeCategoria"
+                      (p-change)="alterouNomeCategoria(row)"></po-input>
           </div>
 
           <div *ngIf="column.property === 'NomeSubCategoria'">
             <po-input class="po-md-12"
                       p-required="true"
-                      [(ngModel)]="row.NomeSubCategoria" (p-change)="alterouNomeSubCategoria(row)"></po-input>
+                      [(ngModel)]="row.NomeSubCategoria"
+                      (p-change)="alterouNomeSubCategoria(row)"></po-input>
           </div>
 
           <div *ngIf="column.property === 'Comentario'">
@@ -54,7 +57,8 @@
             <po-select class="po-md-12"
                        [p-options]="tiposTransacao"
                        [ngModel]="row.IdTipoTransacao"
-                       (ngModelChange)="row.IdTipoTransacao = $event"></po-select>
+                       (ngModelChange)="row.IdTipoTransacao = $event"
+                       (ngModelChange)="alterouTipoTransacao($event, row)"></po-select>
           </div>
 
         </ng-template>
