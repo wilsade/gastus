@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { PoModule, PoNotificationService, PoPageAction, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CategoriaService } from './categoria.service';
 import { ICategoria } from '../_models/ICategoria';
@@ -6,12 +6,14 @@ import { CategoriaEditComponent } from "./categoria-edit.component";
 import { InputDialogService } from '../shared/input-dialog.service';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { CommonModule } from '@angular/common';
+import { SubcategoriaComponent } from './subcategoria.component';
 
 @Component({
   selector: 'app-categoria',
   standalone: true,
-  imports: [PoModule, CommonModule, CategoriaEditComponent],
+  imports: [PoModule, CommonModule, CategoriaEditComponent, SubcategoriaComponent],
   providers: [InputDialogService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './categoria.component.html'
 })
 export class CategoriaComponent extends GastusBaseComponent implements OnInit {
@@ -51,7 +53,7 @@ export class CategoriaComponent extends GastusBaseComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this._service.getCategorias().subscribe({
+    this._service.getCategorias(true).subscribe({
       next: data => {
         this.categorias = data;
       },

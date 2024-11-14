@@ -1,11 +1,23 @@
 <po-page-default p-title="Categorias"
                  [p-actions]="acoesPagina">
+
   <po-table [p-hide-columns-manager]="true"
             [p-striped]="true"
             [p-sort]="true"
             [p-columns]="colunas"
             [p-items]="categorias"
-            [p-actions]="acoesTabela"></po-table>
+            [p-actions]="acoesTabela">
+
+    <ng-template p-table-row-template
+                 let-rowItem
+                 let-i="rowIndex">
+      <po-widget>
+        <app-subcategoria [categoria]="rowItem"></app-subcategoria>
+      </po-widget>
+
+    </ng-template>
+
+  </po-table>
 
 
   <app-categoria-edit #modalCategoria
