@@ -18,13 +18,15 @@ namespace Gastus.Api.Controllers
     /// <summary>
     /// Recuperar todas as subcategorias cadastradas
     /// </summary>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="orderByName">true para ordenar os registros por nome</param>
     /// <returns>Subcategorias</returns>
     [HttpGet()]
-    public IActionResult GetAllSubCategorias(int? idCategoria)
+    public IActionResult GetAllSubCategorias(int? idCategoria, bool orderByName = false)
     {
       try
       {
-        List<SubCategoriaModel> lista = _repository.GetAllSubCategorias(idCategoria);
+        List<SubCategoriaModel> lista = _repository.GetAllSubCategorias(idCategoria, orderByName);
         return Ok(lista);
       }
       catch (Exception ex)

@@ -50,8 +50,10 @@ namespace Gastus.Core
     /// </summary>
     /// <param name="connection">Conexão com o banco de dados</param>
     /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="orderByName">true para ordenar os registros por nome</param>
     /// <returns>SubCategorias</returns>
-    static List<SubCategoriaModel> GetAllSubCategorias(SQLiteConnection connection, int? idCategoria)
+    static List<SubCategoriaModel> GetAllSubCategorias(SQLiteConnection connection, 
+      int? idCategoria, bool orderByName)
     {
       string sql = @"SELECT * FROM SUBCATEGORIA";
       object param = null;
@@ -60,6 +62,8 @@ namespace Gastus.Core
         sql += " WHERE IDCATEGORIA = @idCategoria";
         param = new { idCategoria };
       }
+      if (orderByName)
+        sql += " ORDER BY NOME COLLATE NOCASE";
       List<SubCategoriaModel> subCategorias = connection.Query<SubCategoriaModel>(sql, param)
         .ToList();
       return subCategorias;
@@ -87,15 +91,18 @@ ORDER BY Data";
     /// Recuperar todas as categorias
     /// </summary>
     /// <param name="loadSubs">true para carregar as subcategorias</param>
+    /// <param name="orderByName">true para ordenar os registros por nome</param>
     /// <returns>Todas as categorias</returns>
-    public List<CategoriaModel> GetAllCategorias(bool loadSubs)
+    public List<CategoriaModel> GetAllCategorias(bool loadSubs, bool orderByName)
     {
       using SQLiteConnection connection = GetConnection(false);
       var query = "SELECT Id, Nome FROM Categoria";
+      if (orderByName)
+        query += " ORDER BY Nome COLLATE NOCASE";
 
       var categorias = connection.Query<CategoriaModel>(query).ToList();
       if (loadSubs)
-        categorias.ForEach(c => c.SubCategorias = GetAllSubCategorias(connection, c.Id));
+        categorias.ForEach(c => c.SubCategorias = GetAllSubCategorias(connection, c.Id, orderByName));
       return categorias;
     }
 
@@ -160,11 +167,12 @@ ORDER BY Data";
     /// Recuperar todas as subCategorias
     /// </summary>
     /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="orderByName">true para ordenar os registros por nome</param>
     /// <returns>SubCategorias</returns>
-    public List<SubCategoriaModel> GetAllSubCategorias(int? idCategoria)
+    public List<SubCategoriaModel> GetAllSubCategorias(int? idCategoria, bool orderByName)
     {
       using var connection = GetConnection(false);
-      List<SubCategoriaModel> subCategorias = GetAllSubCategorias(connection, idCategoria);
+      List<SubCategoriaModel> subCategorias = GetAllSubCategorias(connection, idCategoria, orderByName);
       return subCategorias;
     }
 

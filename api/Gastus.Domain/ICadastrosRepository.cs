@@ -9,8 +9,9 @@
     /// Recuperar todas as categorias
     /// </summary>
     /// <param name="loadSubs">true para carregar as subcategorias</param>
+    /// <param name="orderByName">true para ordenar os registros por nome</param>
     /// <returns>Todas as categorias</returns>
-    List<CategoriaModel> GetAllCategorias(bool loadSubs);
+    List<CategoriaModel> GetAllCategorias(bool loadSubs, bool orderByName);
 
     /// <summary>
     /// Adicionar uma categoria
@@ -44,8 +45,9 @@
     /// Recuperar todas as subCategorias
     /// </summary>
     /// <param name="idCategoria">Identificador da categoria</param>
+    /// <param name="orderByName">true para ordenar os registros por nome</param>
     /// <returns>SubCategorias</returns>
-    List<SubCategoriaModel> GetAllSubCategorias(int? idCategoria);
+    List<SubCategoriaModel> GetAllSubCategorias(int? idCategoria, bool orderByName);
 
     /// <summary>
     /// Recuperar uma subcategoria
