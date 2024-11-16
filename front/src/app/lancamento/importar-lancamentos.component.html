@@ -6,7 +6,8 @@
 
   <po-tabs>
     <po-tab [p-active]="abaDadosAtiva"
-            [p-label]="INFORMAR_DADOS">
+            [p-label]="INFORMAR_DADOS"
+            (p-click)="clicouAbaInformarDados()">
       <po-textarea class="po-md-12"
                    [p-rows]="9"
                    p-placeholder="Informe um item por linha separados por ponto-e-vírgula, pipe ou TAB"
@@ -76,7 +77,8 @@
         <span style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
         <po-checkbox class="po-md-6"
                      p-label="Confirmar importação"
-                     [(ngModel)]="confirmouImportacao"></po-checkbox>
+                     [(ngModel)]="confirmouImportacao"
+                     (ngModelChange)="alterouCheckBoxConfirmacao()"></po-checkbox>
 
       </div>
       <po-divider></po-divider>

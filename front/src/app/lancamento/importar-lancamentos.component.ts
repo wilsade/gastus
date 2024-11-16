@@ -51,7 +51,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   private _lookupByTitulo: ILookupLancamento[] = [];
   private allCategorias: ICategoria[] = [];
 
-
   protected abaDadosAtiva = false;
   //protected abaPreencherTabelaAtiva = false;
   protected abaPreencherTabelaDesabilitada = true;
@@ -63,7 +62,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected confirmouImportacao = false;
   protected loading = false;
   protected lancamentosInseridos: ILancamento[] = [];
-  protected importacao_foi_realizada = false;
   protected ultimoLancamento = '';
 
   protected readonly confirmou: PoModalAction = {
@@ -74,9 +72,13 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     }
   }
 
+  protected clicouAbaInformarDados(): void {
+    this.confirmou.disabled = true;
+  }
+
   protected readonly cancelou: PoModalAction = {
     label: 'Cancelar e fechar',
-    action: () => this.fecharModal()
+    action: () => this.fecharModal(false)
   }
 
   protected readonly colunasTabela: PoTableColumn[] = [
@@ -120,7 +122,12 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   protected clicouAbaPreencherTabela(): void {
+    this.confirmou.disabled = true;
     this.preencherDadosImportacao();
+  }
+
+  protected alterouCheckBoxConfirmacao(): void {
+    this.confirmou.disabled = !this.confirmouImportacao;
   }
 
   private preencherDadosImportacao(): void {
@@ -302,22 +309,21 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         this.lancamentosInseridos = data;
         this.showSuccess(`Total de lançamentos inseridos: ${data.length}`);
         this.loading = false;
+        this.fecharModal(true);
       },
       error: err => {
         this.loading = false;
         this.tratarErro(err);
       },
       complete: () => {
-        this.importacao_foi_realizada = true;
-        this.cancelou.disabled = true;
-        this.modalImportacao.hideClose = true;
+        console.log('Importação concluida');
       }
     })
   }
 
-  private fecharModal(): void {
+  private fecharModal(importacaoRealizada: boolean): void {
     this.modalImportacao.close();
-    this.onFechouModal.emit(this.importacao_foi_realizada);
+    this.onFechouModal.emit(importacaoRealizada);
   }
 
   protected alterouNomeCategoria(row: IImportarLancamento): void {
@@ -386,10 +392,10 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
 
   protected clicouAbaValidacao(): void {
     this.criarLancamentosParaInsercao();
+    this.confirmouImportacao = false;
   }
 
   openModal(): void {
-    this.importacao_foi_realizada = false;
     this.cancelou.disabled = false;
     this.modalImportacao.hideClose = false;
     this.confirmou.disabled = true;
