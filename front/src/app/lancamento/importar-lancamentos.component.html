@@ -4,12 +4,11 @@
           [p-primary-action]="confirmou"
           [p-secondary-action]="cancelou">
 
-  <div class="po-row">
-    <po-button-group class="po-md-12"
-                     [p-buttons]="botoes"
-                     p-toggle="single"> </po-button-group>
-  </div>
-  <hr>
+  <div #fake
+       *ngIf="abaValidacaoDesabilitada()"></div>
+  <po-button-group class="po-md-12"
+                   [p-buttons]="botoes"
+                   p-toggle="single"> </po-button-group>
 
   <div *ngIf="activePage == 0">
     <po-textarea [p-rows]="9"
@@ -100,9 +99,6 @@
 
     </po-table>
   </div>
-
-  <div #fake
-       *ngIf="abaValidacaoDesabilitada()"></div>
 
   <div *ngIf="loading"
        class="sample-container">

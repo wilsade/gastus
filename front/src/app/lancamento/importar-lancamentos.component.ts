@@ -54,13 +54,13 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected ultimoLancamento = '';
 
   private readonly botaoInfomarDados: PoButtonGroupItem = {
-    label: 'Informar dados', action: this.clicouBotaoInformarDados.bind(this)
+    label: 'Informar dados', icon: 'ph ph-database', action: this.clicouBotaoInformarDados.bind(this)
   }
   private readonly botaoPreencherTabela: PoButtonGroupItem = {
-    label: 'Preencher tabela', action: this.clicouBotaoPreencherTabela.bind(this)
+    label: 'Preencher tabela', icon: 'ph ph-list-dashes', action: this.clicouBotaoPreencherTabela.bind(this)
   }
   private readonly botaoValidacaoConfirmacao: PoButtonGroupItem = {
-    label: 'Validação / Confirmação', action: this.clicouBotaoValidacao.bind(this)
+    label: 'Validação / Confirmação', icon: 'ph ph-check-fat', action: this.clicouBotaoValidacao.bind(this)
   }
 
   protected readonly botoes: PoButtonGroupItem[] = [
