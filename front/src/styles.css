@@ -3,3 +3,8 @@
 po-table {
   --background-striped-color: AliceBlue;
 }
+
+.po-button-group-container .po-button-group {
+  padding-right: 9px;
+  padding-bottom: 9px;
+}

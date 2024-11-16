@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { PoButtonGroupItem, PoButtonGroupModule, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
+import { PoButtonGroupItem, PoButtonGroupModule, PoInputComponent, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -324,7 +324,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this.onFechouModal.emit(importacaoRealizada);
   }
 
-  protected alterouNomeCategoria(row: IImportarLancamento): void {
+  protected alterouNomeCategoria(input: PoInputComponent, row: IImportarLancamento): void {
     row.IdCategoria = 0;
     if (row.NomeCategoria.length >= 3) {
       const acheiCategorias = this.allCategorias.filter(x => x.Nome.startsWithInsensitive(row.NomeCategoria));
@@ -335,15 +335,17 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         row.NomeSubCategoria = '';
       }
       else {
+        input.focus();
         const nomesDeCategorias = this.allCategorias.map(x => x.Nome);
         this._modalDialog.alert({ title: 'Categorias disponíveis', message: nomesDeCategorias.join(", ") });
       }
     } else {
+      input.focus();
       this.showWarning(this.AVISO_LOOKUP_3CARACTERES);
     }
   }
 
-  protected alterouNomeSubCategoria(row: IImportarLancamento): void {
+  protected alterouNomeSubCategoria(input: PoInputComponent, row: IImportarLancamento): void {
     row.IdSubCategoria = 0;
     if (StrUtils.hasValue(row.NomeCategoria) && row.NomeSubCategoria.length >= 3) {
       const acheiCategoria = this.allCategorias.find(x => x.Nome == row.NomeCategoria);
@@ -353,11 +355,13 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
           row.IdSubCategoria = subcategorias[0].Id;
           row.NomeSubCategoria = subcategorias[0].Nome;
         } else {
+          input.focus();
           const nomes = acheiCategoria.SubCategorias.map(x => x.Nome);
           this._modalDialog.alert({ title: 'SubCategorias disponíveis', message: nomes.join(", ") });
         }
       }
     } else {
+      input.focus();
       this.showWarning(this.AVISO_LOOKUP_3CARACTERES);
     }
   }

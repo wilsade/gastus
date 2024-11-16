@@ -1,12 +1,12 @@
 <po-modal #modalImportacao
-          p-size="xl"
+          p-size="auto"
           p-title="Importação de lançamentos"
           [p-primary-action]="confirmou"
           [p-secondary-action]="cancelou">
 
   <div #fake
        *ngIf="abaValidacaoDesabilitada()"></div>
-  <po-button-group class="po-md-12"
+  <po-button-group class="po-md-8"
                    [p-buttons]="botoes"
                    p-toggle="single"> </po-button-group>
 
@@ -34,19 +34,22 @@
 
         <div *ngIf="column.property === 'NomeCategoria'">
           <po-input class="po-md-12"
+                    #meuInput
                     id="input-categoria-{{row.Num}}"
                     p-required="true"
                     [p-help]="getHelpCategoria(row)"
                     [(ngModel)]="row.NomeCategoria"
-                    (p-change)="alterouNomeCategoria(row)"></po-input>
+                    (p-change)="alterouNomeCategoria(meuInput, row)"></po-input>
         </div>
 
         <div *ngIf="column.property === 'NomeSubCategoria'">
           <po-input class="po-md-12"
+                    #meuSubInput
+                    id="input-subcategoria-{{row.Num}}"
                     p-required="true"
                     [p-help]="getHelpSubCategoria(row)"
                     [(ngModel)]="row.NomeSubCategoria"
-                    (p-change)="alterouNomeSubCategoria(row)"></po-input>
+                    (p-change)="alterouNomeSubCategoria(meuSubInput, row)"></po-input>
         </div>
 
         <div *ngIf="column.property === 'Comentario'">
@@ -66,7 +69,7 @@
     </po-table>
   </div>
 
-  <div *ngIf="activePage == 2 && !abaValidacaoDesabilitada()">
+  <div *ngIf="activePage == 2">
     <div class="po-row">
       <div><strong>Último lançamento: </strong><span>{{ultimoLancamento}}</span></div>
       <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong>
