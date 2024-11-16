@@ -1,111 +1,108 @@
 <po-modal #modalImportacao
-          p-size="auto"
+          p-size="xl"
           p-title="Importação de lançamentos"
           [p-primary-action]="confirmou"
           [p-secondary-action]="cancelou">
 
-  <po-tabs>
-    <po-tab [p-active]="abaDadosAtiva"
-            [p-label]="INFORMAR_DADOS"
-            (p-click)="clicouAbaInformarDados()">
-      <po-textarea class="po-md-12"
-                   [p-rows]="9"
-                   p-placeholder="Informe um item por linha separados por ponto-e-vírgula, pipe ou TAB"
-                   [(ngModel)]="rawLines"
-                   (p-change)="alterouRawLines()"
-                   (p-change-model)="alterouRawLines()"></po-textarea>
-    </po-tab>
+  <div class="po-row">
+    <po-button-group class="po-md-12"
+                     [p-buttons]="botoes"
+                     p-toggle="single"> </po-button-group>
+  </div>
+  <hr>
 
-    <po-tab [p-label]="PREENCHER_TABELA"
-            [p-disabled]="abaPreencherTabelaDesabilitada"
-            (p-click)="clicouAbaPreencherTabela()">
-      <po-table [p-hide-columns-manager]="true"
-                [p-striped]="true"
-                [p-columns]="colunasTabela"
-                [p-items]="dadosImportacao">
+  <div *ngIf="activePage == 0">
+    <po-textarea [p-rows]="9"
+                 p-placeholder="Informe um item por linha separados por ponto-e-vírgula, pipe ou TAB"
+                 [(ngModel)]="rawLines"
+                 (p-change)="alterouRawLines()"
+                 (p-change-model)="alterouRawLines()"></po-textarea>
+  </div>
 
-        <ng-template p-table-cell-template
-                     let-column="column"
-                     let-row="row">
+  <div *ngIf="activePage == 1">
+    <po-table [p-hide-columns-manager]="true"
+              [p-striped]="true"
+              [p-columns]="colunasTabela"
+              [p-items]="dadosImportacao">
 
-          <div *ngIf="column.property === 'Valor'">
-            <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
-          </div>
+      <ng-template p-table-cell-template
+                   let-column="column"
+                   let-row="row">
 
-          <div *ngIf="column.property === 'NomeCategoria'">
-            <po-input class="po-md-12"
-                      id="input-categoria-{{row.Num}}"
-                      p-required="true"
-                      [p-help]="getHelpCategoria(row)"
-                      [(ngModel)]="row.NomeCategoria"
-                      (p-change)="alterouNomeCategoria(row)"></po-input>
-          </div>
+        <div *ngIf="column.property === 'Valor'">
+          <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+        </div>
 
-          <div *ngIf="column.property === 'NomeSubCategoria'">
-            <po-input class="po-md-12"
-                      p-required="true"
-                      [p-help]="getHelpSubCategoria(row)"
-                      [(ngModel)]="row.NomeSubCategoria"
-                      (p-change)="alterouNomeSubCategoria(row)"></po-input>
-          </div>
+        <div *ngIf="column.property === 'NomeCategoria'">
+          <po-input class="po-md-12"
+                    id="input-categoria-{{row.Num}}"
+                    p-required="true"
+                    [p-help]="getHelpCategoria(row)"
+                    [(ngModel)]="row.NomeCategoria"
+                    (p-change)="alterouNomeCategoria(row)"></po-input>
+        </div>
 
-          <div *ngIf="column.property === 'Comentario'">
-            <po-input class="po-md-12"
-                      [(ngModel)]="row.Comentario"></po-input>
-          </div>
+        <div *ngIf="column.property === 'NomeSubCategoria'">
+          <po-input class="po-md-12"
+                    p-required="true"
+                    [p-help]="getHelpSubCategoria(row)"
+                    [(ngModel)]="row.NomeSubCategoria"
+                    (p-change)="alterouNomeSubCategoria(row)"></po-input>
+        </div>
 
-          <div *ngIf="column.property === 'NomeTipoTransacao'">
-            <po-select class="po-md-12"
-                       [p-options]="tiposTransacao"
-                       [ngModel]="row.IdTipoTransacao"
-                       (ngModelChange)="row.IdTipoTransacao = $event"
-                       (ngModelChange)="alterouTipoTransacao($event, row)"></po-select>
-          </div>
+        <div *ngIf="column.property === 'Comentario'">
+          <po-input class="po-md-12"
+                    [(ngModel)]="row.Comentario"></po-input>
+        </div>
 
-        </ng-template>
-      </po-table>
-    </po-tab>
+        <div *ngIf="column.property === 'NomeTipoTransacao'">
+          <po-select class="po-md-12"
+                     [p-options]="tiposTransacao"
+                     [ngModel]="row.IdTipoTransacao"
+                     (ngModelChange)="row.IdTipoTransacao = $event"
+                     (ngModelChange)="alterouTipoTransacao($event, row)"></po-select>
+        </div>
 
-    <po-tab [p-label]="VALIDACAO_CONFIRMACAO"
-            [p-disabled]="abaValidacaoDesabilitada()"
-            (p-click)="clicouAbaValidacao()">
+      </ng-template>
+    </po-table>
+  </div>
 
-      <div class="po-row">
-        <div><strong>Último lançamento: </strong><span>{{ultimoLancamento}}</span></div>
-        <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong>
+  <div *ngIf="activePage == 2 && !abaValidacaoDesabilitada()">
+    <div class="po-row">
+      <div><strong>Último lançamento: </strong><span>{{ultimoLancamento}}</span></div>
+      <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong>
 
-        <span style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
-        <po-checkbox class="po-md-6"
-                     p-label="Confirmar importação"
-                     [(ngModel)]="confirmouImportacao"
-                     (ngModelChange)="alterouCheckBoxConfirmacao()"></po-checkbox>
+      <span style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
+      <po-checkbox class="po-md-6"
+                   p-label="Confirmar importação"
+                   [(ngModel)]="confirmouImportacao"
+                   (ngModelChange)="alterouCheckBoxConfirmacao()"></po-checkbox>
 
-      </div>
-      <po-divider></po-divider>
-      <po-table [p-striped]="true"
-                [p-hide-columns-manager]="true"
-                [p-columns]="colunasConfirmacao"
-                [p-items]="lancamentosParaInsercao">
+    </div>
+    <po-divider></po-divider>
+    <po-table [p-striped]="true"
+              [p-hide-columns-manager]="true"
+              [p-columns]="colunasConfirmacao"
+              [p-items]="lancamentosParaInsercao">
 
-        <ng-template p-table-cell-template
-                     let-column="column"
-                     let-row="row">
+      <ng-template p-table-cell-template
+                   let-column="column"
+                   let-row="row">
 
-          <div *ngIf="column.property === 'Valor'">
-            <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
-          </div>
+        <div *ngIf="column.property === 'Valor'">
+          <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+        </div>
 
-          <div *ngIf="column.property === 'SALDO'">
-            <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
-          </div>
-        </ng-template>
+        <div *ngIf="column.property === 'SALDO'">
+          <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
+        </div>
+      </ng-template>
 
-      </po-table>
+    </po-table>
+  </div>
 
-
-    </po-tab>
-  </po-tabs>
-
+  <div #fake
+       *ngIf="abaValidacaoDesabilitada()"></div>
 
   <div *ngIf="loading"
        class="sample-container">

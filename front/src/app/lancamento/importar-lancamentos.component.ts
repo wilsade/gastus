@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
+import { PoButtonGroupItem, PoButtonGroupModule, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,7 @@ import { AdminService } from '../admin/admin.service';
 @Component({
   selector: 'app-importar-lancamentos',
   standalone: true,
-  imports: [PoModule, FormsModule, CommonModule, ColunaValorComponent],
+  imports: [PoModule, PoButtonGroupModule, FormsModule, CommonModule, ColunaValorComponent],
   providers: [InputDialogService],
   templateUrl: './importar-lancamentos.component.html'
 })
@@ -37,24 +37,13 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   @Output()
   onFechouModal = new EventEmitter<boolean>();
 
-  protected readonly INFORMAR_DADOS = 'Informar dados';
-  protected readonly PREENCHER_TABELA = 'Preencher tabela';
-  protected readonly VALIDACAO_CONFIRMACAO = 'Validação / Confirmação';
-  protected readonly TERMINO = 'Término';
-
   private readonly AVISO_LOOKUP_3CARACTERES = 'Informe pelo menos 3 caracteres para pesquisar';
   private readonly TRANSACAO_NULA = 0;
-  //private readonly AVANCAR = 'Avançar';
-  //private readonly IMPORTAR = 'Importar';
-  //private readonly FECHAR = 'Fechar';
   private _saldoAtual: number = 0;
   private _lookupByTitulo: ILookupLancamento[] = [];
   private allCategorias: ICategoria[] = [];
 
-  protected abaDadosAtiva = false;
-  //protected abaPreencherTabelaAtiva = false;
-  protected abaPreencherTabelaDesabilitada = true;
-  //protected abaValidacaoDesabilitada = true;
+  protected activePage = 0;
   protected rawLines = '';
   protected dadosImportacao: IImportarLancamento[] = []
   protected tiposTransacao: PoSelectOption[] = [];
@@ -64,16 +53,26 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected lancamentosInseridos: ILancamento[] = [];
   protected ultimoLancamento = '';
 
+  private readonly botaoInfomarDados: PoButtonGroupItem = {
+    label: 'Informar dados', action: this.clicouBotaoInformarDados.bind(this)
+  }
+  private readonly botaoPreencherTabela: PoButtonGroupItem = {
+    label: 'Preencher tabela', action: this.clicouBotaoPreencherTabela.bind(this)
+  }
+  private readonly botaoValidacaoConfirmacao: PoButtonGroupItem = {
+    label: 'Validação / Confirmação', action: this.clicouBotaoValidacao.bind(this)
+  }
+
+  protected readonly botoes: PoButtonGroupItem[] = [
+    this.botaoInfomarDados, this.botaoPreencherTabela, this.botaoValidacaoConfirmacao,
+  ]
+
   protected readonly confirmou: PoModalAction = {
     label: 'Importar',
     disabled: true,
     action: () => {
       this.processarImportacao();
     }
-  }
-
-  protected clicouAbaInformarDados(): void {
-    this.confirmou.disabled = true;
   }
 
   protected readonly cancelou: PoModalAction = {
@@ -103,6 +102,26 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     { label: 'Saldo', property: 'SALDO', type: 'cellTemplate' },
   ]
 
+  protected clicouBotaoInformarDados(): void {
+    this.activePage = 0;
+    this.botaoInfomarDados.selected = true;
+    this.confirmou.disabled = true;
+  }
+
+  protected clicouBotaoPreencherTabela(): void {
+    this.activePage = 1;
+    this.botaoPreencherTabela.selected = true;
+    this.confirmou.disabled = true;
+    this.preencherDadosImportacao();
+  }
+
+  protected clicouBotaoValidacao(): void {
+    this.activePage = 2;
+    this.botaoValidacaoConfirmacao.selected = true;
+    this.criarLancamentosParaInsercao();
+    this.confirmouImportacao = false;
+  }
+
   private loadLookUpByTitulo(): void {
     this._service.getLookupByTitulo().subscribe({
       next: data => {
@@ -119,11 +138,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
 
     const achei = this._lookupByTitulo.find(x => x.Titulo == aux);
     return achei;
-  }
-
-  protected clicouAbaPreencherTabela(): void {
-    this.confirmou.disabled = true;
-    this.preencherDadosImportacao();
   }
 
   protected alterouCheckBoxConfirmacao(): void {
@@ -193,28 +207,12 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       }]
     });
   }
-  protected podeAvancarDosDados(): boolean {
-    const ok = StrUtils.hasValue(this.rawLines);
-    if (!ok)
-      this.showWarning('Informe os dados de importação');
-    return ok;
-  }
 
   protected alterouTipoTransacao(transacaoEscolhida: number, row: IImportarLancamento): void {
     const achei = this.tiposTransacao.find(x => x.value == transacaoEscolhida);
     if (achei)
       row.NomeTipoTransacao = achei.label;
   }
-
-  protected podeAvancarDaValidacao(): boolean {
-    if (!this.confirmouImportacao)
-      this.showWarning('Confirme a importação dos lançamentos');
-    return this.confirmouImportacao;
-  }
-
-  // protected clicouAbaValidacao(): void {
-  //   this.abaPreencherTabelaAtiva = !this.podeAvancarDaTabela();
-  // }
 
   private podeAvancarDaTabela(): boolean {
     if (this.dadosImportacao.length == 0)
@@ -367,14 +365,17 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected alterouRawLines(): void {
     this.dadosImportacao = [];
     this.lancamentosParaInsercao = [];
-    this.abaPreencherTabelaDesabilitada = !StrUtils.hasValue(this.rawLines) ||
-      this.rawLines.length < 10;
+    const podeAvancar = StrUtils.hasValue(this.rawLines) && this.rawLines.length > 10;
+    this.botaoPreencherTabela.disabled = !podeAvancar;
   }
 
   protected abaValidacaoDesabilitada(): boolean {
     if (!this.dadosImportacao || this.dadosImportacao.length == 0)
       return true;
     const algumInvalido = this.dadosImportacao.find(x => x.IdCategoria == 0 || x.IdSubCategoria == 0);
+    this.botaoValidacaoConfirmacao.disabled = algumInvalido != null;
+    if (this.activePage == 2 && !this.botaoValidacaoConfirmacao.disabled)
+      this.botaoValidacaoConfirmacao.selected = true;
     return algumInvalido != null;
   }
 
@@ -390,17 +391,10 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     return ''
   }
 
-  protected clicouAbaValidacao(): void {
-    this.criarLancamentosParaInsercao();
-    this.confirmouImportacao = false;
-  }
-
   openModal(): void {
     this.cancelou.disabled = false;
     this.modalImportacao.hideClose = false;
     this.confirmou.disabled = true;
-
-    this.abaPreencherTabelaDesabilitada = true;
 
     this.rawLines = '';
     this.dadosImportacao = [];
@@ -412,9 +406,15 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this.loadSaldoAtual();
 
     this.modalImportacao.open();
-    this.abaDadosAtiva = true;
+
+    this.botaoPreencherTabela.disabled = true;
+    this.botaoPreencherTabela.selected = false;
+
+    this.botaoValidacaoConfirmacao.disabled = true;
+    this.botaoValidacaoConfirmacao.selected = false;
+
+    this.botaoInfomarDados.selected = true;
+    this.activePage = 0;
   }
-
-
 
 }
