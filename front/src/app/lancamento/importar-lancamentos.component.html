@@ -4,23 +4,20 @@
           [p-primary-action]="confirmou"
           [p-secondary-action]="cancelou">
 
-  <po-stepper #stepper
-              (p-change-step)="alterouStep($event)">
-    <po-step *ngIf="!acabou"
-             [p-label]="INFORMAR_DADOS"
-             [p-can-active-next-step]="podeAvancarDosDados.bind(this)">
-
+  <po-tabs>
+    <po-tab [p-label]="INFORMAR_DADOS"
+            [p-active]="abaDadosAtiva">
       <po-textarea class="po-md-12"
                    [p-rows]="9"
                    p-placeholder="Informe um item por linha separados por ponto-e-vírgula, pipe ou TAB"
                    [(ngModel)]="rawLines"
-                   (p-change)="alterouRawLines()"></po-textarea>
+                   (p-change)="alterouRawLines()"
+                   (p-change-model)="alterouRawLines()"></po-textarea>
+    </po-tab>
 
-    </po-step>
-
-    <po-step *ngIf="!acabou"
-             [p-label]="PREENCHER_TABELA"
-             [p-can-active-next-step]="podeAvancarDaTabela.bind(this)">
+    <po-tab [p-label]="PREENCHER_TABELA"
+            [p-disabled]="abaPreencherTabelaDesabilitada"
+            (p-click)="clicouAbaPreencherTabela()">
       <po-table [p-hide-columns-manager]="true"
                 [p-striped]="true"
                 [p-columns]="colunasTabela"
@@ -36,7 +33,9 @@
 
           <div *ngIf="column.property === 'NomeCategoria'">
             <po-input class="po-md-12"
+                      id="input-categoria-{{row.Num}}"
                       p-required="true"
+                      [p-help]="getHelpCategoria(row)"
                       [(ngModel)]="row.NomeCategoria"
                       (p-change)="alterouNomeCategoria(row)"></po-input>
           </div>
@@ -44,6 +43,7 @@
           <div *ngIf="column.property === 'NomeSubCategoria'">
             <po-input class="po-md-12"
                       p-required="true"
+                      [p-help]="getHelpSubCategoria(row)"
                       [(ngModel)]="row.NomeSubCategoria"
                       (p-change)="alterouNomeSubCategoria(row)"></po-input>
           </div>
@@ -62,49 +62,14 @@
           </div>
 
         </ng-template>
-
       </po-table>
-    </po-step>
-    <po-step *ngIf="!acabou"
-             [p-label]="VALIDACAO_CONFIRMACAO"
-             [p-can-active-next-step]="podeAvancarDaValidacao.bind(this)">
-      <div class="po-row">
-        <div><strong>Último lançamento: </strong><span>{{ultimoLancamento}}</span></div>
-        <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong>
+    </po-tab>
 
-        <span style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
-        <po-checkbox class="po-md-6"
-                     p-label="Confirmar importação"
-                     [(ngModel)]="confirmouImportacao"></po-checkbox>
+    <po-tab [p-label]="VALIDACAO_CONFIRMACAO"
+            [p-disabled]="abaValidacaoDesabilitada()">
+    </po-tab>
+  </po-tabs>
 
-      </div>
-      <po-divider></po-divider>
-      <po-table [p-striped]="true"
-                [p-hide-columns-manager]="true"
-                [p-columns]="colunasConfirmacao"
-                [p-items]="lancamentosParaInsercao">
-
-        <ng-template p-table-cell-template
-                     let-column="column"
-                     let-row="row">
-
-          <div *ngIf="column.property === 'Valor'">
-            <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
-          </div>
-
-          <div *ngIf="column.property === 'SALDO'">
-            <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
-          </div>
-        </ng-template>
-
-      </po-table>
-    </po-step>
-    <po-step [p-label]="TERMINO">
-      <po-table [p-hide-columns-manager]="true"
-                [p-striped]="true"
-                [p-items]="lancamentosInseridos"></po-table>
-    </po-step>
-  </po-stepper>
 
   <div *ngIf="loading"
        class="sample-container">

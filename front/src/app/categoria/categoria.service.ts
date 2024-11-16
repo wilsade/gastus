@@ -19,8 +19,9 @@ export class CategoriaService {
     }
   }
 
-  getCategorias(loadSubs: boolean = false): Observable<ICategoria[]> {
-    return this._http.get<any>(`${this.categoriasUrl}?loadsubs=${loadSubs}`).pipe(
+  getCategorias(loadSubs: boolean = false, orderByNome: boolean = false): Observable<ICategoria[]> {
+    const url = `${this.categoriasUrl}?loadSubs=${loadSubs}&orderByName=${orderByNome}`;
+    return this._http.get<any>(url).pipe(
       map((response: any) => {
         return response;
       }));

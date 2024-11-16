@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoStepperComponent, PoTableColumn } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -34,9 +34,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   @ViewChild('modalImportacao')
   protected modalImportacao: PoModalComponent;
 
-  @ViewChild('stepper')
-  stepper: PoStepperComponent;
-
   @Output()
   onFechouModal = new EventEmitter<boolean>();
 
@@ -45,14 +42,20 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected readonly VALIDACAO_CONFIRMACAO = 'Validação / Confirmação';
   protected readonly TERMINO = 'Término';
 
+  private readonly AVISO_LOOKUP_3CARACTERES = 'Informe pelo menos 3 caracteres para pesquisar';
   private readonly TRANSACAO_NULA = 0;
-  private readonly AVANCAR = 'Avançar';
-  private readonly IMPORTAR = 'Importar';
-  private readonly FECHAR = 'Fechar';
+  //private readonly AVANCAR = 'Avançar';
+  //private readonly IMPORTAR = 'Importar';
+  //private readonly FECHAR = 'Fechar';
   private _saldoAtual: number = 0;
   private _lookupByTitulo: ILookupLancamento[] = [];
   private allCategorias: ICategoria[] = [];
 
+
+  protected abaDadosAtiva = false;
+  //protected abaPreencherTabelaAtiva = false;
+  protected abaPreencherTabelaDesabilitada = true;
+  //protected abaValidacaoDesabilitada = true;
   protected rawLines = '';
   protected dadosImportacao: IImportarLancamento[] = []
   protected tiposTransacao: PoSelectOption[] = [];
@@ -60,19 +63,14 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   protected confirmouImportacao = false;
   protected loading = false;
   protected lancamentosInseridos: ILancamento[] = [];
-  protected acabou = false;
+  protected importacao_foi_realizada = false;
   protected ultimoLancamento = '';
 
   protected readonly confirmou: PoModalAction = {
-    label: this.AVANCAR,
-    disabled: false,
+    label: 'Importar',
+    disabled: true,
     action: () => {
-      if (this.confirmou.label === this.IMPORTAR && this.confirmouImportacao)
-        this.processarImportacao();
-      else if (this.confirmou.label == this.FECHAR)
-        this.fecharModal();
-      else
-        this.stepper.next();
+      this.processarImportacao();
     }
   }
 
@@ -121,8 +119,12 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     return achei;
   }
 
+  protected clicouAbaPreencherTabela(): void {
+    this.preencherDadosImportacao();
+  }
+
   private preencherDadosImportacao(): void {
-    if (this.lancamentosParaInsercao.length > 0) {
+    if (this.dadosImportacao.length > 0 || this.lancamentosParaInsercao.length > 0) {
       console.log('Já temos dados. Não vamos preencher novamente.');
       return;
     }
@@ -156,19 +158,6 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         NomeTipoTransacao: lookup ? lookup.NomeTipoTransacao : ''
       }];
     });
-  }
-
-  protected alterouStep(step: any): void {
-    this.confirmou.label = this.AVANCAR;
-    if (step.label === this.PREENCHER_TABELA)
-      this.preencherDadosImportacao();
-    else if (step.label === this.VALIDACAO_CONFIRMACAO) {
-      this.criarLancamentosParaInsercao();
-      this.confirmou.label = this.IMPORTAR;
-    }
-    else if (step.label === this.TERMINO) {
-      this.confirmou.label = this.FECHAR;
-    }
   }
 
   private criarLancamentosParaInsercao(): void {
@@ -216,7 +205,11 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     return this.confirmouImportacao;
   }
 
-  protected podeAvancarDaTabela(): boolean {
+  // protected clicouAbaValidacao(): void {
+  //   this.abaPreencherTabelaAtiva = !this.podeAvancarDaTabela();
+  // }
+
+  private podeAvancarDaTabela(): boolean {
     if (this.dadosImportacao.length == 0)
       return false;
     let camposEmBranco: string[] = [];
@@ -271,7 +264,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   private loadCategorias(): void {
-    this._categoriaService.getCategorias(true).subscribe({
+    this._categoriaService.getCategorias(true, true).subscribe({
       next: data => {
         this.allCategorias = data;
       },
@@ -315,8 +308,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         this.tratarErro(err);
       },
       complete: () => {
-        this.stepper.next();
-        this.acabou = true;
+        this.importacao_foi_realizada = true;
         this.cancelou.disabled = true;
         this.modalImportacao.hideClose = true;
       }
@@ -325,54 +317,91 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
 
   private fecharModal(): void {
     this.modalImportacao.close();
-    this.onFechouModal.emit(this.acabou);
+    this.onFechouModal.emit(this.importacao_foi_realizada);
   }
 
   protected alterouNomeCategoria(row: IImportarLancamento): void {
+    row.IdCategoria = 0;
     if (row.NomeCategoria.length >= 3) {
       const acheiCategorias = this.allCategorias.filter(x => x.Nome.startsWithInsensitive(row.NomeCategoria));
-      if (acheiCategorias.length > 0)
+      if (acheiCategorias.length > 0) {
+        row.IdCategoria = acheiCategorias[0].Id;
         row.NomeCategoria = acheiCategorias[0].Nome;
+        row.IdSubCategoria = 0;
+        row.NomeSubCategoria = '';
+      }
       else {
         const nomesDeCategorias = this.allCategorias.map(x => x.Nome);
         this._modalDialog.alert({ title: 'Categorias disponíveis', message: nomesDeCategorias.join(", ") });
       }
-
+    } else {
+      this.showWarning(this.AVISO_LOOKUP_3CARACTERES);
     }
   }
 
   protected alterouNomeSubCategoria(row: IImportarLancamento): void {
+    row.IdSubCategoria = 0;
     if (StrUtils.hasValue(row.NomeCategoria) && row.NomeSubCategoria.length >= 3) {
       const acheiCategoria = this.allCategorias.find(x => x.Nome == row.NomeCategoria);
       if (acheiCategoria) {
         const subcategorias = acheiCategoria.SubCategorias.filter(x => x.Nome.startsWithInsensitive(row.NomeSubCategoria));
-        if (subcategorias.length > 0)
+        if (subcategorias.length > 0) {
+          row.IdSubCategoria = subcategorias[0].Id;
           row.NomeSubCategoria = subcategorias[0].Nome;
-        else {
+        } else {
           const nomes = acheiCategoria.SubCategorias.map(x => x.Nome);
           this._modalDialog.alert({ title: 'SubCategorias disponíveis', message: nomes.join(", ") });
         }
       }
+    } else {
+      this.showWarning(this.AVISO_LOOKUP_3CARACTERES);
     }
   }
 
   protected alterouRawLines(): void {
+    this.dadosImportacao = [];
     this.lancamentosParaInsercao = [];
+    this.abaPreencherTabelaDesabilitada = !StrUtils.hasValue(this.rawLines) ||
+      this.rawLines.length < 10;
+  }
+
+  protected abaValidacaoDesabilitada(): boolean {
+    if (!this.dadosImportacao || this.dadosImportacao.length == 0)
+      return true;
+    const algumInvalido = this.dadosImportacao.find(x => x.IdCategoria == 0 || x.IdSubCategoria == 0);
+    return algumInvalido != null;
+  }
+
+  protected getHelpCategoria(row: IImportarLancamento): string {
+    if (row.IdCategoria == 0)
+      return 'Não informado';
+    return ''
+  }
+
+  protected getHelpSubCategoria(row: IImportarLancamento): string {
+    if (row.IdSubCategoria == 0)
+      return 'Não informado';
+    return ''
   }
 
   openModal(): void {
-    this.acabou = false;
+    this.importacao_foi_realizada = false;
     this.cancelou.disabled = false;
     this.modalImportacao.hideClose = false;
-    this.confirmou.label = this.AVANCAR;
+    this.confirmou.disabled = true;
 
-    this.stepper.first();
+    this.abaDadosAtiva = true;
+    this.abaPreencherTabelaDesabilitada = true;
+
     this.rawLines = '';
     this.dadosImportacao = [];
+    this.lancamentosParaInsercao = [];
+
     this.loadLookUpByTitulo();
     this.loadComboTiposTransacao();
     this.loadCategorias();
     this.loadSaldoAtual();
+
     this.modalImportacao.open();
   }
 
