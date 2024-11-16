@@ -5,8 +5,8 @@
           [p-secondary-action]="cancelou">
 
   <po-tabs>
-    <po-tab [p-label]="INFORMAR_DADOS"
-            [p-active]="abaDadosAtiva">
+    <po-tab [p-active]="abaDadosAtiva"
+            [p-label]="INFORMAR_DADOS">
       <po-textarea class="po-md-12"
                    [p-rows]="9"
                    p-placeholder="Informe um item por linha separados por ponto-e-vírgula, pipe ou TAB"
@@ -66,7 +66,41 @@
     </po-tab>
 
     <po-tab [p-label]="VALIDACAO_CONFIRMACAO"
-            [p-disabled]="abaValidacaoDesabilitada()">
+            [p-disabled]="abaValidacaoDesabilitada()"
+            (p-click)="clicouAbaValidacao()">
+
+      <div class="po-row">
+        <div><strong>Último lançamento: </strong><span>{{ultimoLancamento}}</span></div>
+        <strong style="margin-right: 9px; margin-left: 9px;">Saldo atual:</strong>
+
+        <span style="color: blue; margin-right: 9px;">{{getTotal()}}</span>
+        <po-checkbox class="po-md-6"
+                     p-label="Confirmar importação"
+                     [(ngModel)]="confirmouImportacao"></po-checkbox>
+
+      </div>
+      <po-divider></po-divider>
+      <po-table [p-striped]="true"
+                [p-hide-columns-manager]="true"
+                [p-columns]="colunasConfirmacao"
+                [p-items]="lancamentosParaInsercao">
+
+        <ng-template p-table-cell-template
+                     let-column="column"
+                     let-row="row">
+
+          <div *ngIf="column.property === 'Valor'">
+            <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+          </div>
+
+          <div *ngIf="column.property === 'SALDO'">
+            <app-coluna-valor [valor]="row.SALDO"></app-coluna-valor>
+          </div>
+        </ng-template>
+
+      </po-table>
+
+
     </po-tab>
   </po-tabs>
 

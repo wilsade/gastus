@@ -384,13 +384,16 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     return ''
   }
 
+  protected clicouAbaValidacao(): void {
+    this.criarLancamentosParaInsercao();
+  }
+
   openModal(): void {
     this.importacao_foi_realizada = false;
     this.cancelou.disabled = false;
     this.modalImportacao.hideClose = false;
     this.confirmou.disabled = true;
 
-    this.abaDadosAtiva = true;
     this.abaPreencherTabelaDesabilitada = true;
 
     this.rawLines = '';
@@ -403,6 +406,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     this.loadSaldoAtual();
 
     this.modalImportacao.open();
+    this.abaDadosAtiva = true;
   }
 
 
