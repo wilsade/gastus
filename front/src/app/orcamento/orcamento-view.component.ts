@@ -80,4 +80,8 @@ export class OrcamentoViewComponent extends GastusBaseComponent implements OnIni
     return StrUtils.formatValue(valor);
   }
 
+  protected fechouModal(): void {
+    this.carregarOrcamentos();
+  }
+
 }

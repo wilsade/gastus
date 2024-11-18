@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Output, ViewChild } from '@angular/core';
 import { PoModalAction, PoModalComponent, PoModule, PoMultiselectOption, PoNotificationService } from '@po-ui/ng-components';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { CommonModule } from '@angular/common';
@@ -23,6 +23,9 @@ export class OrcamentoInsercaoComponent extends GastusBaseComponent {
 
   @ViewChild('modalInsercao')
   protected modalInsercao: PoModalComponent;
+
+  @Output()
+  onFechouModal = new EventEmitter<void>();
 
   protected orcamentoInsertModel = this._service.createEmptyInsertModel();
   protected listaMeses: PoMultiselectOption[] = this.getMeses();
@@ -53,6 +56,7 @@ export class OrcamentoInsercaoComponent extends GastusBaseComponent {
 
   private fecharModal(): void {
     this.modalInsercao.close();
+    this.onFechouModal.emit();
   }
 
   private habilitarBotaoSalvar(): void {
