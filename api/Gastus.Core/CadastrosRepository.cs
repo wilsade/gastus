@@ -52,7 +52,7 @@ namespace Gastus.Core
     /// <param name="idCategoria">Identificador da categoria</param>
     /// <param name="orderByName">true para ordenar os registros por nome</param>
     /// <returns>SubCategorias</returns>
-    static List<SubCategoriaModel> GetAllSubCategorias(SQLiteConnection connection, 
+    static List<SubCategoriaModel> GetAllSubCategorias(SQLiteConnection connection,
       int? idCategoria, bool orderByName)
     {
       string sql = @"SELECT * FROM SUBCATEGORIA";
@@ -155,9 +155,14 @@ ORDER BY Data";
     /// </summary>
     /// <param name="model">Dados da modificação</param>
     /// <returns>Número de registros afetados</returns>
-    public int EditCategoria(BaseEditModel model)
+    public int EditCategoria(CategoriaEditModel model)
     {
-      const string sql = "UPDATE CATEGORIA SET NOME = @Nome WHERE ID = @Id";
+      const string sql = @"
+        UPDATE CATEGORIA 
+        SET NOME = @Nome, 
+            IndicaReceita = @IndicaReceita,
+            SaiNoRelatorio = @SaiNoRelatorio
+        WHERE ID = @Id";
       using var connection = GetConnection(false);
       int rows = connection.Execute(sql, model);
       return rows;
