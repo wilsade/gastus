@@ -39,7 +39,7 @@
     /// </summary>
     /// <param name="model">Dados da modificação</param>
     /// <returns>Número de registros afetados</returns>
-    int EditCategoria(BaseEditModel model);
+    int EditCategoria(CategoriaEditModel model);
 
     /// <summary>
     /// Recuperar todas as subCategorias

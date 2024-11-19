@@ -1,4 +1,6 @@
-﻿namespace Gastus.Domain
+﻿using System.Numerics;
+
+namespace Gastus.Domain
 {
   /// <summary>
   /// Representa um item de Categoria
@@ -30,6 +32,16 @@
     public string Nome { get; set; }
 
     /// <summary>
+    /// Indica se a Categoria representa uma receita
+    /// </summary>
+    public bool IndicaReceita { get; set; } = false;
+
+    /// <summary>
+    /// Indica se a Categoria será incluída no relatorio
+    /// </summary>
+    public bool SaiNoRelatorio { get; set; } = true;
+
+    /// <summary>
     /// Lista de Sub categorias
     /// </summary>
     public List<SubCategoriaModel> SubCategorias { get; set; } = [];
@@ -39,5 +51,21 @@
     /// </summary>
     /// <returns>string representando esta instância</returns>
     public override string ToString() => $"[{Id}] {Nome} (Filhas={SubCategorias.Count})";
+  }
+
+  /// <summary>
+  /// Representa um item de Categoria para edição
+  /// </summary>
+  public class CategoriaEditModel : BaseEditModel
+  {
+    /// <summary>
+    /// Indica se a Categoria representa uma receita
+    /// </summary>
+    public bool IndicaReceita { get; set; }
+
+    /// <summary>
+    /// Indica se a Categoria será incluída no relatorio
+    /// </summary>
+    public bool SaiNoRelatorio { get; set; }
   }
 }
