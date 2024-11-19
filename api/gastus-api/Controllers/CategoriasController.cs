@@ -103,7 +103,7 @@ namespace Gastus.Api.Controllers
     /// <param name="model">Dados da modificação</param>
     /// <returns>NoContent se não houve alteração; OK em caso de sucesso</returns>
     [HttpPut()]
-    public IActionResult EditCategoria([FromBody] BaseEditModel model)
+    public IActionResult EditCategoria([FromBody] CategoriaEditModel model)
     {
       try
       {
