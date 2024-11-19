@@ -1,27 +1,18 @@
 -- Iniciar uma transação para garantir integridade
 BEGIN TRANSACTION;
 
--- Criar uma nova tabela Orcamento sem a coluna NomeMes
-CREATE TABLE IF NOT EXISTS Orcamento_New (
-    Id INTEGER PRIMARY KEY,
-    IdCategoria INTEGER NOT NULL,
-    IdSubCategoria INTEGER NOT NULL,
-    NumMes INTEGER NOT NULL,
-    Valor REAL NOT NULL,
-    Descricao TEXT,
-    FOREIGN KEY (IdCategoria, IdSubCategoria) REFERENCES SubCategoria(IdCategoria, Id)
-);
+-- Adicionar a coluna IndicaReceita com valor padrão false para registros existentes
+ALTER TABLE Categoria
+ADD COLUMN IndicaReceita BOOLEAN NOT NULL DEFAULT 0;
 
--- Copiar os dados da tabela original para a nova (exceto NomeMes)
-INSERT INTO Orcamento_New (Id, IdCategoria, IdSubCategoria, NumMes, Valor, Descricao)
-SELECT Id, IdCategoria, IdSubCategoria, NumMes, Valor, Descricao
-FROM Orcamento;
+-- Adicionar a coluna SaiNoRelatorio com valor padrão true para registros existentes
+ALTER TABLE Categoria
+ADD COLUMN SaiNoRelatorio BOOLEAN NOT NULL DEFAULT 1;
 
--- Apagar a tabela original
-DROP TABLE Orcamento;
-
--- Renomear a nova tabela para Orcamento
-ALTER TABLE Orcamento_New RENAME TO Orcamento;
+-- Atualizar registros existentes para garantir os valores padrões, caso necessário
+UPDATE Categoria
+SET IndicaReceita = 0, -- False
+    SaiNoRelatorio = 1; -- True
 
 -- Finalizar a transação
 COMMIT;
