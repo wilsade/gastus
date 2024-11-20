@@ -63,7 +63,7 @@ namespace Gastus.Api.Controllers
     /// <param name="categoria">Categoria</param>
     /// <returns>Categoria inserida</returns>
     [HttpPost()]
-    public IActionResult AddCategoria([FromBody] BaseInsertModel categoria)
+    public IActionResult AddCategoria([FromBody] CategoriaInsertModel categoria)
     {
       try
       {

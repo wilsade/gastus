@@ -111,12 +111,18 @@ ORDER BY Data";
     /// </summary>
     /// <param name="categoria">Categoria a ser adicionada</param>
     /// <returns>Nova categoria</returns>
-    public CategoriaModel AddCategoria(BaseInsertModel categoria)
+    public CategoriaModel AddCategoria(CategoriaInsertModel categoria)
     {
       using var connection = GetConnection(false);
 
-      var query = "INSERT INTO Categoria (Id, Nome) VALUES (@Id, @Nome)";
-      var novaCategoria = new CategoriaModel(GetNextIdFromTabela(connection, "Categoria"), categoria.Nome);
+      var query = @"
+INSERT INTO Categoria (Id, Nome, IndicaReceita, SaiNoRelatorio) 
+VALUES (@Id, @Nome, @IndicaReceita, @SaiNoRelatorio)";
+      var novaCategoria = new CategoriaModel(GetNextIdFromTabela(connection, "Categoria"), categoria.Nome)
+      {
+        IndicaReceita = categoria.IndicaReceita,
+        SaiNoRelatorio = categoria.SaiNoRelatorio
+      };
       int rows = connection.Execute(query, novaCategoria);
       System.Diagnostics.Trace.WriteLine(rows);
       return novaCategoria;

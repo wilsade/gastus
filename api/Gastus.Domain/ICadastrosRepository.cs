@@ -18,7 +18,7 @@
     /// </summary>
     /// <param name="categoria">Categoria a ser adicionada</param>
     /// <returns>Nova categoria</returns>
-    CategoriaModel AddCategoria(BaseInsertModel categoria);
+    CategoriaModel AddCategoria(CategoriaInsertModel categoria);
 
     /// <summary>
     /// Excluir uma categoria
