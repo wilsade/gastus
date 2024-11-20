@@ -8,6 +8,17 @@
             [p-items]="categorias"
             [p-actions]="acoesTabela">
 
+    <ng-template p-table-cell-template
+                 let-column="column"
+                 let-row="row">
+      <div *ngIf="column.property === 'IndicaReceita'">
+        <span>{{row.IndicaReceita ? 'Sim' : ''}}</span>
+      </div>
+      <div *ngIf="column.property === 'SaiNoRelatorio'">
+        <span>{{row.SaiNoRelatorio ? 'Sim' : ''}}</span>
+      </div>
+    </ng-template>
+
     <ng-template p-table-row-template
                  let-rowItem
                  let-i="rowIndex">

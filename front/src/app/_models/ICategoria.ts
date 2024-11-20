@@ -3,6 +3,8 @@ import { PoSelectOption } from '@po-ui/ng-components';
 export class ICategoria {
   Id: number;
   Nome: string;
+  IndicaReceita: boolean;
+  SaiNoRelatorio: boolean;
   SubCategorias: ISubCategoria[] = [];
 }
 

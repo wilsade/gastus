@@ -15,7 +15,7 @@ export class CategoriaService {
 
   getEmptyCategoria(): ICategoria {
     return {
-      Id: 0, Nome: '', SubCategorias: []
+      Id: 0, Nome: '', IndicaReceita: false, SaiNoRelatorio: true, SubCategorias: []
     }
   }
 
@@ -61,7 +61,9 @@ export class CategoriaService {
 
     const body = {
       Id: categoria.Id,
-      Nome: categoria.Nome
+      Nome: categoria.Nome,
+      IndicaReceita: categoria.IndicaReceita,
+      SaiNoRelatorio: categoria.SaiNoRelatorio
     };
 
     return this._http.put<number>(this.categoriasUrl, body, { headers });

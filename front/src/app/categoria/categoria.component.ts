@@ -29,7 +29,9 @@ export class CategoriaComponent extends GastusBaseComponent implements OnInit {
 
   protected readonly colunas: PoTableColumn[] = [
     { label: 'Id.', property: 'Id', width: '10%' },
-    { label: 'Nome', property: 'Nome' }
+    { label: 'Nome', property: 'Nome' },
+    { label: 'Receita', property: 'IndicaReceita', type: 'cellTemplate', width: '10%' },
+    { label: 'Relatório', property: 'SaiNoRelatorio', type: 'cellTemplate', width: '10%' },
   ]
 
   protected readonly acoesPagina: PoPageAction[] = [

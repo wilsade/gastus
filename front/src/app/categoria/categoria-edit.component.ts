@@ -21,6 +21,8 @@ export class CategoriaEditComponent extends GastusBaseComponent {
   }
 
   private _nomeOriginal: string;
+  private _indicaReceitaOriginal: boolean;
+  private _saiNoRelatorioOriginal: boolean;
 
   protected confirmouModal: PoModalAction = {
     label: 'Salvar e fechar',
@@ -49,13 +51,25 @@ export class CategoriaEditComponent extends GastusBaseComponent {
 
   exibirModal(item: ICategoria): void {
     this._nomeOriginal = item.Nome;
+    this._indicaReceitaOriginal = item.IndicaReceita;
+    this._saiNoRelatorioOriginal = item.SaiNoRelatorio;
     this.meuTitulo = `Editar categoria: ${item.Nome}`;
     this.modal.open();
     this.loadCategoria(item);
   }
 
   protected alterouNomeCategoria(): void {
-    this.confirmouModal.disabled = this._nomeOriginal === this.categoria.Nome;
+    this.habilitarConfimar();
+  }
+
+  protected alterouCheckBox(): void {
+    this.habilitarConfimar();
+  }
+
+  private habilitarConfimar(): void {
+    this.confirmouModal.disabled = this._nomeOriginal === this.categoria.Nome &&
+      this._indicaReceitaOriginal === this.categoria.IndicaReceita &&
+      this._saiNoRelatorioOriginal === this.categoria.SaiNoRelatorio;
   }
 
   private loadCategoria(item: ICategoria): void {

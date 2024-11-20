@@ -13,6 +13,17 @@
               [(ngModel)]="categoria.Nome"
               (p-change-model)="alterouNomeCategoria()"></po-input>
   </div>
+
+  <div class="po-row">
+    <po-checkbox class="po-md-6"
+                 p-label="Indica Receita"
+                 [(ngModel)]="categoria.IndicaReceita"
+                 (ngModelChange)="alterouCheckBox()"></po-checkbox>
+    <po-checkbox class="po-md-6"
+                 p-label="Sai no relatório"
+                 [(ngModel)]="categoria.SaiNoRelatorio"
+                 (ngModelChange)="alterouCheckBox()"></po-checkbox>
+  </div>
   <hr>
   <app-subcategoria [categoria]="categoria"></app-subcategoria>
 </po-modal>
