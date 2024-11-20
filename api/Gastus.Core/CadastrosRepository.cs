@@ -96,7 +96,7 @@ ORDER BY Data";
     public List<CategoriaModel> GetAllCategorias(bool loadSubs, bool orderByName)
     {
       using SQLiteConnection connection = GetConnection(false);
-      var query = "SELECT Id, Nome FROM Categoria";
+      var query = "SELECT * FROM Categoria";
       if (orderByName)
         query += " ORDER BY Nome COLLATE NOCASE";
 
