@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Net.Http.Headers;
 
 using Dapper;
 
@@ -88,6 +89,8 @@ namespace Gastus.Core
     /// <returns>Número de registros afetados</returns>
     public int EditLancamento(LancamentoModel model)
     {
+      Dictionary<int, bool> dicCategorias = [];
+
       const string sql = @"
         UPDATE Lancamento
         SET 
@@ -101,6 +104,13 @@ namespace Gastus.Core
         WHERE Id = @Id";
 
       using var connection = GetConnection(true);
+
+      bool indicaReceita = GetIndicaReceitaFromDic(connection, dicCategorias, model.IdCategoria);
+      if (model.Valor > 0 && !indicaReceita)
+        model.Valor *= -1;
+      else if (model.Valor < 0 && indicaReceita)
+        model.Valor *= -1;
+
       return connection.Execute(sql, model);
     }
 
@@ -111,6 +121,8 @@ namespace Gastus.Core
     /// <returns>Lançamentos importados</returns>
     public List<LancamentoModel> ImportarLancamentos(List<LancamentoInsertModel> lancamentos)
     {
+      Dictionary<int, bool> dicCategorias = [];
+
       const string sql = @"
         INSERT INTO Lancamento (Id, Data, Titulo, Comentario, IdCategoria, IdSubCategoria, IdTipoTransacao, Valor)
         VALUES (@Id, @Data, @Titulo, @Comentario, @IdCategoria, @IdSubCategoria, @IdTipoTransacao, @Valor);";
@@ -118,6 +130,12 @@ namespace Gastus.Core
       using var connection = GetConnection(false);
       foreach (var insertModel in lancamentos)
       {
+        bool indicaReceita = GetIndicaReceitaFromDic(connection, dicCategorias, insertModel.IdCategoria);
+        if (insertModel.Valor > 0 && !indicaReceita)
+          insertModel.Valor *= -1;
+        else if (insertModel.Valor < 0 && indicaReceita)
+          insertModel.Valor *= -1;
+
         var novoLancamento = new LancamentoModel(GetNextId(connection),
         DateTime.Parse(insertModel.Data), insertModel.Titulo, insertModel.Comentario,
         insertModel.IdCategoria, insertModel.IdSubCategoria, insertModel.IdTipoTransacao,

@@ -3,6 +3,7 @@
 using Gastus.Domain;
 
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Gastus.Core
 {
@@ -23,6 +24,13 @@ namespace Gastus.Core
       const string sql = @"
         INSERT INTO ORCAMENTO (Id, IdCategoria, IdSubCategoria, NumMes, Valor, Descricao)
         VALUES (@Id, @IdCategoria, @IdSubCategoria, @NumMes, @Valor, @Descricao)";
+
+      Dictionary<int, bool> dicCategorias = [];
+      bool indicaReceita = GetIndicaReceitaFromDic(connection, dicCategorias, insertModel.IdCategoria);
+      if (insertModel.Valor > 0 && !indicaReceita)
+        insertModel.Valor *= -1;
+      else if (insertModel.Valor < 0 && indicaReceita)
+        insertModel.Valor *= -1;
 
       var inseridos = new List<OrcamentoModel>();
       foreach (var numeroMes in insertModel.NumMeses)
@@ -65,6 +73,14 @@ namespace Gastus.Core
           Descricao = @Descricao
         WHERE Id = @Id";
       var conn = GetConnection(false);
+
+      Dictionary<int, bool> dicCategorias = [];
+      bool indicaReceita = GetIndicaReceitaFromDic(conn, dicCategorias, model.IdCategoria);
+      if (model.Valor > 0 && !indicaReceita)
+        model.Valor *= -1;
+      else if (model.Valor < 0 && indicaReceita)
+        model.Valor *= -1;
+
       int rows = conn.Execute(sql, model);
       return rows;
     }

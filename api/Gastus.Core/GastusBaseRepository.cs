@@ -16,6 +16,25 @@ namespace Gastus.Core
     private readonly string _databaseFileName = databaseFileName;
 
     /// <summary>
+    /// Recuperar o indicador de receita de uma categoria
+    /// </summary>
+    /// <param name="conn">Conexão com o banco de dados</param>
+    /// <param name="dicCategorias">Dicionário de categorias</param>
+    /// <param name="idCategoria">Identificador da categoria</param>
+    /// <returns>indicador de receita de uma categoria</returns>
+    static protected bool GetIndicaReceitaFromDic(SQLiteConnection conn, Dictionary<int, bool> dicCategorias, int idCategoria)
+    {
+      if (!dicCategorias.TryGetValue(idCategoria, out bool value))
+      {
+        bool tipo = conn.QuerySingle<bool>("SELECT IndicaReceita FROM Categoria WHERE Id = @id", new { id = idCategoria });
+        value = tipo;
+        dicCategorias.Add(idCategoria, value);
+        return tipo;
+      }
+      return value;
+    }
+
+    /// <summary>
     /// Recuperar a conexão com o banco de dados
     /// </summary>
     /// <param name="activateForeignKeyPragma">true para ativar a constraint de FK</param>

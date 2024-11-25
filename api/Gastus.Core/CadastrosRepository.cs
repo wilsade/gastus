@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.SQLite;
 
 using Dapper;
 
@@ -408,8 +409,10 @@ VALUES (@Id, @Nome, @IndicaReceita, @SaiNoRelatorio)";
     /// </summary>
     /// <param name="insertModel">Modelo de inserção</param>
     /// <returns>Lançamento inserido</returns>
-    public LancamentoAplicacaoModel AddLancamentoAplicacao(LancamentoAplicacaoInsertModel insertModel)
+    public LancamentoAplicacaoModel AddLancamentoAplicacao(LancamentoAplicacaoInsertModel insertModel)       
     {
+      EnsureGreaterThanZero(insertModel.Valor);
+
       const string sql = @"
         INSERT INTO LANCAMENTOAPLICACAO (IdAplicacao, Id, Data, Valor)
         VALUES (@IdAplicacao, @Id, @Data, @Valor)";
@@ -458,6 +461,12 @@ VALUES (@Id, @Nome, @IndicaReceita, @SaiNoRelatorio)";
       return lancamento;
     }
 
+    void EnsureGreaterThanZero(decimal valor)
+    {
+      if (valor <= 0)
+        throw new ArgumentException("Lançamento de uma aplicação deve ser maior do que zero.");
+    }
+
     /// <summary>
     /// Editar um Lançamento de uma aplicação
     /// </summary>
@@ -465,6 +474,8 @@ VALUES (@Id, @Nome, @IndicaReceita, @SaiNoRelatorio)";
     /// <returns>Lançamento alterado</returns>
     public int EditLancamentoAplicacao(LancamentoAplicacaoModel editModel)
     {
+      EnsureGreaterThanZero(editModel.Valor);
+
       const string sql = @"
         UPDATE LancamentoAplicacao
         SET Data = @Data,
