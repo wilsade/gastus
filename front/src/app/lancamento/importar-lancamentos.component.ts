@@ -116,6 +116,8 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
   }
 
   protected clicouBotaoValidacao(): void {
+    if (!this.podeAvancarDaTabela())
+      return;
     this.activePage = 2;
     this.botaoValidacaoConfirmacao.selected = true;
     this.criarLancamentosParaInsercao();
@@ -246,6 +248,11 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       const SubCategoria = categoria.SubCategorias.find(x => x.Nome == row.NomeSubCategoria);
       if (!SubCategoria)
         categoriasInvalidas.push(`Linha: ${row.Num} - SubCategoria: [${row.NomeSubCategoria}]`);
+
+      if (categoria.IndicaReceita && row.Valor < 0)
+        categoriasInvalidas.push(`Linha: ${row.Num} - Categoria de receita com valor negativo`);
+      else if (!categoria.IndicaReceita && row.Valor > 0)
+        categoriasInvalidas.push(`Linha: ${row.Num} - Categoria de despesa com valor positivo`);
     }
   }
 
