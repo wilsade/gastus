@@ -336,8 +336,8 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
       }
       else {
         input.focus();
-        const nomesDeCategorias = this.allCategorias.map(x => x.Nome);
-        this._modalDialog.alert({ title: 'Categorias disponíveis', message: nomesDeCategorias.join(", ") });
+        const nomesDeCategorias = this.allCategorias.map(x => `<li>${x.Nome}</li>`);
+        this._modalDialog.alert({ title: 'Categorias disponíveis', message: nomesDeCategorias.join('') });
       }
     } else {
       input.focus();
@@ -356,8 +356,8 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
           row.NomeSubCategoria = subcategorias[0].Nome;
         } else {
           input.focus();
-          const nomes = acheiCategoria.SubCategorias.map(x => x.Nome);
-          this._modalDialog.alert({ title: 'SubCategorias disponíveis', message: nomes.join(", ") });
+          const nomes = acheiCategoria.SubCategorias.map(x => `<li>${x.Nome};</li>`);
+          this._modalDialog.alert({ title: 'SubCategorias disponíveis', message: nomes.join("") });
         }
       }
     } else {
