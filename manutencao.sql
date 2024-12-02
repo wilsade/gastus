@@ -1,18 +1,62 @@
--- Iniciar uma transaÁ„o para garantir integridade
-BEGIN TRANSACTION;
+-- Relat√≥rio com o saldo de cada aplica√ß√£o
+SELECT 
+    'Conta corrente' AS NomeAplicacao, SUM(L.Valor) AS Valor, 0 AS Ordem
+FROM Lancamento L
 
--- Adicionar a coluna IndicaReceita com valor padr„o false para registros existentes
-ALTER TABLE Categoria
-ADD COLUMN IndicaReceita BOOLEAN NOT NULL DEFAULT 0;
+UNION
 
--- Adicionar a coluna SaiNoRelatorio com valor padr„o true para registros existentes
-ALTER TABLE Categoria
-ADD COLUMN SaiNoRelatorio BOOLEAN NOT NULL DEFAULT 1;
+SELECT A.Nome AS NomeAplicacao, LA.Valor AS Valor, 1 AS Ordem
+FROM Aplicacao A
+JOIN 
+    LancamentoAplicacao LA ON A.Id = LA.IdAplicacao
+WHERE 
+    LA.Data = (SELECT MAX(LA2.Data)
+        FROM LancamentoAplicacao LA2
+        WHERE LA2.IdAplicacao = LA.IdAplicacao)
+ORDER BY  Ordem,  NomeAplicacao;
 
--- Atualizar registros existentes para garantir os valores padrıes, caso necess·rio
-UPDATE Categoria
-SET IndicaReceita = 0, -- False
-    SaiNoRelatorio = 1; -- True
+-- Total de or√ßamento por m√™s
+SELECT NumMes, SUM(Valor) AS TotalOrcamento
+FROM Orcamento
+GROUP BY  NumMes
+ORDER BY NumMes;
 
--- Finalizar a transaÁ„o
-COMMIT;
+-- Total de or√ßamento por m√™s/categoria
+SELECT 
+    CASE NumMes
+        WHEN 1 THEN 'Janeiro'
+        WHEN 2 THEN 'Fevereiro'
+        WHEN 3 THEN 'Mar√ßo'
+        WHEN 4 THEN 'Abril'
+        WHEN 5 THEN 'Maio'
+        WHEN 6 THEN 'Junho'
+        WHEN 7 THEN 'Julho'
+        WHEN 8 THEN 'Agosto'
+        WHEN 9 THEN 'Setembro'
+        WHEN 10 THEN 'Outubro'
+        WHEN 11 THEN 'Novembro'
+        WHEN 12 THEN 'Dezembro'
+    END AS NomeMes,
+    C.Nome AS NomeCategoria, SUM(O.Valor) AS TotalOrcamento
+FROM 
+    Orcamento O
+JOIN 
+    Categoria C ON O.IdCategoria = C.Id
+GROUP BY NumMes, NomeCategoria
+ORDER BY NumMes, NomeCategoria;
+
+-- Total de lan√ßamento por m√™s/categoria
+SELECT 
+    STRFTIME('%m', L.Data) AS Mes,
+    C.Nome AS NomeCategoria,
+    CAST(ROUND(SUM(L.Valor), 2) AS REAL) AS TotalGasto
+FROM 
+    Lancamento L
+JOIN 
+    Categoria C ON L.IdCategoria = C.Id
+WHERE 
+    C.IndicaReceita = 0 AND C.SaiNoRelatorio = 1
+GROUP BY 
+    STRFTIME('%m', L.Data), C.Nome
+ORDER BY 
+    Mes, NomeCategoria;
