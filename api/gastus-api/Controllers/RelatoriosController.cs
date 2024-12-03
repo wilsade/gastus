@@ -14,10 +14,21 @@ namespace Gastus.Api.Controllers
     private readonly IRelatoriosRepository _repository = relatoriosRepository;
 
     /// <summary>
-    /// Recuperar os relatorios
+    /// Recuperar o total das aplicações
     /// </summary>
-    /// <returns>Relatorios</returns>
-    [HttpGet()]
-    public IActionResult GetRelatorios() => Ok();
+    /// <returns>Total das aplicações</returns>
+    [HttpGet("totalaplicacoes")]
+    public IActionResult GetTotalAplicacoes()
+    {
+      try
+      {
+        var result = _repository.GetTotalAplicacoes();
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
   }
 }
