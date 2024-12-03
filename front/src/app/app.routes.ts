@@ -7,6 +7,7 @@ export class NomesRotas {
   static readonly APLICACOES = 'aplicacoes';
   static readonly ORCAMENTO = 'orcamentos';
   static readonly ADMIN = 'admin';
+  static readonly RELATORIOS = 'relatorios';
 }
 
 export const routes: Routes = [
@@ -17,4 +18,5 @@ export const routes: Routes = [
   { path: NomesRotas.APLICACOES, loadComponent: () => import('./aplicacao/aplicacao-view.component').then(m => m.AplicacaoViewComponent) },
   { path: NomesRotas.ORCAMENTO, loadComponent: () => import('./orcamento/orcamento-view.component').then(m => m.OrcamentoViewComponent) },
   { path: NomesRotas.ADMIN, loadComponent: () => import('./admin/admin-sql.component').then(m => m.AdminSqlComponent) },
+  { path: NomesRotas.RELATORIOS, loadComponent: () => import('./relatorios/totais-aplicacoes.component').then(m => m.TotaisAplicacoesComponent) },
 ];

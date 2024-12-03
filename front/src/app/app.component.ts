@@ -23,6 +23,7 @@ export class AppComponent {
     { label: 'Lançamentos', shortLabel: 'Lançamentos', icon: 'ph ph-cash-register', link: `./${NomesRotas.LANCAMENTOS}` },
     { label: 'Aplicações', shortLabel: 'Aplicações', icon: 'ph ph-bank', link: `./${NomesRotas.APLICACOES}` },
     { label: 'Orçamento', shortLabel: 'Orçamento', icon: 'ph ph-book-open-text', link: `./${NomesRotas.ORCAMENTO}` },
+    { label: 'Relatórios', shortLabel: 'Relatórios', icon: 'ph-fill ph-table', link: `./${NomesRotas.RELATORIOS}` },
     { label: 'Admin', shortLabel: 'Admin', icon: 'ph ph-user-gear', link: `./${NomesRotas.ADMIN}` },
   ];
 }
