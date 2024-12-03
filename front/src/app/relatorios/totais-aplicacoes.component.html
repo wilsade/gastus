@@ -1,3 +1,32 @@
 <po-page-default p-title="Totais por aplicação">
 
+  <div class="po-md-4">
+    <po-table [p-hide-columns-manager]="true" [p-striped]="true" [p-columns]="colunas"
+              [p-items]="totaisAplicacoes">
+
+      <ng-template p-table-cell-template
+                   let-column="column"
+                   let-row="row">
+
+
+        <div *ngIf="column.property === 'Valor'">
+          <div style="text-align: right;">
+            <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+          </div>
+        </div>
+      </ng-template>
+    </po-table>
+    <po-divider></po-divider>
+    <div class="po-row">
+      <strong style="margin-right: 9px; margin-left: 9px;">Saldo final:</strong>
+      <span style="color: blue;">{{saldoFinal}}</span>
+    </div>
+  </div>
+
+
+  <div *ngIf="loading"
+       class="sample-container">
+    <po-loading-overlay></po-loading-overlay>
+  </div>
+
 </po-page-default>
