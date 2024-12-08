@@ -30,5 +30,23 @@ namespace Gastus.Api.Controllers
         return ReturnBadRequestException(ex);
       }
     }
+
+    /// <summary>
+    /// Recuperar os lançamentos por categoria/mês
+    /// </summary>
+    /// <returns>lançamentos por categoria/mês</returns>
+    [HttpGet("lancamentosPorCategoriaMes")]
+    public IActionResult GetLancamentosPorCategoriaMes()
+    {
+      try
+      {
+        var result = _repository.GetLancamentosPorCategoriaMes();
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
   }
 }

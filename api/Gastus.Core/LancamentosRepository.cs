@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Net.Http.Headers;
+﻿using System.Data.SQLite;
 
 using Dapper;
 
@@ -44,7 +42,7 @@ namespace Gastus.Core
     {
       const string sql = @"
         SELECT L.*,
-          C.Nome NomeCategoria, S.Nome NomeSubCategoria, T.Nome NomeTipoTransacao
+          C.Nome NomeCategoria, S.Nome NomeSubCategoria, T.Nome NomeTipoTransacao, C.IndicaReceita, C.SaiNoRelatorio
         FROM LANCAMENTO L
           JOIN CATEGORIA C ON L.IdCategoria = C.Id
           JOIN SUBCATEGORIA S ON L.IdCategoria = S.IdCategoria AND L.IdSubCategoria = S.Id

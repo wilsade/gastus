@@ -26,7 +26,9 @@ namespace Gastus.Api
       builder.Services.AddSingleton<ICadastrosRepository>(x => new CadastrosRepository(DATABASE_FILE_NAME));
       builder.Services.AddSingleton<ILancamentosRepository>(x => new LancamentosRepository(DATABASE_FILE_NAME));
       builder.Services.AddSingleton<IOrcamentosRepository>(x => new OrcamentosRepository(DATABASE_FILE_NAME));
-      builder.Services.AddSingleton<IRelatoriosRepository>(x => new RelatoriosRepository(DATABASE_FILE_NAME));
+      builder.Services.AddSingleton<IRelatoriosRepository>(x =>
+        new RelatoriosRepository(DATABASE_FILE_NAME, x.GetRequiredService<ILancamentosRepository>())
+      );
       builder.Services.AddSingleton(x => DATABASE_FILE_NAME);
 
       builder.Services.AddControllers()

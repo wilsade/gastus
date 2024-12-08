@@ -119,5 +119,15 @@
     /// Nome do tipo de transação
     /// </summary>
     public string NomeTipoTransacao { get; set; }
+
+    /// <summary>
+    /// Indica se a categoria representa uma receita
+    /// </summary>
+    public bool IndicaReceita { get; set; }
+
+    /// <summary>
+    /// Indica se a categoria sai no relatório
+    /// </summary>
+    public bool SaiNoRelatorio { get; set; }
   }
 }
