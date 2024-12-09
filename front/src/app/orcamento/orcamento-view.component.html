@@ -2,7 +2,7 @@
                  [p-actions]="acoesPagina">
 
   <div *ngFor="let orcamento of orcamentos">
-    <po-widget class="po-md-6"
+    <po-widget class="po-md-6" [p-height]="600"
                [p-title]="orcamento.NOMEMES">
       <app-orcamento-items-view [orcamento]="orcamento"
                                 (onFechouEdicao)="fechouModalDetail()"></app-orcamento-items-view>
