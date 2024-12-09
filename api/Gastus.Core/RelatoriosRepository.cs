@@ -51,7 +51,7 @@ namespace Gastus.Core
       var agrupadoPorMes = lancamentos.GroupBy(l => new
       {
         NumMes = l.Data.Month,
-        NomeMes = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(l.Data.Month),
+        NomeMes = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(l.Data.Month)),
       }).Select(grupo => new
       {
         Chave = grupo.Key,
