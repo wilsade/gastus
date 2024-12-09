@@ -1,0 +1,27 @@
+<po-page-default p-title="Lançamentos por Categoria / Mês">
+
+  <div *ngFor="let item of lancamentosPorCategoriaMes">
+    <po-widget *ngIf="item.Categorias.length > 0" [p-height]="675" class="po-md-4" [p-title]="item.NomeMes">
+      <po-table [p-hide-columns-manager]="true" [p-striped]="true" [p-columns]="colunas" [p-items]="item.Categorias">
+
+        <ng-template p-table-cell-template
+                     let-column="column"
+                     let-row="row">
+
+          <div *ngIf="column.property === 'Valor'">
+            <div style="text-align: right;">
+              <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+            </div>
+          </div>
+        </ng-template>
+      </po-table>
+      <hr>
+      <div style="text-align: right;">
+        <strong style="margin-right: 9px; margin-left: 9px;">Total do mês:</strong>
+        <span style="color: red;">{{getSaldoFinal(item)}}</span>
+      </div>
+    </po-widget>
+  </div>
+
+
+</po-page-default>
