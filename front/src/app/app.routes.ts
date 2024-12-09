@@ -18,5 +18,5 @@ export const routes: Routes = [
   { path: NomesRotas.APLICACOES, loadComponent: () => import('./aplicacao/aplicacao-view.component').then(m => m.AplicacaoViewComponent) },
   { path: NomesRotas.ORCAMENTO, loadComponent: () => import('./orcamento/orcamento-view.component').then(m => m.OrcamentoViewComponent) },
   { path: NomesRotas.ADMIN, loadComponent: () => import('./admin/admin-sql.component').then(m => m.AdminSqlComponent) },
-  { path: NomesRotas.RELATORIOS, loadComponent: () => import('./relatorios/totais-aplicacoes.component').then(m => m.TotaisAplicacoesComponent) },
+  { path: NomesRotas.RELATORIOS, loadComponent: () => import('./relatorios/lancamentos-por-categoria-mes.component').then(m => m.LancamentosPorCategoriaMesComponent) },
 ];
