@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { PoNotificationService, PoSelectOption, PoTableColumn, PoTableColumnSpacing } from "@po-ui/ng-components";
+import { PoInfoOrientation, PoNotificationService, PoSelectOption, PoTableColumn, PoTableColumnSpacing } from "@po-ui/ng-components";
 import { StrUtils } from "./str-utils";
 
 export abstract class GastusBaseComponent {
@@ -12,6 +12,7 @@ export abstract class GastusBaseComponent {
   protected iconeAtualizar = 'ph-fill ph-arrows-clockwise';
   protected alturaVisao = 400;
   protected spacingSmall = PoTableColumnSpacing.Small;
+  protected infoOrientacaoHorizontal = PoInfoOrientation.Horizontal;
 
   /**
    * Criar a coluna para o Identificador da entidade
