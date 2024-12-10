@@ -1,0 +1,9 @@
+.even {
+  background-color: #f2f2f2;
+  /* Cor para itens pares */
+}
+
+.odd {
+  background-color: #ffffff;
+  /* Cor para itens ímpares */
+}

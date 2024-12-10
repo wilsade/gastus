@@ -14,6 +14,23 @@
             </div>
           </div>
         </ng-template>
+
+        <ng-template p-table-row-template="Categorias" let-rowCategoria let-i="index">
+
+          <po-container>
+            <div *ngFor="let itemLancamento of rowCategoria.Lancamentos; let i = index"
+                 [ngClass]="{'even': i % 2 === 0, 'odd': i % 2 !== 0}">
+
+              <div style="display: flex; justify-content: space-between;">
+                <div style="margin-left: 40px;">{{ itemLancamento.Nome }}</div>
+                <div style="text-align: right; color: red;">{{ getValor(itemLancamento) }}</div>
+              </div>
+
+            </div>
+          </po-container>
+
+        </ng-template>
+
       </po-table>
       <hr>
       <div style="text-align: right;">

@@ -6,14 +6,15 @@ import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { RelatoriosService } from './relatorios.service';
 import { ColunaValorComponent } from '../shared/coluna-valor.component';
 import { StrUtils } from '../shared/str-utils';
-import { ILancamentosPorCategoriaMes } from '../_models/IRelatorios';
+import { ILancamentoDeCategoria, ILancamentosPorCategoriaMes } from '../_models/IRelatorios';
 
 @Component({
   selector: 'app-lancamentos-por-categoria-mes',
   standalone: true,
   imports: [PoModule, CommonModule, FormsModule, ColunaValorComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  templateUrl: './lancamentos-por-categoria-mes.component.html'
+  templateUrl: './lancamentos-por-categoria-mes.component.html',
+  styleUrls: ['./lancamentos-por-categoria-mes.component.css']
 })
 export class LancamentosPorCategoriaMesComponent extends GastusBaseComponent implements OnInit {
 
@@ -39,6 +40,7 @@ export class LancamentosPorCategoriaMesComponent extends GastusBaseComponent imp
     this.loading = true;
     this._service.getLancamentosPorCategoriaMes().subscribe({
       next: data => {
+        console.log(data);
         this.lancamentosPorCategoriaMes = data;
       },
       error: err => {
@@ -49,6 +51,15 @@ export class LancamentosPorCategoriaMesComponent extends GastusBaseComponent imp
         this.loading = false;
       }
     });
+  }
+
+  protected getValor(item: ILancamentoDeCategoria): string {
+    if (!item)
+      return '';
+    if (!item.VALOR_FORMATADO) {
+      item.VALOR_FORMATADO = StrUtils.formatValue(item.Valor);
+    }
+    return item.VALOR_FORMATADO;
   }
 
   protected getSaldoFinal(item: ILancamentosPorCategoriaMes): string {
