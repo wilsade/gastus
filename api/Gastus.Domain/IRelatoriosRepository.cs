@@ -16,5 +16,11 @@
     /// </summary>
     /// <returns>Lançamentos por categoria/mês</returns>
     List<RelatLancamentosPorCategoriaMesModel> GetLancamentosPorCategoriaMes();
+
+    /// <summary>
+    /// Recuperar o relatório de Previsto x Realizado
+    /// </summary>
+    /// <returns>Relatório de Previsto x Realizado</returns>
+    List<RelatPrevistoRealizadoModel> GetPrevistoRealizado();
   }
 }

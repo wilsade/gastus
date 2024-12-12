@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 
 using Dapper;
 
@@ -9,10 +10,12 @@ namespace Gastus.Core
   /// <summary>
   /// Repositório para os relatórios
   /// </summary>
-  public class RelatoriosRepository(string databaseFileName, ILancamentosRepository lancamentosRepository) :
+  public class RelatoriosRepository(string databaseFileName, ILancamentosRepository lancamentosRepository,
+    IOrcamentosRepository orcamentosRepository) :
     GastusBaseRepository(databaseFileName), IRelatoriosRepository
   {
     private readonly ILancamentosRepository _lancamentosRepository = lancamentosRepository;
+    private readonly IOrcamentosRepository _orcamentosRepository = orcamentosRepository;
 
     /// <summary>
     /// Recuperar o total das aplicações
@@ -51,7 +54,7 @@ namespace Gastus.Core
       var agrupadoPorMes = lancamentos.GroupBy(l => new
       {
         NumMes = l.Data.Month,
-        NomeMes = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(l.Data.Month)),
+        NomeMes = GetNomeMes(l.Data.Month),
       }).Select(grupo => new
       {
         Chave = grupo.Key,
@@ -79,6 +82,39 @@ namespace Gastus.Core
         lst.Add(obj);
       }
       return lst;
+    }
+
+    /// <summary>
+    /// Recuperar o relatório de Previsto x Realizado
+    /// </summary>
+    /// <returns>Relatório de Previsto x Realizado</returns>
+    public List<RelatPrevistoRealizadoModel> GetPrevistoRealizado()
+    {
+      List<OrcamentoViewModel> orcamentosDoMes = _orcamentosRepository.GetAllOrcamentos();
+
+      var listaPrevistoRealizado = new List<RelatPrevistoRealizadoModel>();
+      foreach (var itemDoMes in orcamentosDoMes)
+      {
+        var porCategoria = itemDoMes.Items.GroupBy(x => new { x.IdCategoria, x.NomeCategoria }).ToList();
+
+        var obj = new RelatPrevistoRealizadoModel(itemDoMes.NumMes, GetNomeMes(itemDoMes.NumMes))
+        {
+          Previsto = porCategoria.Select(x => new RelatTotalCategoriaModel(
+            x.Key.IdCategoria, x.Key.NomeCategoria, x.Sum(y => y.Valor))).ToList()
+        };
+        obj.TotalPrevisto = obj.Previsto.Sum(x => x.Valor);
+        listaPrevistoRealizado.Add(obj);
+      }
+
+      var lancamentosPorCategoriaMes = GetLancamentosPorCategoriaMes();
+      foreach (var itemPrevistoRealizado in listaPrevistoRealizado)
+      {
+        var lancamentosDoMes = lancamentosPorCategoriaMes.FirstOrDefault(x => x.NumMes == itemPrevistoRealizado.NumMes);
+        if (lancamentosDoMes != null)
+          itemPrevistoRealizado.Realizado.AddRange(lancamentosDoMes.Categorias);
+      }
+
+      return listaPrevistoRealizado;
     }
   }
 }

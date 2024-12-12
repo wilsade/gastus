@@ -48,5 +48,23 @@ namespace Gastus.Api.Controllers
         return ReturnBadRequestException(ex);
       }
     }
+
+    /// <summary>
+    /// Recuperar o relatório de Previsto x Realizado
+    /// </summary>
+    /// <returns>Relatório de Previsto x Realizado</returns>
+    [HttpGet("previstorealizado")]
+    public IActionResult GetPrevistoRealizado()
+    {
+      try
+      {
+        var result = _repository.GetPrevistoRealizado();
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return ReturnBadRequestException(ex);
+      }
+    }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Data.SQLite;
+using System.Globalization;
 
 using Dapper;
 
@@ -77,5 +78,13 @@ namespace Gastus.Core
       int rows = connection.Execute(commandText, new { id });
       return rows;
     }
+
+    /// <summary>
+    /// Recuperar o nome do  mês
+    /// </summary>
+    /// <param name="numMes">Número do mês</param>
+    /// <returns>Nome do mês</returns>
+    protected static string GetNomeMes(int numMes) =>
+      CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(numMes));
   }
 }
