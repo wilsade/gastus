@@ -39,7 +39,6 @@ export class PrevistoRealizadoComponent extends GastusBaseComponent implements O
     this.loading = true;
     this._service.getPrevistoRealizado().subscribe({
       next: data => {
-        console.log(data);
         this.previstoXrealizado = data;
       },
       error: err => {
