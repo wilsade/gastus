@@ -34,6 +34,25 @@
     /// </summary>
     /// <returns>string representando esta instância</returns>
     public override string ToString() => $"[{Id}] {Nome} (Filhas={SubCategorias.Count})";
+
+    /// <summary>
+    /// Retorna um código hash para esta instância,
+    /// adequado para uso em algoritmos hash e estrutura de dados como uma tabela hash.
+    /// </summary>
+    /// <returns>Código hash para esta instância</returns>
+    public override int GetHashCode() => Id.GetHashCode();
+
+    /// <summary>
+    /// Indica se este objeto é igual a outro
+    /// </summary>
+    /// <param name="obj">Obj</param>
+    /// <returns>true se o objeto é igual a outro</returns>
+    public override bool Equals(object obj)
+    {
+      if (!(obj is CategoriaModel other))
+        return false;
+      return other.Id == Id;
+    }
   }
 
   /// <summary>

@@ -113,7 +113,31 @@ namespace Gastus.Core
           itemPrevistoRealizado.Realizado.AddRange(lancamentosDoMes.Categorias);
       }
 
+      IgualarCategorias(listaPrevistoRealizado);
+
       return listaPrevistoRealizado;
+    }
+
+    static void IgualarCategorias(List<RelatPrevistoRealizadoModel> listaPrevistoRealizado)
+    {
+      foreach (var itemMes in listaPrevistoRealizado)
+      {
+        System.Diagnostics.Trace.WriteLine(itemMes.NomeMes);
+        var categoriasPrevistas = itemMes.Previsto.Select(x => new CategoriaModel(x.Codigo, x.Nome)).ToList();
+        var categoriasRealizado = itemMes.Realizado.Select(x => new CategoriaModel(x.Codigo, x.Nome)).ToList();
+
+        var naoTemRealizado = categoriasPrevistas.Except(categoriasRealizado).ToList();
+        itemMes.Realizado.AddRange(naoTemRealizado.Select(x => new RelatLancamentosDaCategoriaModel(x.Id, x.Nome, 0)
+        {
+          Lancamentos = new List<RelatTotalCategoriaModel>()
+        }));
+
+        var naoTemPrevisto = categoriasRealizado.Except(categoriasPrevistas).ToList();
+        itemMes.Previsto.AddRange(naoTemPrevisto.Select(x => new RelatTotalCategoriaModel(x.Id, x.Nome, 0)));
+
+        itemMes.Realizado = [.. itemMes.Realizado.OrderBy(x => x.Nome)];
+        itemMes.Previsto = [.. itemMes.Previsto.OrderBy(x => x.Nome)];
+      }
     }
   }
 }

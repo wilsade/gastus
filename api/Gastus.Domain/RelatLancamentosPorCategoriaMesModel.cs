@@ -121,6 +121,24 @@
   public class RelatLancamentosDaCategoriaModel : RelatTotalCategoriaModel
   {
     /// <summary>
+    /// Inicialização da classe: <see cref="RelatLancamentosDaCategoriaModel"/>.
+    /// </summary>
+    public RelatLancamentosDaCategoriaModel()
+    {
+
+    }
+
+    /// <summary>
+    /// Inicialização da classe: <see cref="RelatLancamentosDaCategoriaModel"/>.
+    /// </summary>
+    /// <param name="codigo">Código</param>
+    /// <param name="nome">Nome</param>
+    /// <param name="valor">Valor</param>
+    public RelatLancamentosDaCategoriaModel(int codigo, string nome, decimal valor) : base(codigo, nome, valor)
+    {
+    }
+
+    /// <summary>
     /// Lançamentos da Categoria
     /// </summary>
     public List<RelatTotalCategoriaModel> Lancamentos { get; set; }
