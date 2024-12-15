@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gastus.Domain
+﻿namespace Gastus.Domain
 {
   /// <summary>
   /// Representa o relatório de Previsto x Realizado
@@ -30,7 +24,6 @@ namespace Gastus.Domain
       NomeMes = nomeMes;
     }
 
-
     /// <summary>
     /// Número do mês
     /// </summary>
@@ -49,17 +42,17 @@ namespace Gastus.Domain
     /// <summary>
     /// Realizado
     /// </summary>
-    public List<RelatTotalCategoriaModel> Realizado { get; set; } = [];
+    public List<RelatLancamentosDaCategoriaModel> Realizado { get; set; } = [];
 
     /// <summary>
     /// Total previsto
     /// </summary>
-    public decimal TotalPrevisto { get; set; }
+    public decimal TotalPrevisto => Previsto.Sum(p => p.Valor);
 
     /// <summary>
     /// Total realizado
     /// </summary>
-    public decimal TotalRealizado { get; set; }
+    public decimal TotalRealizado => Realizado.Sum(p => p.Valor);
 
     /// <summary>
     /// Retorna uma string representando esta instância

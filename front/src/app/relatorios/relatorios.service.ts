@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ILancamentosPorCategoriaMes } from '../_models/IRelatorios';
+import { ILancamentosPorCategoriaMes, IRelatPrevistoRealizado } from '../_models/IRelatorios';
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +19,9 @@ export class RelatoriosService {
 
   getLancamentosPorCategoriaMes(): Observable<ILancamentosPorCategoriaMes[]> {
     return this._http.get<ILancamentosPorCategoriaMes[]>(`${this.relatoriosUrl}/lancamentosPorCategoriaMes`);
+  }
+
+  getPrevistoRealizado(): Observable<IRelatPrevistoRealizado[]> {
+    return this._http.get<IRelatPrevistoRealizado[]>(`${this.relatoriosUrl}/previstorealizado`);
   }
 }

@@ -102,7 +102,6 @@ namespace Gastus.Core
           Previsto = porCategoria.Select(x => new RelatTotalCategoriaModel(
             x.Key.IdCategoria, x.Key.NomeCategoria, x.Sum(y => y.Valor))).ToList()
         };
-        obj.TotalPrevisto = obj.Previsto.Sum(x => x.Valor);
         listaPrevistoRealizado.Add(obj);
       }
 

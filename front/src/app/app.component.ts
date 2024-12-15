@@ -27,6 +27,7 @@ export class AppComponent {
       label: 'Relatórios', shortLabel: 'Relatórios', icon: 'ph-fill ph-table', subItems: [
         { label: 'Total de aplicações', link: `./${NomesRotas.RELAT_TotalAplicacoes}` },
         { label: 'Lançamentos por categoria / mês', link: `./${NomesRotas.RELAT_LancamentosPorCategoriaMes}` },
+        { label: 'Previsto x Realizado', link: `./${NomesRotas.RELAT_PrevistoRealizado}` },
       ]
     },
     { label: 'Admin', shortLabel: 'Admin', icon: 'ph ph-user-gear', link: `./${NomesRotas.ADMIN}` },

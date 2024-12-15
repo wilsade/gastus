@@ -15,3 +15,14 @@ export interface ILancamentoDeCategoria {
   Valor: number;
   VALOR_FORMATADO: string;
 }
+
+export interface IRelatPrevistoRealizado {
+  NumMes: number;
+  NomeMes: string;
+  Previsto: ILancamentoDeCategoria[];
+  Realizado: IReportCategoria[];
+  TotalPrevisto: number;
+  TOTALPREVISTO_FORMATADO: string;
+  TotalRealizado: number;
+  TOTALREALIZADO_FORMATADO: string;
+}

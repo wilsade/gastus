@@ -1,8 +1,14 @@
 <po-page-default p-title="Lançamentos por Categoria / Mês">
 
   <div *ngFor="let item of lancamentosPorCategoriaMes">
-    <po-widget *ngIf="item.Categorias.length > 0" [p-height]="675" class="po-md-4" [p-title]="item.NomeMes">
-      <po-table [p-hide-columns-manager]="true" [p-striped]="true" [p-columns]="colunas" [p-items]="item.Categorias">
+    <po-widget *ngIf="item.Categorias.length > 0"
+               [p-height]="675"
+               class="po-md-4"
+               [p-title]="item.NomeMes">
+      <po-table [p-hide-columns-manager]="true"
+                [p-striped]="true"
+                [p-columns]="colunas"
+                [p-items]="item.Categorias">
 
         <ng-template p-table-cell-template
                      let-column="column"
@@ -15,7 +21,9 @@
           </div>
         </ng-template>
 
-        <ng-template p-table-row-template="Categorias" let-rowCategoria let-i="index">
+        <ng-template p-table-row-template="Categorias"
+                     let-rowCategoria
+                     let-i="index">
 
           <po-container>
             <div *ngFor="let itemLancamento of rowCategoria.Lancamentos; let i = index"
@@ -40,5 +48,9 @@
     </po-widget>
   </div>
 
+  <div *ngIf="loading"
+       class="sample-container">
+    <po-loading-overlay></po-loading-overlay>
+  </div>
 
 </po-page-default>

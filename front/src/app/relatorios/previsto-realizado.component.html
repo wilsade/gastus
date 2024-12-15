@@ -1,0 +1,63 @@
+<po-page-default p-title="Previsto x Realizado">
+
+  <div *ngFor="let itemMes of previstoXrealizado">
+
+    <po-widget [p-title]="itemMes.NomeMes"
+               [p-primary-label]="getTotalPrevisto(itemMes)"
+               [p-secondary-label]="getTotalRealizado(itemMes)"
+               class="po-md-6">
+
+      <po-widget p-title="Previsto"
+                 class="po-md-6">
+        <po-table [p-hide-columns-manager]="true"
+                  [p-striped]="true"
+                  [p-columns]="colunasPrevisto"
+                  [p-items]="itemMes.Previsto">
+
+          <ng-template p-table-cell-template
+                       let-column="column"
+                       let-row="row">
+
+            <div *ngIf="column.property === 'Valor'">
+              <div style="text-align: right;">
+                <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+              </div>
+            </div>
+          </ng-template>
+
+        </po-table>
+
+      </po-widget>
+
+      <po-widget p-title="Realizado"
+                 class="po-md-6">
+        <po-table [p-hide-columns-manager]="true"
+                  [p-striped]="true"
+                  [p-columns]="colunasPrevisto"
+                  [p-items]="itemMes.Realizado">
+
+          <ng-template p-table-cell-template
+                       let-column="column"
+                       let-row="row">
+
+            <div *ngIf="column.property === 'Valor'">
+              <div style="text-align: right;">
+                <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
+              </div>
+            </div>
+          </ng-template>
+
+        </po-table>
+
+      </po-widget>
+
+
+    </po-widget>
+
+  </div>
+
+  <div *ngIf="loading"
+       class="sample-container">
+    <po-loading-overlay></po-loading-overlay>
+  </div>
+</po-page-default>

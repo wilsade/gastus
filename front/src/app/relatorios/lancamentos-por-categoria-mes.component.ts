@@ -40,7 +40,6 @@ export class LancamentosPorCategoriaMesComponent extends GastusBaseComponent imp
     this.loading = true;
     this._service.getLancamentosPorCategoriaMes().subscribe({
       next: data => {
-        console.log(data);
         this.lancamentosPorCategoriaMes = data;
       },
       error: err => {

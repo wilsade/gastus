@@ -10,6 +10,7 @@ export class NomesRotas {
   static readonly RELATORIOS = 'relatorios';
   static readonly RELAT_TotalAplicacoes = `${NomesRotas.RELATORIOS}/totalaplicacoes`;
   static readonly RELAT_LancamentosPorCategoriaMes = `${NomesRotas.RELATORIOS}/lancamentosporcategoriames`;
+  static readonly RELAT_PrevistoRealizado = `${NomesRotas.RELATORIOS}/previstorealizado`;
 }
 
 export const routes: Routes = [
@@ -22,4 +23,5 @@ export const routes: Routes = [
   { path: NomesRotas.ADMIN, loadComponent: () => import('./admin/admin-sql.component').then(m => m.AdminSqlComponent) },
   { path: NomesRotas.RELAT_TotalAplicacoes, loadComponent: () => import('./relatorios/totais-aplicacoes.component').then(m => m.TotaisAplicacoesComponent) },
   { path: NomesRotas.RELAT_LancamentosPorCategoriaMes, loadComponent: () => import('./relatorios/lancamentos-por-categoria-mes.component').then(m => m.LancamentosPorCategoriaMesComponent) },
+  { path: NomesRotas.RELAT_PrevistoRealizado, loadComponent: () => import('./relatorios/previsto-realizado.component').then(m => m.PrevistoRealizadoComponent) },
 ];
