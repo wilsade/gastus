@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PoModule, PoNotificationService, PoTableColumn } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoPageAction, PoTableColumn } from '@po-ui/ng-components';
 import { ColunaValorComponent } from '../shared/coluna-valor.component';
 import { GastusBaseComponent } from '../shared/gastus-base-component';
 import { RelatoriosService } from './relatorios.service';
-import { ILancamentoDeCategoria, IRelatPrevistoRealizado } from '../_models/IRelatorios';
+import { IRelatPrevistoRealizado } from '../_models/IRelatorios';
 import { StrUtils } from '../shared/str-utils';
 
 @Component({
@@ -26,9 +26,14 @@ export class PrevistoRealizadoComponent extends GastusBaseComponent implements O
   protected previstoXrealizado: Array<IRelatPrevistoRealizado> = []
   protected loading = false;
 
+  protected readonly acoesPagina: PoPageAction[] = [
+    { label: 'Atualizar', icon: this.iconeAtualizar, action: () => this.carregarPrevistoRealizado() }
+  ]
+
   protected readonly colunasPrevisto: PoTableColumn[] = [
-    { property: 'Nome', label: 'Nome' },
-    { property: 'Valor', label: 'Valor', type: 'cellTemplate' },
+    { property: 'NomeCategoria', label: 'Categoria' },
+    { property: 'TotalPrevisto', label: 'Previsto', type: 'cellTemplate' },
+    { property: 'TotalRealizado', label: 'Realizado', type: 'cellTemplate' },
   ]
 
   ngOnInit(): void {

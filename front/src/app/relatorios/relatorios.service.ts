@@ -21,7 +21,7 @@ export class RelatoriosService {
     return this._http.get<ILancamentosPorCategoriaMes[]>(`${this.relatoriosUrl}/lancamentosPorCategoriaMes`);
   }
 
-  getPrevistoRealizado(): Observable<IRelatPrevistoRealizado[]> {
-    return this._http.get<IRelatPrevistoRealizado[]>(`${this.relatoriosUrl}/previstorealizado`);
+  getPrevistoRealizado(): Observable<Array<IRelatPrevistoRealizado>> {
+    return this._http.get<Array<IRelatPrevistoRealizado>>(`${this.relatoriosUrl}/previstorealizado`);
   }
 }

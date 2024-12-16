@@ -1,55 +1,36 @@
-<po-page-default p-title="Previsto x Realizado">
+<po-page-default p-title="Previsto x Realizado" [p-actions]="acoesPagina">
 
   <div *ngFor="let itemMes of previstoXrealizado">
 
-    <po-widget [p-title]="itemMes.NomeMes"
+    <po-widget [p-title]="itemMes.NomeMes" [p-height]="600"
                [p-primary-label]="getTotalPrevisto(itemMes)"
                [p-secondary-label]="getTotalRealizado(itemMes)"
-               class="po-md-6">
+               class="po-md-4">
 
-      <po-widget p-title="Previsto"
-                 class="po-md-6">
-        <po-table [p-hide-columns-manager]="true"
-                  [p-striped]="true"
-                  [p-columns]="colunasPrevisto"
-                  [p-items]="itemMes.Previsto">
+      <po-table [p-striped]="true" [p-hide-columns-manager]="true" [p-spacing]="spacingSmall"
+                [p-columns]="colunasPrevisto"
+                [p-items]="itemMes.Categorias">
 
-          <ng-template p-table-cell-template
-                       let-column="column"
-                       let-row="row">
+        <ng-template p-table-cell-template
+                     let-column="column"
+                     let-row="row">
 
-            <div *ngIf="column.property === 'Valor'">
-              <div style="text-align: right;">
-                <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
-              </div>
+          <div *ngIf="column.property === 'TotalPrevisto'">
+            <div>
+              <span *ngIf="row.TotalPrevisto === 0">-</span>
+              <app-coluna-valor *ngIf="row.TotalPrevisto != 0" [valor]="row.TotalPrevisto"></app-coluna-valor>
             </div>
-          </ng-template>
+          </div>
 
-        </po-table>
-
-      </po-widget>
-
-      <po-widget p-title="Realizado"
-                 class="po-md-6">
-        <po-table [p-hide-columns-manager]="true"
-                  [p-striped]="true"
-                  [p-columns]="colunasPrevisto"
-                  [p-items]="itemMes.Realizado">
-
-          <ng-template p-table-cell-template
-                       let-column="column"
-                       let-row="row">
-
-            <div *ngIf="column.property === 'Valor'">
-              <div style="text-align: right;">
-                <app-coluna-valor [valor]="row.Valor"></app-coluna-valor>
-              </div>
+          <div *ngIf="column.property === 'TotalRealizado'">
+            <div>
+              <span *ngIf="row.TotalRealizado === 0">-</span>
+              <app-coluna-valor *ngIf="row.TotalRealizado != 0" [valor]="row.TotalRealizado"></app-coluna-valor>
             </div>
-          </ng-template>
+          </div>
+        </ng-template>
 
-        </po-table>
-
-      </po-widget>
+      </po-table>
 
     </po-widget>
 
