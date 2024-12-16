@@ -78,6 +78,12 @@
     /// Número do mês (1 a 12).
     /// </summary>
     public int NumMes { get; set; }
+
+    /// <summary>
+    /// Retorna uma string representando esta instância
+    /// </summary>
+    /// <returns>string representando esta instância</returns>
+    public override string ToString() => $"[{NumMes}] {NomeCategoria}: {Valor}";
   }
 
   /// <summary>

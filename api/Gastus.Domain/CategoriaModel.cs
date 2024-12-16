@@ -49,7 +49,7 @@
     /// <returns>true se o objeto é igual a outro</returns>
     public override bool Equals(object obj)
     {
-      if (!(obj is CategoriaModel other))
+      if (obj is not CategoriaModel other)
         return false;
       return other.Id == Id;
     }

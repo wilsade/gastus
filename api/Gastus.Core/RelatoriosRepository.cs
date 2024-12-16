@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-
-using Dapper;
+﻿using Dapper;
 
 using Gastus.Domain;
 
@@ -96,48 +93,36 @@ namespace Gastus.Core
       foreach (var itemDoMes in orcamentosDoMes)
       {
         var porCategoria = itemDoMes.Items.GroupBy(x => new { x.IdCategoria, x.NomeCategoria }).ToList();
-
-        var obj = new RelatPrevistoRealizadoModel(itemDoMes.NumMes, GetNomeMes(itemDoMes.NumMes))
-        {
-          Previsto = porCategoria.Select(x => new RelatTotalCategoriaModel(
-            x.Key.IdCategoria, x.Key.NomeCategoria, x.Sum(y => y.Valor))).ToList()
-        };
-        listaPrevistoRealizado.Add(obj);
+        var itemPrevistoRealizado = new RelatPrevistoRealizadoModel(itemDoMes.NumMes, GetNomeMes(itemDoMes.NumMes));
+        itemPrevistoRealizado.Categorias.AddRange(porCategoria.Select(x => new CategoriaPrevistoRealizadoRelatModel(
+          x.Key.IdCategoria, x.Key.NomeCategoria, x.Sum(y => y.Valor), 0)));
+        listaPrevistoRealizado.Add(itemPrevistoRealizado);
       }
 
       var lancamentosPorCategoriaMes = GetLancamentosPorCategoriaMes();
-      foreach (var itemPrevistoRealizado in listaPrevistoRealizado)
+      foreach (var lancamentoDoMes in lancamentosPorCategoriaMes)
       {
-        var lancamentosDoMes = lancamentosPorCategoriaMes.FirstOrDefault(x => x.NumMes == itemPrevistoRealizado.NumMes);
-        if (lancamentosDoMes != null)
-          itemPrevistoRealizado.Realizado.AddRange(lancamentosDoMes.Categorias);
-      }
-
-      IgualarCategorias(listaPrevistoRealizado);
-
-      return listaPrevistoRealizado;
-    }
-
-    static void IgualarCategorias(List<RelatPrevistoRealizadoModel> listaPrevistoRealizado)
-    {
-      foreach (var itemMes in listaPrevistoRealizado)
-      {
-        System.Diagnostics.Trace.WriteLine(itemMes.NomeMes);
-        var categoriasPrevistas = itemMes.Previsto.Select(x => new CategoriaModel(x.Codigo, x.Nome)).ToList();
-        var categoriasRealizado = itemMes.Realizado.Select(x => new CategoriaModel(x.Codigo, x.Nome)).ToList();
-
-        var naoTemRealizado = categoriasPrevistas.Except(categoriasRealizado).ToList();
-        itemMes.Realizado.AddRange(naoTemRealizado.Select(x => new RelatLancamentosDaCategoriaModel(x.Id, x.Nome, 0)
+        // Para cada lançamento do mês, vamos verificar se temos orçamento para esse mês
+        var itemDoMesPrevistoRealizado = listaPrevistoRealizado.FirstOrDefault(x => x.NumMes == lancamentoDoMes.NumMes);
+        if (itemDoMesPrevistoRealizado == null)
         {
-          Lancamentos = new List<RelatTotalCategoriaModel>()
-        }));
+          itemDoMesPrevistoRealizado = new RelatPrevistoRealizadoModel(lancamentoDoMes.NumMes, lancamentoDoMes.NomeMes);
+          listaPrevistoRealizado.Add(itemDoMesPrevistoRealizado);
+        }
 
-        var naoTemPrevisto = categoriasRealizado.Except(categoriasPrevistas).ToList();
-        itemMes.Previsto.AddRange(naoTemPrevisto.Select(x => new RelatTotalCategoriaModel(x.Id, x.Nome, 0)));
-
-        itemMes.Realizado = [.. itemMes.Realizado.OrderBy(x => x.Nome)];
-        itemMes.Previsto = [.. itemMes.Previsto.OrderBy(x => x.Nome)];
+        // Para cada categoria do mês, vamos verificar se temos orcamento para essa categoria
+        foreach (var categoria in lancamentoDoMes.Categorias)
+        {
+          var categoriaDoMes = itemDoMesPrevistoRealizado.Categorias.FirstOrDefault(x => x.IdCategoria == categoria.Codigo);
+          if (categoriaDoMes == null)
+            itemDoMesPrevistoRealizado.Categorias.Add(new CategoriaPrevistoRealizadoRelatModel(categoria.Codigo, categoria.Nome,
+              0, categoria.Valor));
+          else
+            categoriaDoMes.TotalRealizado = categoria.Valor;
+        }
       }
-    }
+      
+      return listaPrevistoRealizado;
+    }    
   }
 }
