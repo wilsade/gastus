@@ -115,11 +115,15 @@ namespace Gastus.Core
         {
           var categoriaDoMes = itemDoMesPrevistoRealizado.Categorias.FirstOrDefault(x => x.IdCategoria == categoria.Codigo);
           if (categoriaDoMes == null)
+            {
             itemDoMesPrevistoRealizado.Categorias.Add(new CategoriaPrevistoRealizadoRelatModel(categoria.Codigo, categoria.Nome,
               0, categoria.Valor));
+            itemDoMesPrevistoRealizado.Categorias = itemDoMesPrevistoRealizado.Categorias.OrderBy(x => x.NomeCategoria).ToList();
+          }
           else
             categoriaDoMes.TotalRealizado = categoria.Valor;
         }
+
       }
       
       return listaPrevistoRealizado;
