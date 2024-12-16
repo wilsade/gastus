@@ -19,10 +19,18 @@ export interface ILancamentoDeCategoria {
 export interface IRelatPrevistoRealizado {
   NumMes: number;
   NomeMes: string;
-  Previsto: ILancamentoDeCategoria[];
-  Realizado: IReportCategoria[];
+  Categorias: Array<IRelatCategoriaPrevistoRealizado>;
+  // Previsto: ILancamentoDeCategoria[];
+  // Realizado: IReportCategoria[];
   TotalPrevisto: number;
   TOTALPREVISTO_FORMATADO: string;
   TotalRealizado: number;
   TOTALREALIZADO_FORMATADO: string;
+}
+
+export interface IRelatCategoriaPrevistoRealizado {
+  IdCategoria: number;
+  NomeCategoria: string;
+  TotalPrevisto: number;
+  TotalRealizado: number;
 }
