@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Gastus.Domain\Gastus.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 </Project>

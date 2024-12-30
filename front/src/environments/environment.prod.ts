@@ -1,6 +1,5 @@
 export const environment = {
-    nome: 'PRODUCAO',
-    production: true,
-    apiUrl: 'https://minhaapi.com/api', 
-  };
-  
+  nome: 'PRODUCAO',
+  production: true,
+  apiUrl: 'http://localhost/gastus.api/api',
+};
