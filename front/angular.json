@@ -55,7 +55,14 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "assets": [
+                {
+                  "glob": "web.config",
+                  "input": ".",
+                  "output": "."
+                }
+              ]
             },
             "development": {
               "optimization": false,
