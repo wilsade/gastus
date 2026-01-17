@@ -157,6 +157,11 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
     linhas.forEach(linha => {
       linha = linha.replace('DÃBITO', 'DÉBITO');
       linha = linha.replace('DÃƒÂ‰BITO', 'DÉBITO');
+      linha = linha.replace('Ã¡', 'á');
+      linha = linha.replace('Ã©', 'é');
+      linha = linha.replace('Ã­', 'í');
+      linha = linha.replace('Ã¶', 'ö');
+      linha = linha.replace('Ã»', 'ü');
       if (!StrUtils.hasValue(linha))
         return;
 
@@ -171,7 +176,7 @@ export class ImportarLancamentosComponent extends GastusBaseComponent {
         Num: num++,
         Data: itens[0],
         Titulo: itens[1],
-        Valor: parseFloat(itens[2].replace(',', '.')),
+        Valor: Number.parseFloat(itens[2].replace('.', '').replace(',', '.')),
         IdCategoria: lookup ? lookup.IdCategoria : 0,
         NomeCategoria: lookup ? lookup.NomeCategoria : '',
         IdSubCategoria: lookup ? lookup.IdSubCategoria : 0,
