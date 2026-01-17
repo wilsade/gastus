@@ -21,7 +21,7 @@ namespace Gastus.Api
 
       // Add services to the container.
 
-      string gastusPath = Environment.GetEnvironmentVariable("GASTUS_DB_PATH", EnvironmentVariableTarget.Machine);
+      string gastusPath = GetGastusDB();
       string DATABASE_FILE_NAME = $@"Data Source={gastusPath};Version=3;";
       builder.Services.AddSingleton<ICadastrosRepository>(x => new CadastrosRepository(DATABASE_FILE_NAME));
       builder.Services.AddSingleton<ILancamentosRepository>(x => new LancamentosRepository(DATABASE_FILE_NAME));
@@ -71,6 +71,18 @@ namespace Gastus.Api
       app.MapControllers();
 
       app.Run();
+    }
+
+    static string GetGastusDB()
+    {
+      string gastusPath;
+#if LOCAL
+      var paths = new string[] { @"D:\Temp\gastus-2024.db", @"C:\Temp\gastus.db" };
+      gastusPath = paths.FirstOrDefault(x => File.Exists(x));
+#else
+      gastusPath = Environment.GetEnvironmentVariable("GASTUS_DB_PATH", EnvironmentVariableTarget.Machine);
+#endif
+      return gastusPath;
     }
   }
 }
